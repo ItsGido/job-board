@@ -6,25 +6,28 @@
 <title>Coomer Home Improvements — Front Royal, VA Handyman</title>
 <meta name="description" content="Coomer Home Improvements — local handyman services in Front Royal, Virginia. Drywall, painting, carpentry, mounting, and small repairs. Text to book, no calls needed.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#EDE4D3;
-    --paper-dark:#DCCFB3;
-    --paper-light:#F5EFE2;
-    --ink:#2B2620;
-    --ink-soft:#5A5142;
-    --denim:#2F4858;
-    --rust:#B5502F;
-    --amber:#A6822C;
-    --moss:#5C6B4F;
-    --line:#C7B896;
+    --navy:#122540;
+    --navy-deep:#0B1B30;
+    --paper:#F6F3ED;
+    --paper-alt:#EFEAE0;
+    --ink:#171E29;
+    --ink-soft:#5B6470;
+    --white:#FFFFFF;
+    --rust:#C4501F;
+    --rust-dark:#A63F17;
+    --gold:#D9A441;
+    --line:#DFD9CB;
+    --success:#3F7A52;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} }
   body{
     margin:0;
-    background:var(--paper-light);
+    background:var(--paper);
     color:var(--ink);
     font-family:'Inter',sans-serif;
     font-size:16px;
@@ -32,448 +35,559 @@
     -webkit-font-smoothing:antialiased;
   }
   a{color:inherit;}
-  .wrap{max-width:640px;margin:0 auto;padding:0 22px;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  h1,h2,h3{
+    font-family:'Archivo',sans-serif;
+    text-wrap:balance;
+    margin:0;
+  }
 
-  /* ---- header / nav ---- */
+  /* ---- top bar ---- */
+  .topbar{background:var(--navy-deep);color:#C9D3E0;font-size:12.5px;}
+  .topbar .wrap{display:flex;justify-content:space-between;align-items:center;padding:7px 24px;gap:12px;flex-wrap:wrap;}
+  .topbar strong{color:var(--white);font-weight:600;}
+
+  /* ---- header ---- */
   header.site{
-    position:sticky;top:0;z-index:20;
-    background:var(--paper-light);
-    border-bottom:1.5px solid var(--line);
+    position:sticky;top:0;z-index:30;
+    background:var(--navy);
+    border-bottom:3px solid var(--rust);
   }
   .navrow{
     display:flex;align-items:center;justify-content:space-between;
-    max-width:640px;margin:0 auto;padding:14px 22px;
+    max-width:1080px;margin:0 auto;padding:14px 24px;
+    gap:16px;
   }
-  .mark{display:flex;align-items:center;gap:10px;}
-  .mark svg{flex-shrink:0;}
+  .mark{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .mark-badge{
+    width:38px;height:38px;border-radius:8px;
+    background:var(--rust);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .mark-badge svg{width:22px;height:22px;}
   .mark-text{
-    font-family:'Oswald',sans-serif;
-    font-weight:600;
-    font-size:16px;
-    letter-spacing:.2px;
+    font-family:'Archivo',sans-serif;
+    font-weight:800;
+    font-size:17px;
+    line-height:1.1;
+    color:var(--white);
   }
-  .mark-text span{color:var(--rust);}
+  .mark-text .sub{
+    display:block;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:10.5px;
+    letter-spacing:1.2px;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-top:2px;
+  }
   .nav-cta{
     font-family:'Inter',sans-serif;
-    font-weight:600;
-    font-size:13.5px;
+    font-weight:700;
+    font-size:14px;
     text-decoration:none;
-    background:var(--ink);
-    color:var(--paper-light);
-    padding:9px 14px;
+    background:var(--rust);
+    color:var(--white);
+    padding:11px 18px;
     border-radius:6px;
     white-space:nowrap;
+    border:1.5px solid var(--rust);
+    transition:background .15s;
   }
+  .nav-cta:hover{background:var(--rust-dark);}
 
   /* ---- hero ---- */
-  .hero{padding:44px 0 8px;}
+  .hero{
+    background:linear-gradient(155deg, var(--navy) 0%, var(--navy-deep) 100%);
+    color:var(--white);
+    padding:56px 0 64px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;
+    right:-120px;top:-80px;
+    width:420px;height:420px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(196,80,31,0.28) 0%, rgba(196,80,31,0) 70%);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative;max-width:640px;}
   .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
     font-family:'Inter',sans-serif;
-    font-weight:600;
+    font-weight:700;
     font-size:12.5px;
-    letter-spacing:1px;
+    letter-spacing:1.2px;
     text-transform:uppercase;
-    color:var(--moss);
-    margin:0 0 14px;
+    color:var(--gold);
+    background:rgba(217,164,65,0.12);
+    border:1px solid rgba(217,164,65,0.35);
+    padding:6px 12px;
+    border-radius:20px;
+    margin:0 0 20px;
   }
-  h1{
-    font-family:'Oswald',sans-serif;
-    font-weight:600;
-    font-size:40px;
-    line-height:1.12;
-    margin:0 0 16px;
-    letter-spacing:.2px;
-    text-wrap:balance;
+  h1.hero-h{
+    font-weight:900;
+    font-size:44px;
+    line-height:1.08;
+    margin:0 0 18px;
+    letter-spacing:-.5px;
   }
-  .lede{
-    font-size:16.5px;
-    color:var(--ink-soft);
-    max-width:44ch;
-    margin:0 0 28px;
+  h1.hero-h span{color:var(--gold);}
+  .hero p.lede{
+    font-size:17.5px;
+    color:#C9D3E0;
+    max-width:46ch;
+    margin:0 0 30px;
   }
-  .hero-ctas{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;}
+  .hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:34px;}
   .cta{
-    display:inline-block;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
     text-align:center;
     text-decoration:none;
     font-family:'Inter',sans-serif;
-    font-weight:600;
-    font-size:16px;
-    padding:15px 22px;
+    font-weight:700;
+    font-size:15.5px;
+    padding:15px 24px;
     border-radius:7px;
-    border:1.5px solid var(--ink);
-    background:var(--ink);
-    color:var(--paper-light);
+    border:1.5px solid transparent;
   }
+  .cta.primary{
+    background:var(--rust);
+    border-color:var(--rust);
+    color:var(--white);
+  }
+  .cta.primary:hover{background:var(--rust-dark);}
   .cta.ghost{
     background:transparent;
-    color:var(--ink);
-  }
-  .hero-note{
-    font-size:13px;
-    color:var(--ink-soft);
-    margin:14px 0 0;
+    border-color:rgba(255,255,255,0.35);
+    color:var(--white);
   }
 
+  .trust-strip{
+    display:flex;flex-wrap:wrap;gap:22px 32px;
+    padding-top:26px;
+    border-top:1px solid rgba(255,255,255,0.14);
+  }
+  .trust-item{display:flex;align-items:center;gap:9px;font-size:13.5px;color:#C9D3E0;font-weight:500;}
+  .trust-item svg{width:18px;height:18px;color:var(--gold);flex-shrink:0;}
+
   /* ---- photo placeholder strip ---- */
-  .photo-strip{
-    margin:34px 0 6px;
+  .photo-band{background:var(--paper-alt);padding:22px 0;border-bottom:1px solid var(--line);}
+  .photo-grid{
     display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:8px;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
   }
   .photo-slot{
-    aspect-ratio:1/1;
+    aspect-ratio:4/3;
     border-radius:8px;
-    border:1.5px dashed var(--line);
-    background:var(--paper-dark);
+    border:1.5px dashed #C7BFA9;
+    background:repeating-linear-gradient(135deg, #E4DECE, #E4DECE 10px, #EAE4D6 10px, #EAE4D6 20px);
     display:flex;
     align-items:center;
     justify-content:center;
     color:var(--ink-soft);
     font-size:11px;
+    font-weight:600;
     text-align:center;
     padding:6px;
   }
 
   /* ---- section shell ---- */
-  section{padding:48px 0;border-top:1.5px solid var(--line);}
+  section{padding:64px 0;}
+  section.alt{background:var(--paper-alt);}
+  .section-head{max-width:600px;margin:0 0 40px;}
   .section-tag{
     font-family:'Inter',sans-serif;
-    font-weight:600;
+    font-weight:700;
     font-size:12.5px;
-    letter-spacing:1px;
+    letter-spacing:1.2px;
     text-transform:uppercase;
     color:var(--rust);
     margin:0 0 10px;
   }
-  h2{
-    font-family:'Oswald',sans-serif;
-    font-weight:600;
-    font-size:26px;
-    margin:0 0 14px;
-    text-wrap:balance;
+  h2.section-title{
+    font-weight:900;
+    font-size:30px;
+    line-height:1.15;
   }
-  @media (prefers-reduced-motion:reduce){
-    html{scroll-behavior:auto;}
-  }
-  section > p.lead{
+  .section-head p{
     color:var(--ink-soft);
-    max-width:48ch;
-    margin:0 0 30px;
+    font-size:15.5px;
+    margin:14px 0 0;
   }
 
   /* ---- services ---- */
-  .services{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0;}
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+  }
   .svc{
-    display:flex;gap:16px;align-items:flex-start;
-    padding:20px 0;
-    border-top:1.5px dashed var(--line);
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:22px 20px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
   }
-  .svc:first-child{border-top:none;}
   .svc-icon{
-    flex-shrink:0;width:42px;height:42px;border-radius:8px;
+    width:48px;height:48px;border-radius:9px;
+    background:var(--navy);
     display:flex;align-items:center;justify-content:center;
-    border:2px solid currentColor;
+    color:var(--gold);
   }
-  .svc-icon.a{color:var(--rust);}
-  .svc-icon.b{color:var(--denim);}
-  .svc-icon.c{color:var(--moss);}
-  .svc-icon.d{color:var(--amber);}
-  .svc-body h3{
-    font-family:'Oswald',sans-serif;
-    font-weight:600;
-    font-size:17px;
-    margin:0 0 4px;
-  }
-  .svc-body p{margin:0;font-size:14px;color:var(--ink-soft);}
+  .svc h3{font-size:16.5px;font-weight:700;font-family:'Inter',sans-serif;}
+  .svc p{margin:0;font-size:13.5px;color:var(--ink-soft);}
 
   .scope-note{
-    margin-top:26px;
+    margin-top:24px;
     padding:16px 18px;
-    background:var(--paper-dark);
-    border-radius:8px;
+    background:var(--white);
+    border:1px solid var(--line);
+    border-left:4px solid var(--rust);
+    border-radius:6px;
     font-size:13.5px;
     color:var(--ink-soft);
   }
   .scope-note strong{color:var(--ink);}
 
   /* ---- how it works ---- */
-  .steps{list-style:none;margin:0;padding:0;}
-  .steps li{
-    display:flex;
-    gap:14px;
-    padding:16px 0;
-    border-top:1.5px dashed var(--line);
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
   }
-  .steps li:first-child{border-top:none;}
-  .step-stamp{
-    font-family:'Oswald',sans-serif;
-    font-weight:700;
+  .step{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:26px 22px;
+    position:relative;
+  }
+  .step-num{
+    font-family:'Archivo',sans-serif;
+    font-weight:900;
     font-size:13px;
-    flex-shrink:0;
-    width:30px;
-    height:30px;
-    border-radius:6px;
-    border:2px solid currentColor;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    transform:rotate(-4deg);
+    color:var(--white);
+    background:var(--rust);
+    width:30px;height:30px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:16px;
   }
-  .step-stamp.a{color:var(--rust);}
-  .step-stamp.b{color:var(--denim);}
-  .step-stamp.c{color:var(--moss);}
-  .step-body h3{
-    font-family:'Oswald',sans-serif;
-    font-weight:600;
-    font-size:16px;
-    margin:0 0 4px;
-  }
-  .step-body p{
-    margin:0;
-    font-size:14px;
-    color:var(--ink-soft);
-  }
+  .step h3{font-size:16px;font-weight:700;font-family:'Inter',sans-serif;margin:0 0 6px;}
+  .step p{margin:0;font-size:13.5px;color:var(--ink-soft);}
 
   /* ---- service area ---- */
-  .area-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+  .area-row{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start;}
+  .area-map{
+    flex:1;min-width:240px;
+    background:var(--navy);
+    border-radius:10px;
+    padding:30px 26px;
+    color:var(--white);
+  }
+  .area-map svg{width:34px;height:34px;color:var(--gold);margin-bottom:14px;}
+  .area-map h3{font-size:18px;font-weight:700;font-family:'Inter',sans-serif;margin:0 0 8px;}
+  .area-map p{margin:0;color:#C9D3E0;font-size:14px;}
+  .area-chips{flex:1;min-width:240px;display:flex;flex-wrap:wrap;gap:9px;align-content:flex-start;}
   .area-chip{
-    font-size:13px;
-    font-weight:500;
-    padding:7px 12px;
+    font-size:13.5px;
+    font-weight:600;
+    padding:9px 15px;
     border-radius:20px;
     border:1.5px solid var(--line);
-    background:var(--paper-dark);
+    background:var(--white);
   }
 
   /* ---- about ---- */
-  .about-card{
-    display:flex;gap:16px;align-items:flex-start;
-  }
+  .about-row{display:flex;gap:28px;align-items:center;flex-wrap:wrap;}
   .about-photo{
-    flex-shrink:0;width:76px;height:76px;border-radius:10px;
-    border:1.5px dashed var(--line);
-    background:var(--paper-dark);
+    flex:1;min-width:220px;
+    aspect-ratio:4/3;
+    border-radius:10px;
+    border:1.5px dashed #C7BFA9;
+    background:repeating-linear-gradient(135deg, #E4DECE, #E4DECE 10px, #EAE4D6 10px, #EAE4D6 20px);
     display:flex;align-items:center;justify-content:center;
-    font-size:10px;color:var(--ink-soft);text-align:center;padding:4px;
+    font-size:12px;color:var(--ink-soft);font-weight:600;text-align:center;
   }
-  .about-card p{margin:0 0 10px;font-size:14.5px;color:var(--ink-soft);}
-  .about-card p:last-child{margin-bottom:0;}
+  .about-text{flex:1.4;min-width:260px;}
+  .about-text p{margin:0 0 14px;font-size:15px;color:var(--ink-soft);}
+  .about-text p:last-child{margin-bottom:0;}
+  .about-list{list-style:none;margin:20px 0 0;padding:0;display:flex;flex-direction:column;gap:10px;}
+  .about-list li{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--ink);}
+  .about-list svg{width:18px;height:18px;color:var(--success);flex-shrink:0;}
 
-  /* ---- contact / final cta ---- */
-  .contact-card{
-    background:var(--ink);
-    color:var(--paper-light);
-    border-radius:12px;
-    padding:30px 24px;
+  /* ---- final cta ---- */
+  .final-cta{
+    background:linear-gradient(155deg, var(--navy) 0%, var(--navy-deep) 100%);
+    color:var(--white);
+    border-radius:14px;
+    padding:48px 36px;
     text-align:center;
   }
-  .contact-card h2{color:var(--paper-light);}
-  .contact-card p{color:var(--paper-dark);margin:0 0 22px;max-width:38ch;margin-left:auto;margin-right:auto;}
-  .contact-card .cta{
-    background:var(--paper-light);
-    border-color:var(--paper-light);
-    color:var(--ink);
-    width:100%;
-    max-width:320px;
-  }
-  .contact-card .hero-note{color:var(--paper-dark);}
+  .final-cta h2{color:var(--white);font-weight:900;font-size:28px;}
+  .final-cta p{color:#C9D3E0;margin:14px 0 28px;max-width:44ch;margin-left:auto;margin-right:auto;font-size:15.5px;}
+  .final-cta .cta{font-size:16px;padding:16px 30px;}
+  .final-cta .note{font-size:13px;color:#9FADC0;margin-top:16px;}
 
   footer.site{
-    padding:30px 0 46px;
-    text-align:center;
+    background:var(--navy-deep);
+    color:#9FADC0;
+    padding:40px 0 32px;
   }
-  footer.site .mark{justify-content:center;margin-bottom:14px;}
-  footer.site .foot-links{
+  footer.site .foot-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;margin-bottom:28px;}
+  footer.site .mark-text{color:var(--white);}
+  footer.site .foot-links{display:flex;flex-direction:column;gap:8px;font-size:14px;}
+  footer.site .foot-links a{color:#C9D3E0;text-decoration:none;}
+  footer.site .foot-links a:hover{text-decoration:underline;}
+  footer.site .foot-bottom{
+    border-top:1px solid rgba(255,255,255,0.12);
+    padding-top:20px;
     font-size:12.5px;
-    color:var(--ink-soft);
-  }
-  footer.site .foot-links a{
-    color:var(--ink-soft);
-    text-decoration:underline;
-  }
-  footer.site .foot-note{
-    font-size:11.5px;
-    color:var(--ink-soft);
-    margin-top:14px;
+    color:#7C8AA0;
   }
 
-  @media (max-width:420px){
-    h1{font-size:33px;}
-    .photo-strip{grid-template-columns:1fr 1fr;}
+  @media (max-width:760px){
+    h1.hero-h{font-size:34px;}
+    h2.section-title{font-size:25px;}
+    .services-grid{grid-template-columns:1fr;}
+    .steps{grid-template-columns:1fr;}
+    .photo-grid{grid-template-columns:repeat(2,1fr);}
+    section{padding:48px 0;}
+    .final-cta{padding:38px 22px;}
   }
 </style>
 </head>
 <body>
 
+<div class="topbar">
+  <div class="wrap">
+    <span>Serving Front Royal &amp; Warren County, VA</span>
+    <span><strong>Text-first</strong> — no phone calls needed</span>
+  </div>
+</div>
+
 <header class="site">
   <div class="navrow">
-    <div class="mark">
-      <svg width="26" height="26" viewBox="0 0 30 30">
-        <rect x="2" y="2" width="26" height="26" rx="4" fill="none" stroke="#2B2620" stroke-width="2"/>
-        <circle cx="2" cy="15" r="2.4" fill="#F5EFE2"/>
-        <circle cx="28" cy="15" r="2.4" fill="#F5EFE2"/>
-        <line x1="9" y1="6" x2="9" y2="24" stroke="#2B2620" stroke-width="1.5" stroke-dasharray="2 2.5"/>
-      </svg>
-      <span class="mark-text">Coomer <span>Home Improvements</span></span>
-    </div>
-    <a class="nav-cta" href="app.html">Request service</a>
+    <a class="mark" href="#top">
+      <span class="mark-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.77z"/></svg>
+      </span>
+      <span class="mark-text">Coomer Home Improvements<span class="sub">Front Royal, VA</span></span>
+    </a>
+    <a class="nav-cta" href="app.html">Request a Job</a>
   </div>
 </header>
 
-<div class="wrap">
+<div id="top"></div>
 
-  <!-- HERO -->
-  <section class="hero" style="border-top:none;padding-top:44px;">
-    <p class="eyebrow">Front Royal, Virginia</p>
-    <h1>Small jobs done right, without the phone tag.</h1>
-    <p class="lede">Local handyman work for Front Royal and the surrounding area — drywall, painting, mounting, and small repairs. Tell us what's broken, we text you back.</p>
-    <div class="hero-ctas">
-      <a class="cta" href="app.html">Request a job →</a>
-      <a class="cta ghost" href="#services">See what we do</a>
+<section class="hero" style="padding-top:56px;">
+  <div class="wrap">
+    <div class="hero-inner">
+      <span class="eyebrow">Locally Owned &amp; Operated</span>
+      <h1 class="hero-h">Reliable handyman work, <span>without the phone tag.</span></h1>
+      <p class="lede">Drywall, painting, carpentry, and small repairs for homeowners in Front Royal and the surrounding area. Tell us what's broken — we text you back with a quote.</p>
+      <div class="hero-ctas">
+        <a class="cta primary" href="app.html">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Request a Job
+        </a>
+        <a class="cta ghost" href="#services">See What We Do</a>
+      </div>
+      <div class="trust-strip">
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          Text-first — no calls required
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Upfront, itemized quotes
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Usually quoted within a day
+        </div>
+      </div>
     </div>
-    <p class="hero-note">No call required — fill out a quick form and we'll text you.</p>
+  </div>
+</section>
 
-    <div class="photo-strip" aria-hidden="true">
-      <div class="photo-slot">Photo:<br>finished job</div>
-      <div class="photo-slot">Photo:<br>work in progress</div>
-      <div class="photo-slot">Photo:<br>before / after</div>
+<div class="photo-band">
+  <div class="wrap">
+    <div class="photo-grid" aria-hidden="true">
+      <div class="photo-slot">Photo: finished job</div>
+      <div class="photo-slot">Photo: work in progress</div>
+      <div class="photo-slot">Photo: before / after</div>
+      <div class="photo-slot">Photo: the crew</div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <p class="section-tag">Services</p>
-    <h2>What we handle</h2>
-    <p class="lead">General handyman work around the house — small jobs, done well.</p>
+<section id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="section-tag">Services</p>
+      <h2 class="section-title">What we handle</h2>
+      <p>General handyman work around the house — small jobs, done right, priced fairly.</p>
+    </div>
 
-    <ul class="services">
-      <li class="svc">
-        <div class="svc-icon a">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+    <div class="services-grid">
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
         </div>
-        <div class="svc-body">
-          <h3>Drywall &amp; general repairs</h3>
-          <p>Patching holes, wall repair, and everyday fix-it jobs around the house.</p>
+        <h3>Drywall &amp; General Repairs</h3>
+        <p>Patching holes, wall repair, and everyday fix-it jobs around the house.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.37 2.63L14 7l-1.5-1.5L8.5 9.5 4 14l6 6 4.5-4.5 4-4L20.5 10 22 8.5z"/><path d="M9 15l-4.5 4.5"/></svg>
         </div>
-      </li>
-      <li class="svc">
-        <div class="svc-icon b">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+        <h3>Painting</h3>
+        <p>Interior and exterior painting, touch-ups, and refresh jobs.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.77z"/></svg>
         </div>
-        <div class="svc-body">
-          <h3>Painting</h3>
-          <p>Interior and exterior painting, touch-ups, and refresh jobs.</p>
+        <h3>Carpentry &amp; Mounting</h3>
+        <p>Shelving, furniture assembly, TV and mirror mounting, minor carpentry.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         </div>
-      </li>
-      <li class="svc">
-        <div class="svc-icon c">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.77z"/></svg>
-        </div>
-        <div class="svc-body">
-          <h3>Carpentry &amp; mounting</h3>
-          <p>Shelving, furniture assembly, TV and mirror mounting, minor carpentry.</p>
-        </div>
-      </li>
-      <li class="svc">
-        <div class="svc-icon d">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-        </div>
-        <div class="svc-body">
-          <h3>Fixture swaps &amp; small installs</h3>
-          <p>Hardware, fixtures, weatherstripping, caulking, and other small installs.</p>
-        </div>
-      </li>
-    </ul>
+        <h3>Fixture Swaps &amp; Small Installs</h3>
+        <p>Hardware, fixtures, weatherstripping, caulking, and other small installs.</p>
+      </div>
+    </div>
 
     <div class="scope-note">
       <strong>What we don't do:</strong> licensed plumbing, electrical, or HVAC work, or larger renovation projects. We'll be upfront if a job needs a licensed specialist and can point you in the right direction.
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- HOW IT WORKS -->
-  <section id="how">
-    <p class="section-tag">How it works</p>
-    <h2>Text-first, start to finish</h2>
-    <ul class="steps">
-      <li>
-        <div class="step-stamp a">1</div>
-        <div class="step-body">
-          <h3>Tell us what's going on</h3>
-          <p>Fill out the request form — what needs fixing, your address, and photos if you've got them. No call needed.</p>
-        </div>
-      </li>
-      <li>
-        <div class="step-stamp b">2</div>
-        <div class="step-body">
-          <h3>We text you back</h3>
-          <p>You'll hear back by text with a quote and timing — usually within a day.</p>
-        </div>
-      </li>
-      <li>
-        <div class="step-stamp c">3</div>
-        <div class="step-body">
-          <h3>We get it done</h3>
-          <p>A local contractor handles the job and you're updated as it moves along.</p>
-        </div>
-      </li>
-    </ul>
-  </section>
-
-  <!-- SERVICE AREA -->
-  <section id="area">
-    <p class="section-tag">Service area</p>
-    <h2>Front Royal &amp; nearby</h2>
-    <p class="lead">Based in Front Royal, Virginia, serving Warren County and the surrounding area.</p>
-    <div class="area-chips">
-      <span class="area-chip">Front Royal</span>
-      <span class="area-chip">Warren County</span>
-      <span class="area-chip">Bentonville</span>
-      <span class="area-chip">Linden</span>
-      <span class="area-chip">Rileyville</span>
+<section class="alt" id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="section-tag">How It Works</p>
+      <h2 class="section-title">Text-first, start to finish</h2>
+      <p>No phone tag. Every job runs through three simple steps.</p>
     </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section id="about">
-    <p class="section-tag">About</p>
-    <h2>A local, family-run operation</h2>
-    <div class="about-card">
-      <div class="about-photo">Photo:<br>owner</div>
-      <div>
-        <p>Coomer Home Improvements is a small, local handyman business based in Front Royal — honest pricing, straightforward communication, and jobs done right the first time.</p>
-        <p>Every job is scoped and quoted up front, so there's no surprise cost when the work's done.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Tell us what's going on</h3>
+        <p>Fill out the request form — what needs fixing, your address, and photos if you've got them.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>We text you back</h3>
+        <p>You'll hear back by text with a quote and timing — usually within a day.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>We get it done</h3>
+        <p>A local contractor handles the job and you're updated as it moves along.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- FINAL CTA -->
-  <section id="contact" style="border-top:none;">
-    <div class="contact-card">
+<section id="area">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="section-tag">Service Area</p>
+      <h2 class="section-title">Front Royal &amp; nearby</h2>
+    </div>
+    <div class="area-row">
+      <div class="area-map">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <h3>Based in Front Royal, VA</h3>
+        <p>Serving Warren County and the surrounding area. Not sure if you're in range? Just send us your address.</p>
+      </div>
+      <div class="area-chips">
+        <span class="area-chip">Front Royal</span>
+        <span class="area-chip">Warren County</span>
+        <span class="area-chip">Bentonville</span>
+        <span class="area-chip">Linden</span>
+        <span class="area-chip">Rileyville</span>
+        <span class="area-chip">Middletown</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="about">
+  <div class="wrap">
+    <div class="about-row">
+      <div class="about-photo">Photo: owner / crew</div>
+      <div class="about-text">
+        <p class="section-tag">About Us</p>
+        <h2 class="section-title" style="margin-bottom:14px;">A local, family-run operation</h2>
+        <p>Coomer Home Improvements is a small, local handyman business based in Front Royal — honest pricing, straightforward communication, and jobs done right the first time.</p>
+        <p>Every job is scoped and quoted up front, so there's no surprise cost when the work's done.</p>
+        <ul class="about-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Locally owned &amp; operated</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Upfront, itemized pricing</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Text-first communication</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="final-cta">
       <h2>Got something that needs fixing?</h2>
       <p>Send us the details and we'll text you back with a quote — no phone call required.</p>
-      <a class="cta" href="app.html">Request a job →</a>
-      <p class="hero-note">Takes about a minute to fill out.</p>
+      <a class="cta primary" href="app.html">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Request a Job
+      </a>
+      <p class="note">Takes about a minute to fill out.</p>
     </div>
-  </section>
-
-</div>
+  </div>
+</section>
 
 <footer class="site">
-  <div class="mark">
-    <svg width="22" height="22" viewBox="0 0 30 30">
-      <rect x="2" y="2" width="26" height="26" rx="4" fill="none" stroke="#2B2620" stroke-width="2"/>
-      <circle cx="2" cy="15" r="2.4" fill="#F5EFE2"/>
-      <circle cx="28" cy="15" r="2.4" fill="#F5EFE2"/>
-      <line x1="9" y1="6" x2="9" y2="24" stroke="#2B2620" stroke-width="1.5" stroke-dasharray="2 2.5"/>
-    </svg>
-    <span class="mark-text">Coomer <span>Home Improvements</span></span>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <div class="mark" style="margin-bottom:10px;">
+          <span class="mark-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.77z"/></svg>
+          </span>
+          <span class="mark-text">Coomer Home Improvements</span>
+        </div>
+        <p style="max-width:32ch;font-size:13.5px;">General handyman work only, under $1,000 per job — no plumbing, electrical, or HVAC.</p>
+      </div>
+      <div class="foot-links">
+        <a href="app.html">Request Service</a>
+        <a href="app.html">Contractor Job Board</a>
+        <a href="#services">Services</a>
+        <a href="#area">Service Area</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      Coomer Home Improvements — Front Royal, Virginia.
+    </div>
   </div>
-  <p class="foot-links"><a href="app.html">Request service or view the job board →</a></p>
-  <p class="foot-note">Coomer Home Improvements — Front Royal, Virginia. General handyman work only, under $1,000 per job — no plumbing, electrical, or HVAC.</p>
 </footer>
 
-</body></html>
+</body>
 </html>
-</html>
+
