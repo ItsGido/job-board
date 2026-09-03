@@ -504,7 +504,8 @@ function renderBoard(main){
 /* ---------- shared ticket rendering ---------- */
 function ticketCardHtml(j, mode){
   const meta = [];
-  if(j.phone) meta.push(`Phone: ${esc(j.phone)}`);
+  if(j.phone) meta.push(`Phone: ${esc(j.phone)}${j.textOnly ? ' <strong>(text only — don\'t call)</strong>' : ''}`);
+  if(j.email) meta.push(`Email: ${esc(j.email)}`);
   if(j.address) meta.push(`Address: ${esc(j.address)}`);
   if(j.preferredDays) meta.push(`Preferred: ${esc(j.preferredDays)}`);
   if(j.payRate) meta.push(`<span class="pay">Pay: ${esc(j.payRate)}</span>`);
