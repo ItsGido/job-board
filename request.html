@@ -76,6 +76,19 @@
   .field input:focus, .field textarea:focus, .field select:focus{outline:2px solid var(--navy);outline-offset:1px;}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 
+  .contact-pref{
+    display:flex;align-items:center;gap:10px;
+    padding:12px 14px;
+    background:var(--paper);
+    border:1.5px solid var(--line);
+    border-radius:7px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .contact-pref input{width:auto;flex-shrink:0;}
+
   .license-warning{
     margin:-4px 0 18px;
     padding:14px 16px;
@@ -154,9 +167,19 @@
             <input id="f_phone" type="tel" required>
           </div>
           <div class="field">
-            <label for="f_address">Address</label>
-            <input id="f_address">
+            <label for="f_email">Email</label>
+            <input id="f_email" type="email">
           </div>
+        </div>
+        <div class="field">
+          <label for="f_address">Address</label>
+          <input id="f_address">
+        </div>
+        <div class="field">
+          <label class="contact-pref">
+            <input type="checkbox" id="f_textonly">
+            <span>Text only — please don't call me</span>
+          </label>
         </div>
         <div class="field">
           <label for="f_desc">What needs fixing</label>
@@ -253,6 +276,8 @@ document.getElementById('jobForm').onsubmit = async (e)=>{
       id: uid(),
       customerName: document.getElementById('f_name').value.trim(),
       phone: document.getElementById('f_phone').value.trim(),
+      email: document.getElementById('f_email').value.trim(),
+      textOnly: document.getElementById('f_textonly').checked,
       address: document.getElementById('f_address').value.trim(),
       description: document.getElementById('f_desc').value.trim(),
       jobType: document.getElementById('f_type').value,
@@ -278,5 +303,4 @@ document.getElementById('jobForm').onsubmit = async (e)=>{
 
 </body>
 </html>
-
 
