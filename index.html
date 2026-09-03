@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Job Board</title>
+<title>Coomer Home Improvements — Front Royal, VA Handyman</title>
+<meta name="description" content="Coomer Home Improvements — local handyman services in Front Royal, Virginia. Drywall, painting, carpentry, mounting, and small repairs. Text to book, no calls needed.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -20,609 +21,459 @@
     --line:#C7B896;
   }
   *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
   body{
     margin:0;
     background:var(--paper-light);
     color:var(--ink);
     font-family:'Inter',sans-serif;
     font-size:16px;
-    line-height:1.45;
+    line-height:1.55;
     -webkit-font-smoothing:antialiased;
   }
-  .app{max-width:520px;margin:0 auto;padding:0 0 48px;}
+  a{color:inherit;}
+  .wrap{max-width:640px;margin:0 auto;padding:0 22px;}
 
-  header{padding:20px 18px 14px;}
-  .brand{
+  /* ---- header / nav ---- */
+  header.site{
+    position:sticky;top:0;z-index:20;
+    background:var(--paper-light);
+    border-bottom:1.5px solid var(--line);
+  }
+  .navrow{
+    display:flex;align-items:center;justify-content:space-between;
+    max-width:640px;margin:0 auto;padding:14px 22px;
+  }
+  .mark{display:flex;align-items:center;gap:10px;}
+  .mark svg{flex-shrink:0;}
+  .mark-text{
     font-family:'Oswald',sans-serif;
     font-weight:600;
-    font-size:24px;
-    letter-spacing:.3px;
-    color:var(--ink);
-    margin:0;
+    font-size:16px;
+    letter-spacing:.2px;
   }
-  .brand-sub{color:var(--ink-soft);font-size:13px;margin-top:2px;}
-
-  nav.tabs{display:flex;gap:6px;padding:0 14px;margin-top:14px;}
-  nav.tabs button{
-    flex:1;
+  .mark-text span{color:var(--rust);}
+  .nav-cta{
     font-family:'Inter',sans-serif;
     font-weight:600;
     font-size:13.5px;
-    padding:11px 6px;
-    border:1.5px solid var(--line);
-    border-bottom:none;
-    background:var(--paper);
-    color:var(--ink-soft);
-    border-radius:8px 8px 0 0;
-    cursor:pointer;
+    text-decoration:none;
+    background:var(--ink);
+    color:var(--paper-light);
+    padding:9px 14px;
+    border-radius:6px;
+    white-space:nowrap;
   }
-  nav.tabs button.active{
-    background:var(--paper-light);
-    color:var(--ink);
-    border-color:var(--ink);
-    position:relative;
-  }
-  main{padding:16px;border-top:1.5px solid var(--ink);background:var(--paper-light);}
 
-  h2.section{
+  /* ---- hero ---- */
+  .hero{padding:44px 0 8px;}
+  .eyebrow{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:12.5px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--moss);
+    margin:0 0 14px;
+  }
+  h1{
     font-family:'Oswald',sans-serif;
     font-weight:600;
-    font-size:15px;
+    font-size:40px;
+    line-height:1.12;
+    margin:0 0 16px;
+    letter-spacing:.2px;
+    text-wrap:balance;
+  }
+  .lede{
+    font-size:16.5px;
     color:var(--ink-soft);
-    margin:22px 0 10px;
-    display:flex;
-    align-items:center;
-    gap:8px;
+    max-width:44ch;
+    margin:0 0 28px;
   }
-  h2.section:first-child{margin-top:2px;}
-  .count-badge{
-    font-family:'Inter',sans-serif;
-    font-size:12px;
-    font-weight:600;
-    background:var(--paper-dark);
-    color:var(--ink-soft);
-    padding:1px 8px;
-    border-radius:10px;
-  }
-  .hint{font-size:12.5px;color:var(--ink-soft);margin:-4px 0 14px;}
-
-  .field{margin-bottom:12px;}
-  .field label{display:block;font-size:13px;color:var(--ink-soft);margin-bottom:4px;font-weight:500;}
-  .field input, .field textarea, .field select{
-    width:100%;
-    padding:10px 11px;
-    border:1.5px solid var(--line);
-    border-radius:6px;
-    font-family:'Inter',sans-serif;
-    font-size:15px;
-    background:var(--paper-light);
-    color:var(--ink);
-  }
-  .field textarea{resize:vertical;min-height:64px;}
-  .field input:focus, .field textarea:focus, .field select:focus{outline:2px solid var(--denim);outline-offset:1px;}
-  .btn{
+  .hero-ctas{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;}
+  .cta{
     display:inline-block;
+    text-align:center;
+    text-decoration:none;
     font-family:'Inter',sans-serif;
     font-weight:600;
-    font-size:14.5px;
-    padding:12px 18px;
-    border-radius:6px;
+    font-size:16px;
+    padding:15px 22px;
+    border-radius:7px;
     border:1.5px solid var(--ink);
     background:var(--ink);
     color:var(--paper-light);
-    cursor:pointer;
-    text-align:center;
   }
-  .btn.secondary{background:transparent;color:var(--ink);}
-  .btn.block{width:100%;}
-  .btn.small{padding:8px 12px;font-size:13px;}
-  .confirm-msg{
-    margin-top:12px;
-    padding:12px 14px;
-    border:1.5px dashed var(--moss);
-    border-radius:6px;
-    color:var(--moss);
-    font-weight:600;
-    font-size:14px;
+  .cta.ghost{
+    background:transparent;
+    color:var(--ink);
   }
-  .license-warning{
-    margin-top:4px;
-    margin-bottom:14px;
-    padding:12px 14px;
-    border:1.5px solid var(--rust);
-    border-radius:6px;
-    background:var(--paper);
-  }
-  .license-warning p{
-    margin:0 0 10px;
-    color:var(--rust);
-    font-weight:600;
-    font-size:13.5px;
-    line-height:1.4;
-  }
-  .license-warning label{
-    display:flex;
-    align-items:flex-start;
-    gap:8px;
+  .hero-note{
     font-size:13px;
     color:var(--ink-soft);
-    font-weight:500;
-    cursor:pointer;
-  }
-  .license-warning input[type="checkbox"]{width:auto;margin-top:3px;}
-  .license-flag{
-    color:var(--rust);
-    font-weight:700;
+    margin:14px 0 0;
   }
 
-  .ticket{background:var(--paper);border:1.5px solid var(--ink);border-radius:8px;margin-bottom:14px;overflow:hidden;}
-  .ticket-top{padding:12px 14px 10px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
-  .ticket-name{font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;}
-  .ticket-desc{font-size:14px;color:var(--ink-soft);margin-top:3px;}
-  .ticket-meta{font-size:13px;color:var(--ink-soft);margin-top:6px;}
-  .ticket-meta div{margin-top:2px;}
-  .pay{font-weight:700;color:var(--ink);}
-  .stamp{
-    font-family:'Oswald',sans-serif;
-    font-weight:700;
-    font-size:11.5px;
-    letter-spacing:.5px;
-    padding:4px 9px;
-    border:2px solid currentColor;
-    border-radius:5px;
-    transform:rotate(-3deg);
-    white-space:nowrap;
-    flex-shrink:0;
+  /* ---- photo placeholder strip ---- */
+  .photo-strip{
+    margin:34px 0 6px;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:8px;
   }
-  .stamp.open{color:var(--rust);}
-  .stamp.claimed{color:var(--denim);}
-  .stamp.in_progress{color:var(--amber);}
-  .stamp.done{color:var(--moss);}
-
-  .perf{height:0;border-top:2px dashed var(--line);}
-
-  .ticket-body{padding:12px 14px 14px;}
-  .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
-  .row select{flex:1;min-width:120px;}
-  .status-buttons{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
-  .status-buttons button{
-    flex:1;
-    min-width:70px;
-    font-family:'Inter',sans-serif;
-    font-size:12.5px;
-    font-weight:600;
-    padding:8px 6px;
-    border-radius:5px;
-    border:1.5px solid var(--line);
-    background:var(--paper-light);
-    color:var(--ink-soft);
-    cursor:pointer;
-  }
-  .status-buttons button.current{border-color:var(--ink);color:var(--ink);background:var(--paper-dark);}
-
-  .empty{text-align:center;padding:32px 20px;color:var(--ink-soft);font-size:14px;border:1.5px dashed var(--line);border-radius:8px;}
-
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
-  .chip{
-    padding:8px 14px;
-    border-radius:20px;
-    border:1.5px solid var(--line);
-    background:var(--paper-light);
-    font-size:13.5px;
-    font-weight:600;
-    color:var(--ink-soft);
-    cursor:pointer;
+  .photo-slot{
+    aspect-ratio:1/1;
+    border-radius:8px;
+    border:1.5px dashed var(--line);
+    background:var(--paper-dark);
     display:flex;
     align-items:center;
-    gap:6px;
+    justify-content:center;
+    color:var(--ink-soft);
+    font-size:11px;
+    text-align:center;
+    padding:6px;
   }
-  .chip.active{border-color:var(--ink);color:var(--ink);background:var(--paper-dark);}
-  .chip .x{color:var(--rust);font-weight:700;}
 
-  footer{text-align:center;padding:20px 16px 0;font-size:12px;color:var(--ink-soft);}
-  footer a{color:var(--ink-soft);text-decoration:underline;cursor:pointer;}
-  .loading{padding:40px;text-align:center;color:var(--ink-soft);}
+  /* ---- section shell ---- */
+  section{padding:48px 0;border-top:1.5px solid var(--line);}
+  .section-tag{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:12.5px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--rust);
+    margin:0 0 10px;
+  }
+  h2{
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    font-size:26px;
+    margin:0 0 14px;
+    text-wrap:balance;
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+  }
+  section > p.lead{
+    color:var(--ink-soft);
+    max-width:48ch;
+    margin:0 0 30px;
+  }
+
+  /* ---- services ---- */
+  .services{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0;}
+  .svc{
+    display:flex;gap:16px;align-items:flex-start;
+    padding:20px 0;
+    border-top:1.5px dashed var(--line);
+  }
+  .svc:first-child{border-top:none;}
+  .svc-icon{
+    flex-shrink:0;width:42px;height:42px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    border:2px solid currentColor;
+  }
+  .svc-icon.a{color:var(--rust);}
+  .svc-icon.b{color:var(--denim);}
+  .svc-icon.c{color:var(--moss);}
+  .svc-icon.d{color:var(--amber);}
+  .svc-body h3{
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    font-size:17px;
+    margin:0 0 4px;
+  }
+  .svc-body p{margin:0;font-size:14px;color:var(--ink-soft);}
+
+  .scope-note{
+    margin-top:26px;
+    padding:16px 18px;
+    background:var(--paper-dark);
+    border-radius:8px;
+    font-size:13.5px;
+    color:var(--ink-soft);
+  }
+  .scope-note strong{color:var(--ink);}
+
+  /* ---- how it works ---- */
+  .steps{list-style:none;margin:0;padding:0;}
+  .steps li{
+    display:flex;
+    gap:14px;
+    padding:16px 0;
+    border-top:1.5px dashed var(--line);
+  }
+  .steps li:first-child{border-top:none;}
+  .step-stamp{
+    font-family:'Oswald',sans-serif;
+    font-weight:700;
+    font-size:13px;
+    flex-shrink:0;
+    width:30px;
+    height:30px;
+    border-radius:6px;
+    border:2px solid currentColor;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transform:rotate(-4deg);
+  }
+  .step-stamp.a{color:var(--rust);}
+  .step-stamp.b{color:var(--denim);}
+  .step-stamp.c{color:var(--moss);}
+  .step-body h3{
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    font-size:16px;
+    margin:0 0 4px;
+  }
+  .step-body p{
+    margin:0;
+    font-size:14px;
+    color:var(--ink-soft);
+  }
+
+  /* ---- service area ---- */
+  .area-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+  .area-chip{
+    font-size:13px;
+    font-weight:500;
+    padding:7px 12px;
+    border-radius:20px;
+    border:1.5px solid var(--line);
+    background:var(--paper-dark);
+  }
+
+  /* ---- about ---- */
+  .about-card{
+    display:flex;gap:16px;align-items:flex-start;
+  }
+  .about-photo{
+    flex-shrink:0;width:76px;height:76px;border-radius:10px;
+    border:1.5px dashed var(--line);
+    background:var(--paper-dark);
+    display:flex;align-items:center;justify-content:center;
+    font-size:10px;color:var(--ink-soft);text-align:center;padding:4px;
+  }
+  .about-card p{margin:0 0 10px;font-size:14.5px;color:var(--ink-soft);}
+  .about-card p:last-child{margin-bottom:0;}
+
+  /* ---- contact / final cta ---- */
+  .contact-card{
+    background:var(--ink);
+    color:var(--paper-light);
+    border-radius:12px;
+    padding:30px 24px;
+    text-align:center;
+  }
+  .contact-card h2{color:var(--paper-light);}
+  .contact-card p{color:var(--paper-dark);margin:0 0 22px;max-width:38ch;margin-left:auto;margin-right:auto;}
+  .contact-card .cta{
+    background:var(--paper-light);
+    border-color:var(--paper-light);
+    color:var(--ink);
+    width:100%;
+    max-width:320px;
+  }
+  .contact-card .hero-note{color:var(--paper-dark);}
+
+  footer.site{
+    padding:30px 0 46px;
+    text-align:center;
+  }
+  footer.site .mark{justify-content:center;margin-bottom:14px;}
+  footer.site .foot-links{
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  footer.site .foot-links a{
+    color:var(--ink-soft);
+    text-decoration:underline;
+  }
+  footer.site .foot-note{
+    font-size:11.5px;
+    color:var(--ink-soft);
+    margin-top:14px;
+  }
+
+  @media (max-width:420px){
+    h1{font-size:33px;}
+    .photo-strip{grid-template-columns:1fr 1fr;}
+  }
 </style>
 </head>
 <body>
-<div class="app" id="app">
-  <div class="loading">Loading board…</div>
+
+<header class="site">
+  <div class="navrow">
+    <div class="mark">
+      <svg width="26" height="26" viewBox="0 0 30 30">
+        <rect x="2" y="2" width="26" height="26" rx="4" fill="none" stroke="#2B2620" stroke-width="2"/>
+        <circle cx="2" cy="15" r="2.4" fill="#F5EFE2"/>
+        <circle cx="28" cy="15" r="2.4" fill="#F5EFE2"/>
+        <line x1="9" y1="6" x2="9" y2="24" stroke="#2B2620" stroke-width="1.5" stroke-dasharray="2 2.5"/>
+      </svg>
+      <span class="mark-text">Coomer <span>Home Improvements</span></span>
+    </div>
+    <a class="nav-cta" href="app.html">Request service</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none;padding-top:44px;">
+    <p class="eyebrow">Front Royal, Virginia</p>
+    <h1>Small jobs done right, without the phone tag.</h1>
+    <p class="lede">Local handyman work for Front Royal and the surrounding area — drywall, painting, mounting, and small repairs. Tell us what's broken, we text you back.</p>
+    <div class="hero-ctas">
+      <a class="cta" href="app.html">Request a job →</a>
+      <a class="cta ghost" href="#services">See what we do</a>
+    </div>
+    <p class="hero-note">No call required — fill out a quick form and we'll text you.</p>
+
+    <div class="photo-strip" aria-hidden="true">
+      <div class="photo-slot">Photo:<br>finished job</div>
+      <div class="photo-slot">Photo:<br>work in progress</div>
+      <div class="photo-slot">Photo:<br>before / after</div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <p class="section-tag">Services</p>
+    <h2>What we handle</h2>
+    <p class="lead">General handyman work around the house — small jobs, done well.</p>
+
+    <ul class="services">
+      <li class="svc">
+        <div class="svc-icon a">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <div class="svc-body">
+          <h3>Drywall &amp; general repairs</h3>
+          <p>Patching holes, wall repair, and everyday fix-it jobs around the house.</p>
+        </div>
+      </li>
+      <li class="svc">
+        <div class="svc-icon b">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+        </div>
+        <div class="svc-body">
+          <h3>Painting</h3>
+          <p>Interior and exterior painting, touch-ups, and refresh jobs.</p>
+        </div>
+      </li>
+      <li class="svc">
+        <div class="svc-icon c">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.77z"/></svg>
+        </div>
+        <div class="svc-body">
+          <h3>Carpentry &amp; mounting</h3>
+          <p>Shelving, furniture assembly, TV and mirror mounting, minor carpentry.</p>
+        </div>
+      </li>
+      <li class="svc">
+        <div class="svc-icon d">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </div>
+        <div class="svc-body">
+          <h3>Fixture swaps &amp; small installs</h3>
+          <p>Hardware, fixtures, weatherstripping, caulking, and other small installs.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="scope-note">
+      <strong>What we don't do:</strong> licensed plumbing, electrical, or HVAC work, or larger renovation projects. We'll be upfront if a job needs a licensed specialist and can point you in the right direction.
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <p class="section-tag">How it works</p>
+    <h2>Text-first, start to finish</h2>
+    <ul class="steps">
+      <li>
+        <div class="step-stamp a">1</div>
+        <div class="step-body">
+          <h3>Tell us what's going on</h3>
+          <p>Fill out the request form — what needs fixing, your address, and photos if you've got them. No call needed.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-stamp b">2</div>
+        <div class="step-body">
+          <h3>We text you back</h3>
+          <p>You'll hear back by text with a quote and timing — usually within a day.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-stamp c">3</div>
+        <div class="step-body">
+          <h3>We get it done</h3>
+          <p>A local contractor handles the job and you're updated as it moves along.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- SERVICE AREA -->
+  <section id="area">
+    <p class="section-tag">Service area</p>
+    <h2>Front Royal &amp; nearby</h2>
+    <p class="lead">Based in Front Royal, Virginia, serving Warren County and the surrounding area.</p>
+    <div class="area-chips">
+      <span class="area-chip">Front Royal</span>
+      <span class="area-chip">Warren County</span>
+      <span class="area-chip">Bentonville</span>
+      <span class="area-chip">Linden</span>
+      <span class="area-chip">Rileyville</span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-tag">About</p>
+    <h2>A local, family-run operation</h2>
+    <div class="about-card">
+      <div class="about-photo">Photo:<br>owner</div>
+      <div>
+        <p>Coomer Home Improvements is a small, local handyman business based in Front Royal — honest pricing, straightforward communication, and jobs done right the first time.</p>
+        <p>Every job is scoped and quoted up front, so there's no surprise cost when the work's done.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section id="contact" style="border-top:none;">
+    <div class="contact-card">
+      <h2>Got something that needs fixing?</h2>
+      <p>Send us the details and we'll text you back with a quote — no phone call required.</p>
+      <a class="cta" href="app.html">Request a job →</a>
+      <p class="hero-note">Takes about a minute to fill out.</p>
+    </div>
+  </section>
+
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
-<script src="firebase-config.js"></script>
-<script>
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const jobsDocRef = db.collection('board').doc('jobs');
-const contractorsDocRef = db.collection('board').doc('contractors');
+<footer class="site">
+  <div class="mark">
+    <svg width="22" height="22" viewBox="0 0 30 30">
+      <rect x="2" y="2" width="26" height="26" rx="4" fill="none" stroke="#2B2620" stroke-width="2"/>
+      <circle cx="2" cy="15" r="2.4" fill="#F5EFE2"/>
+      <circle cx="28" cy="15" r="2.4" fill="#F5EFE2"/>
+      <line x1="9" y1="6" x2="9" y2="24" stroke="#2B2620" stroke-width="1.5" stroke-dasharray="2 2.5"/>
+    </svg>
+    <span class="mark-text">Coomer <span>Home Improvements</span></span>
+  </div>
+  <p class="foot-links"><a href="app.html">Request service or view the job board →</a></p>
+  <p class="foot-note">Coomer Home Improvements — Front Royal, Virginia. General handyman work only, under $1,000 per job — no plumbing, electrical, or HVAC.</p>
+</footer>
 
-let jobs = [];
-let contractors = [];
-let activeTab = 'intake';
-let selectedContractor = null;
-
-function esc(s){
-  return (s===undefined||s===null?'':s).toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function uid(){return 'job_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);}
-
-function subscribeToData(){
-  jobsDocRef.onSnapshot(doc=>{
-    jobs = (doc.exists && doc.data().list) || [];
-    render();
-  }, err=>{ console.error('Jobs listener error', err); });
-  contractorsDocRef.onSnapshot(doc=>{
-    contractors = (doc.exists && doc.data().list) || [];
-    render();
-  }, err=>{ console.error('Contractors listener error', err); });
-}
-
-async function saveJobs(){
-  try{
-    await jobsDocRef.set({ list: jobs });
-  }catch(e){ console.error('Firestore error saving jobs', e); }
-}
-async function saveContractors(){
-  try{
-    await contractorsDocRef.set({ list: contractors });
-  }catch(e){ console.error('Firestore error saving contractors', e); }
-}
-
-function statusLabel(s){
-  return {open:'Open', claimed:'Claimed', in_progress:'In progress', done:'Done'}[s] || s;
-}
-
-function render(){
-  const app = document.getElementById('app');
-  app.innerHTML = `
-    <header>
-      <h1 class="brand">Job Board</h1>
-      <div class="brand-sub">Post the job, contractors claim it, everyone updates from their phone</div>
-    </header>
-    <nav class="tabs">
-      <button data-tab="intake" class="${activeTab==='intake'?'active':''}">New Job</button>
-      <button data-tab="dispatch" class="${activeTab==='dispatch'?'active':''}">Dispatch</button>
-      <button data-tab="board" class="${activeTab==='board'?'active':''}">Job Board</button>
-    </nav>
-    <main id="main"></main>
-    <footer>Contractors browse and claim jobs on their own phone — nobody's assigning shifts.
-      <br><a id="resetLink">Reset all data</a>
-    </footer>
-  `;
-  document.querySelectorAll('nav.tabs button').forEach(b=>{
-    b.onclick = ()=>{ activeTab = b.dataset.tab; render(); };
-  });
-  document.getElementById('resetLink').onclick = async ()=>{
-    if(confirm('This clears every job and contractor for everyone using this board. Continue?')){
-      jobs = []; contractors = [];
-      await saveJobs(); await saveContractors();
-      render();
-    }
-  };
-  const main = document.getElementById('main');
-  if(activeTab==='intake') renderIntake(main);
-  if(activeTab==='dispatch') renderDispatch(main);
-  if(activeTab==='board') renderBoard(main);
-}
-
-/* ---------- New Job tab ---------- */
-function renderIntake(main){
-  main.innerHTML = `
-    <h2 class="section">Post a new job</h2>
-    <form id="jobForm">
-      <div class="field"><label for="f_name">Customer name</label><input id="f_name" required></div>
-      <div class="field"><label for="f_phone">Phone</label><input id="f_phone" type="tel"></div>
-      <div class="field"><label for="f_address">Address</label><input id="f_address"></div>
-      <div class="field"><label for="f_desc">What needs fixing</label><textarea id="f_desc" required></textarea></div>
-      <div class="field"><label for="f_type">Job type</label>
-        <select id="f_type">
-          <option value="general">General handyman</option>
-          <option value="plumbing">Plumbing</option>
-          <option value="electrical">Electrical</option>
-          <option value="hvac">HVAC</option>
-        </select>
-      </div>
-      <div class="field"><label for="f_value">Estimated total (labor + materials)</label><input id="f_value" placeholder="e.g. 450" inputmode="decimal"></div>
-      <div id="licenseWarningBox"></div>
-      <div class="field"><label for="f_days">Preferred days</label><input id="f_days" placeholder="e.g. weekday mornings"></div>
-      <div class="field"><label for="f_pay">Pay for this job</label><input id="f_pay" placeholder="e.g. $120 flat rate"></div>
-      <button type="submit" class="btn block" id="postBtn">Post to job board</button>
-    </form>
-    <div id="confirmMsg"></div>
-  `;
-
-  function needsLicense(){
-    const type = document.getElementById('f_type').value;
-    const raw = document.getElementById('f_value').value || '';
-    const num = parseFloat(raw.replace(/[^0-9.]/g,'')) || 0;
-    return ['plumbing','electrical','hvac'].includes(type) || num > 1000;
-  }
-
-  function updateLicenseWarning(){
-    const box = document.getElementById('licenseWarningBox');
-    const btn = document.getElementById('postBtn');
-    if(needsLicense()){
-      const type = document.getElementById('f_type').value;
-      const tradeMsg = ['plumbing','electrical','hvac'].includes(type)
-        ? `${type[0].toUpperCase()+type.slice(1)} work always requires a Virginia specialty license, regardless of job cost.`
-        : `This job's estimated total is over $1,000. Virginia requires a contractor's license (Class C or higher) for any job over $1,000 in labor + materials.`;
-      box.innerHTML = `
-        <div class="license-warning">
-          <p>⚠ ${tradeMsg} Don't post this unless he's actually licensed for it.</p>
-          <label><input type="checkbox" id="ackLicense"> He holds the required license for this job — post anyway</label>
-        </div>
-      `;
-      const ack = document.getElementById('ackLicense');
-      btn.disabled = true;
-      ack.onchange = ()=>{ btn.disabled = !ack.checked; };
-    }else{
-      box.innerHTML = '';
-      btn.disabled = false;
-    }
-  }
-  document.getElementById('f_type').onchange = updateLicenseWarning;
-  document.getElementById('f_value').oninput = updateLicenseWarning;
-
-  document.getElementById('jobForm').onsubmit = async (e)=>{
-    e.preventDefault();
-    if(needsLicense() && !(document.getElementById('ackLicense') && document.getElementById('ackLicense').checked)){
-      return;
-    }
-    const job = {
-      id: uid(),
-      customerName: document.getElementById('f_name').value.trim(),
-      phone: document.getElementById('f_phone').value.trim(),
-      address: document.getElementById('f_address').value.trim(),
-      description: document.getElementById('f_desc').value.trim(),
-      jobType: document.getElementById('f_type').value,
-      estimatedValue: document.getElementById('f_value').value.trim(),
-      preferredDays: document.getElementById('f_days').value.trim(),
-      payRate: document.getElementById('f_pay').value.trim(),
-      status: 'open',
-      assignedTo: null,
-      createdAt: Date.now()
-    };
-    jobs.push(job);
-    await saveJobs();
-    document.getElementById('jobForm').reset();
-    updateLicenseWarning();
-    document.getElementById('confirmMsg').innerHTML = '<div class="confirm-msg">Posted — it will show up on the Job Board for contractors to claim.</div>';
-    setTimeout(()=>{ const m=document.getElementById('confirmMsg'); if(m) m.innerHTML=''; }, 4000);
-  };
-}
-
-/* ---------- Dispatch tab ---------- */
-function renderDispatch(main){
-  const statuses = ['open','claimed','in_progress','done'];
-  let html = `
-    <h2 class="section">Contractors</h2>
-    <div class="field" style="display:flex;gap:8px;align-items:flex-end;">
-      <div style="flex:1;"><input id="newContractorName" placeholder="Add a contractor's name"></div>
-      <button id="addContractorBtn" class="btn small">Add</button>
-    </div>
-    <div class="chips" id="contractorChips"></div>
-  `;
-  statuses.forEach(s=>{
-    const list = jobs.filter(j=>j.status===s).sort((a,b)=>b.createdAt-a.createdAt);
-    html += `<h2 class="section">${statusLabel(s)} <span class="count-badge">${list.length}</span></h2>`;
-    if(list.length===0){
-      html += `<div class="empty">No jobs here yet.</div>`;
-    }else{
-      list.forEach(j=>{ html += ticketCardHtml(j, 'dispatch'); });
-    }
-  });
-  main.innerHTML = html;
-
-  renderContractorChips();
-
-  document.getElementById('addContractorBtn').onclick = async ()=>{
-    const input = document.getElementById('newContractorName');
-    const name = input.value.trim();
-    if(!name) return;
-    if(!contractors.includes(name)) contractors.push(name);
-    await saveContractors();
-    input.value='';
-    renderDispatch(main);
-  };
-
-  wireTicketControls(main, 'dispatch');
-}
-
-function renderContractorChips(){
-  const el = document.getElementById('contractorChips');
-  if(!el) return;
-  if(contractors.length===0){
-    el.innerHTML = '<div style="font-size:13px;color:var(--ink-soft);">No contractors added yet.</div>';
-    return;
-  }
-  el.innerHTML = contractors.map(name=>`
-    <span class="chip"><span>${esc(name)}</span><span class="x" data-remove="${esc(name)}">×</span></span>
-  `).join('');
-  el.querySelectorAll('[data-remove]').forEach(x=>{
-    x.onclick = async ()=>{
-      const name = x.dataset.remove;
-      if(confirm(`Remove ${name} from the roster? Their claimed jobs will go back to open.`)){
-        contractors = contractors.filter(n=>n!==name);
-        jobs.forEach(j=>{
-          if(j.assignedTo===name){
-            j.assignedTo=null;
-            if(j.status==='claimed') j.status='open';
-          }
-        });
-        await saveContractors();
-        await saveJobs();
-        render();
-      }
-    };
-  });
-}
-
-/* ---------- Job Board tab (contractor view) ---------- */
-function renderBoard(main){
-  let html = `<h2 class="section">Who are you?</h2>`;
-  if(contractors.length===0){
-    html += `<div class="empty">No contractors on the roster yet — add one from the Dispatch tab.</div>`;
-    main.innerHTML = html;
-    return;
-  }
-  html += `<div class="chips">` + contractors.map(name=>
-    `<span class="chip ${selectedContractor===name?'active':''}" data-select="${esc(name)}">${esc(name)}</span>`
-  ).join('') + `</div>`;
-
-  const openJobs = jobs.filter(j=>j.status==='open').sort((a,b)=>a.createdAt-b.createdAt);
-  html += `<h2 class="section">Open jobs <span class="count-badge">${openJobs.length}</span></h2>`;
-  html += `<div class="hint">Browse what's posted and claim what you want — nobody's assigning you anything.</div>`;
-  if(openJobs.length===0){
-    html += `<div class="empty">Nothing posted right now.</div>`;
-  }else{
-    openJobs.forEach(j=>{ html += ticketCardHtml(j, 'claim'); });
-  }
-
-  if(selectedContractor){
-    const mine = jobs.filter(j=>j.assignedTo===selectedContractor);
-    const active = mine.filter(j=>j.status!=='done').sort((a,b)=>a.createdAt-b.createdAt);
-    const done = mine.filter(j=>j.status==='done');
-    html += `<h2 class="section">Your claimed jobs <span class="count-badge">${active.length}</span></h2>`;
-    if(active.length===0){
-      html += `<div class="empty">You haven't claimed anything yet.</div>`;
-    }else{
-      active.forEach(j=>{ html += ticketCardHtml(j, 'mine'); });
-    }
-    if(done.length>0){
-      html += `<h2 class="section">Completed <span class="count-badge">${done.length}</span></h2>`;
-      done.forEach(j=>{ html += ticketCardHtml(j, 'mine'); });
-    }
-  }
-  main.innerHTML = html;
-
-  main.querySelectorAll('[data-select]').forEach(c=>{
-    c.onclick = ()=>{ selectedContractor = c.dataset.select; renderBoard(main); };
-  });
-  wireTicketControls(main, 'claim');
-  wireTicketControls(main, 'mine');
-}
-
-/* ---------- shared ticket rendering ---------- */
-function ticketCardHtml(j, mode){
-  const meta = [];
-  if(j.phone) meta.push(`Phone: ${esc(j.phone)}`);
-  if(j.address) meta.push(`Address: ${esc(j.address)}`);
-  if(j.preferredDays) meta.push(`Preferred: ${esc(j.preferredDays)}`);
-  if(j.payRate) meta.push(`<span class="pay">Pay: ${esc(j.payRate)}</span>`);
-  if(mode==='dispatch' && j.assignedTo) meta.push(`Claimed by: ${esc(j.assignedTo)}`);
-  const tradeTypes = ['plumbing','electrical','hvac'];
-  const estNum = parseFloat((j.estimatedValue||'').replace(/[^0-9.]/g,'')) || 0;
-  if(j.jobType && (tradeTypes.includes(j.jobType) || estNum > 1000)){
-    const label = tradeTypes.includes(j.jobType) ? (j.jobType[0].toUpperCase()+j.jobType.slice(1)+' — needs specialty license') : 'Over $1,000 — needs contractor license';
-    meta.push(`<span class="license-flag">⚠ ${label}</span>`);
-  }
-
-  let body = '';
-  if(mode==='dispatch'){
-    const options = ['<option value="">— open, unclaimed —</option>']
-      .concat(contractors.map(n=>`<option value="${esc(n)}" ${j.assignedTo===n?'selected':''}>${esc(n)}</option>`))
-      .join('');
-    body += `
-      <div class="row">
-        <select data-assign="${j.id}">${options}</select>
-      </div>
-      <div class="status-buttons">
-        ${['open','claimed','in_progress','done'].map(s=>`
-          <button data-status="${j.id}" data-value="${s}" class="${j.status===s?'current':''}">${statusLabel(s)}</button>
-        `).join('')}
-      </div>
-    `;
-  }else if(mode==='claim'){
-    body += `<div class="row"><button class="btn block" data-claim="${j.id}">Claim this job</button></div>`;
-  }else if(mode==='mine'){
-    if(j.status==='claimed'){
-      body += `<div class="row"><button class="btn block" data-advance="${j.id}" data-value="in_progress">Start job</button></div>`;
-    }else if(j.status==='in_progress'){
-      body += `<div class="row"><button class="btn block" data-advance="${j.id}" data-value="done">Mark done</button></div>`;
-    }else if(j.status==='done'){
-      body += `<div class="row"><span style="color:var(--moss);font-weight:600;font-size:14px;">✓ Completed</span></div>`;
-    }
-  }
-
-  return `
-    <div class="ticket">
-      <div class="ticket-top">
-        <div>
-          <div class="ticket-name">${esc(j.customerName)||'Unnamed job'}</div>
-          <div class="ticket-desc">${esc(j.description)}</div>
-        </div>
-        <span class="stamp ${j.status}">${statusLabel(j.status)}</span>
-      </div>
-      <div class="perf"></div>
-      <div class="ticket-body">
-        ${meta.length ? `<div class="ticket-meta">${meta.map(m=>`<div>${m}</div>`).join('')}</div>` : ''}
-        ${body}
-      </div>
-    </div>
-  `;
-}
-
-function wireTicketControls(main, mode){
-  if(mode==='dispatch'){
-    main.querySelectorAll('[data-assign]').forEach(sel=>{
-      sel.onchange = async ()=>{
-        const job = jobs.find(j=>j.id===sel.dataset.assign);
-        if(!job) return;
-        job.assignedTo = sel.value || null;
-        if(job.assignedTo){
-          if(job.status==='open') job.status='claimed';
-        }else{
-          if(job.status==='claimed') job.status='open';
-        }
-        await saveJobs();
-        render();
-      };
-    });
-    main.querySelectorAll('[data-status]').forEach(btn=>{
-      btn.onclick = async ()=>{
-        const job = jobs.find(j=>j.id===btn.dataset.status);
-        if(!job) return;
-        job.status = btn.dataset.value;
-        await saveJobs();
-        render();
-      };
-    });
-  }
-  if(mode==='claim'){
-    main.querySelectorAll('[data-claim]').forEach(btn=>{
-      btn.onclick = async ()=>{
-        if(!selectedContractor){
-          alert('Tap your name up top first, then claim the job.');
-          return;
-        }
-        const job = jobs.find(j=>j.id===btn.dataset.claim);
-        if(!job) return;
-        job.assignedTo = selectedContractor;
-        job.status = 'claimed';
-        await saveJobs();
-        renderBoard(document.getElementById('main'));
-      };
-    });
-  }
-  if(mode==='mine'){
-    main.querySelectorAll('[data-advance]').forEach(btn=>{
-      btn.onclick = async ()=>{
-        const job = jobs.find(j=>j.id===btn.dataset.advance);
-        if(!job) return;
-        job.status = btn.dataset.value;
-        await saveJobs();
-        renderBoard(document.getElementById('main'));
-      };
-    });
-  }
-}
-
-(function init(){
-  render();
-  subscribeToData();
-})();
-</script>
-</body>
+</body></html>
+</html>
 </html>
