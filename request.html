@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Request a Job — Coomer Home Improvements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#122540;
+    --navy-deep:#0B1B30;
+    --paper:#F6F3ED;
+    --paper-alt:#EFEAE0;
+    --ink:#171E29;
+    --ink-soft:#5B6470;
+    --white:#FFFFFF;
+    --rust:#C4501F;
+    --rust-dark:#A63F17;
+    --gold:#D9A441;
+    --line:#DFD9CB;
+    --success:#3F7A52;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  h1,h2{font-family:'Archivo',sans-serif;text-wrap:balance;margin:0;}
+  .wrap{max-width:640px;margin:0 auto;padding:0 24px;}
+
+  header.site{background:var(--navy);border-bottom:3px solid var(--rust);}
+  .navrow{display:flex;align-items:center;justify-content:space-between;max-width:640px;margin:0 auto;padding:14px 24px;gap:16px;}
+  .mark{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .mark-badge{width:34px;height:34px;border-radius:8px;background:var(--rust);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .mark-badge svg{width:19px;height:19px;}
+  .mark-text{font-family:'Archivo',sans-serif;font-weight:800;font-size:15.5px;color:var(--white);}
+  .back-link{font-size:13.5px;font-weight:600;color:#C9D3E0;text-decoration:none;display:flex;align-items:center;gap:6px;}
+  .back-link:hover{color:var(--white);}
+
+  .intro{padding:44px 0 8px;}
+  .eyebrow{
+    font-family:'Inter',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:1.2px;
+    text-transform:uppercase;color:var(--rust);margin:0 0 12px;
+  }
+  h1{font-weight:900;font-size:32px;line-height:1.15;margin:0 0 12px;}
+  .intro p{color:var(--ink-soft);font-size:15.5px;max-width:48ch;margin:0;}
+
+  .form-card{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:28px;
+    margin:32px 0 56px;
+  }
+  .field{margin-bottom:18px;}
+  .field label{display:block;font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+  .field .hint{font-weight:500;color:var(--ink-soft);font-size:12.5px;margin-left:6px;}
+  .field input, .field textarea, .field select{
+    width:100%;
+    padding:12px 13px;
+    border:1.5px solid var(--line);
+    border-radius:7px;
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .field textarea{resize:vertical;min-height:88px;}
+  .field input:focus, .field textarea:focus, .field select:focus{outline:2px solid var(--navy);outline-offset:1px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+  .license-warning{
+    margin:-4px 0 18px;
+    padding:14px 16px;
+    border:1.5px solid var(--rust);
+    border-left:4px solid var(--rust);
+    border-radius:7px;
+    background:#FBF1EC;
+  }
+  .license-warning p{margin:0;color:var(--rust-dark);font-weight:600;font-size:13.5px;line-height:1.45;}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;
+    font-family:'Inter',sans-serif;font-weight:700;font-size:16px;
+    padding:15px 20px;border-radius:8px;border:1.5px solid var(--rust);
+    background:var(--rust);color:var(--white);cursor:pointer;
+  }
+  .btn:hover{background:var(--rust-dark);}
+  .btn:disabled{opacity:.6;cursor:default;}
+
+  .form-note{font-size:12.5px;color:var(--ink-soft);text-align:center;margin-top:12px;}
+
+  .confirm{
+    display:none;
+    text-align:center;
+    padding:56px 28px;
+  }
+  .confirm.show{display:block;}
+  .confirm-icon{
+    width:64px;height:64px;border-radius:50%;
+    background:var(--success);color:var(--white);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 22px;
+  }
+  .confirm h2{font-size:26px;font-weight:900;margin:0 0 12px;}
+  .confirm p{color:var(--ink-soft);font-size:15px;max-width:38ch;margin:0 auto;}
+  .confirm .back-home{
+    display:inline-block;margin-top:26px;font-weight:700;color:var(--navy);text-decoration:underline;font-size:14.5px;
+  }
+
+  footer.site{background:var(--navy-deep);color:#7C8AA0;padding:26px 0;text-align:center;font-size:12.5px;}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="navrow">
+    <a class="mark" href="index.html">
+      <span class="mark-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.77z"/></svg>
+      </span>
+      <span class="mark-text">Coomer Home Improvements</span>
+    </a>
+    <a class="back-link" href="index.html">&larr; Back to home</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div id="formView">
+    <div class="intro">
+      <p class="eyebrow">Request a Job</p>
+      <h1>Tell us what's broken.</h1>
+      <p>Fill this out and we'll text you back with a quote — usually within a day. No call needed.</p>
+    </div>
+
+    <div class="form-card">
+      <form id="jobForm">
+        <div class="field">
+          <label for="f_name">Your name</label>
+          <input id="f_name" required>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="f_phone">Phone <span class="hint">(for texting you back)</span></label>
+            <input id="f_phone" type="tel" required>
+          </div>
+          <div class="field">
+            <label for="f_address">Address</label>
+            <input id="f_address">
+          </div>
+        </div>
+        <div class="field">
+          <label for="f_desc">What needs fixing</label>
+          <textarea id="f_desc" required placeholder="e.g. Drywall patch in the hallway, about 2ft wide, from a door handle hole"></textarea>
+        </div>
+        <div class="field">
+          <label for="f_type">What kind of job is this? <span class="hint">(unsure? leave as General)</span></label>
+          <select id="f_type">
+            <option value="general">General handyman</option>
+            <option value="plumbing">Plumbing</option>
+            <option value="electrical">Electrical</option>
+            <option value="hvac">HVAC</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f_value">Rough budget <span class="hint">(optional — just a ballpark)</span></label>
+          <input id="f_value" placeholder="e.g. 450" inputmode="decimal">
+        </div>
+        <div id="licenseWarningBox"></div>
+        <div class="field">
+          <label for="f_days">Preferred days <span class="hint">(optional)</span></label>
+          <input id="f_days" placeholder="e.g. weekday mornings">
+        </div>
+        <button type="submit" class="btn" id="postBtn">Send Request</button>
+        <p class="form-note">We'll text you back — no account or app download needed.</p>
+      </form>
+    </div>
+  </div>
+
+  <div id="confirmView" class="confirm">
+    <div class="confirm-icon">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+    </div>
+    <h2>Got it — thanks!</h2>
+    <p>We'll text you back with a quote, usually within a day. No need to call or check back in.</p>
+    <a class="back-home" href="index.html">&larr; Back to home</a>
+  </div>
+
+</div>
+
+<footer class="site">Coomer Home Improvements — Front Royal, Virginia &middot; <a href="mailto:coomerhomeimprovements@gmail.com" style="color:inherit;">coomerhomeimprovements@gmail.com</a></footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const jobsDocRef = db.collection('board').doc('jobs');
+
+function uid(){return 'job_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);}
+
+function jobNeedsLicense(j){
+  const tradeTypes = ['plumbing','electrical','hvac'];
+  const estNum = parseFloat((j.estimatedValue||'').replace(/[^0-9.]/g,'')) || 0;
+  return tradeTypes.includes(j.jobType) || estNum > 1000;
+}
+function licenseWarningText(j){
+  const tradeTypes = ['plumbing','electrical','hvac'];
+  if(tradeTypes.includes(j.jobType)){
+    return `${j.jobType[0].toUpperCase()+j.jobType.slice(1)} work always requires a Virginia specialty license, regardless of job cost.`;
+  }
+  return `This job's estimated total is over $1,000. Virginia requires a contractor's license (Class C or higher) for any job over $1,000 in labor + materials.`;
+}
+
+function updateLicenseWarning(){
+  const box = document.getElementById('licenseWarningBox');
+  const j = {
+    jobType: document.getElementById('f_type').value,
+    estimatedValue: document.getElementById('f_value').value || ''
+  };
+  if(jobNeedsLicense(j)){
+    box.innerHTML = `
+      <div class="license-warning">
+        <p>⚠ ${licenseWarningText(j)} This just means it'll need a specially-licensed contractor — we'll let you know if that changes anything about timing or price.</p>
+      </div>
+    `;
+  }else{
+    box.innerHTML = '';
+  }
+}
+document.getElementById('f_type').onchange = updateLicenseWarning;
+document.getElementById('f_value').oninput = updateLicenseWarning;
+
+document.getElementById('jobForm').onsubmit = async (e)=>{
+  e.preventDefault();
+  const btn = document.getElementById('postBtn');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  try{
+    const doc = await jobsDocRef.get();
+    const jobs = (doc.exists && doc.data().list) || [];
+    const job = {
+      id: uid(),
+      customerName: document.getElementById('f_name').value.trim(),
+      phone: document.getElementById('f_phone').value.trim(),
+      address: document.getElementById('f_address').value.trim(),
+      description: document.getElementById('f_desc').value.trim(),
+      jobType: document.getElementById('f_type').value,
+      estimatedValue: document.getElementById('f_value').value.trim(),
+      preferredDays: document.getElementById('f_days').value.trim(),
+      payRate: '',
+      status: 'open',
+      assignedTo: null,
+      createdAt: Date.now()
+    };
+    jobs.push(job);
+    await jobsDocRef.set({ list: jobs });
+    document.getElementById('formView').style.display = 'none';
+    document.getElementById('confirmView').classList.add('show');
+  }catch(err){
+    console.error('Error submitting job', err);
+    btn.disabled = false;
+    btn.textContent = 'Send Request';
+    alert('Something went wrong sending your request — please try again in a moment.');
+  }
+};
+</script>
+
+</body>
+</html>
+
+
