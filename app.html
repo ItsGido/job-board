@@ -248,6 +248,19 @@ function esc(s){
 }
 function uid(){return 'job_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);}
 
+function jobNeedsLicense(j){
+  const tradeTypes = ['plumbing','electrical','hvac'];
+  const estNum = parseFloat((j.estimatedValue||'').replace(/[^0-9.]/g,'')) || 0;
+  return tradeTypes.includes(j.jobType) || estNum > 1000;
+}
+function licenseWarningText(j){
+  const tradeTypes = ['plumbing','electrical','hvac'];
+  if(tradeTypes.includes(j.jobType)){
+    return `${j.jobType[0].toUpperCase()+j.jobType.slice(1)} work always requires a Virginia specialty license, regardless of job cost.`;
+  }
+  return `This job's estimated total is over $1,000. Virginia requires a contractor's license (Class C or higher) for any job over $1,000 in labor + materials.`;
+}
+
 function subscribeToData(){
   jobsDocRef.onSnapshot(doc=>{
     jobs = (doc.exists && doc.data().list) || [];
@@ -333,33 +346,20 @@ function renderIntake(main){
     <div id="confirmMsg"></div>
   `;
 
-  function needsLicense(){
-    const type = document.getElementById('f_type').value;
-    const raw = document.getElementById('f_value').value || '';
-    const num = parseFloat(raw.replace(/[^0-9.]/g,'')) || 0;
-    return ['plumbing','electrical','hvac'].includes(type) || num > 1000;
-  }
-
   function updateLicenseWarning(){
     const box = document.getElementById('licenseWarningBox');
-    const btn = document.getElementById('postBtn');
-    if(needsLicense()){
-      const type = document.getElementById('f_type').value;
-      const tradeMsg = ['plumbing','electrical','hvac'].includes(type)
-        ? `${type[0].toUpperCase()+type.slice(1)} work always requires a Virginia specialty license, regardless of job cost.`
-        : `This job's estimated total is over $1,000. Virginia requires a contractor's license (Class C or higher) for any job over $1,000 in labor + materials.`;
+    const j = {
+      jobType: document.getElementById('f_type').value,
+      estimatedValue: document.getElementById('f_value').value || ''
+    };
+    if(jobNeedsLicense(j)){
       box.innerHTML = `
         <div class="license-warning">
-          <p>⚠ ${tradeMsg} Don't post this unless he's actually licensed for it.</p>
-          <label><input type="checkbox" id="ackLicense"> He holds the required license for this job — post anyway</label>
+          <p>⚠ ${licenseWarningText(j)} This job will only be claimable by a contractor who confirms they hold that license — nothing to verify yourself before posting.</p>
         </div>
       `;
-      const ack = document.getElementById('ackLicense');
-      btn.disabled = true;
-      ack.onchange = ()=>{ btn.disabled = !ack.checked; };
     }else{
       box.innerHTML = '';
-      btn.disabled = false;
     }
   }
   document.getElementById('f_type').onchange = updateLicenseWarning;
@@ -367,9 +367,6 @@ function renderIntake(main){
 
   document.getElementById('jobForm').onsubmit = async (e)=>{
     e.preventDefault();
-    if(needsLicense() && !(document.getElementById('ackLicense') && document.getElementById('ackLicense').checked)){
-      return;
-    }
     const job = {
       id: uid(),
       customerName: document.getElementById('f_name').value.trim(),
@@ -512,6 +509,7 @@ function ticketCardHtml(j, mode){
   if(j.preferredDays) meta.push(`Preferred: ${esc(j.preferredDays)}`);
   if(j.payRate) meta.push(`<span class="pay">Pay: ${esc(j.payRate)}</span>`);
   if(mode==='dispatch' && j.assignedTo) meta.push(`Claimed by: ${esc(j.assignedTo)}`);
+  if(mode==='dispatch' && j.licenseConfirmedBy) meta.push(`License confirmed by: ${esc(j.licenseConfirmedBy)}`);
   const tradeTypes = ['plumbing','electrical','hvac'];
   const estNum = parseFloat((j.estimatedValue||'').replace(/[^0-9.]/g,'')) || 0;
   if(j.jobType && (tradeTypes.includes(j.jobType) || estNum > 1000)){
@@ -535,7 +533,17 @@ function ticketCardHtml(j, mode){
       </div>
     `;
   }else if(mode==='claim'){
-    body += `<div class="row"><button class="btn block" data-claim="${j.id}">Claim this job</button></div>`;
+    if(jobNeedsLicense(j)){
+      body += `
+        <div class="license-warning">
+          <p>⚠ ${licenseWarningText(j)} Only claim this if you hold that license.</p>
+          <label><input type="checkbox" class="claimLicenseAck" data-ack="${j.id}"> I hold the required license for this job</label>
+        </div>
+        <div class="row"><button class="btn block" data-claim="${j.id}" disabled>Claim this job</button></div>
+      `;
+    }else{
+      body += `<div class="row"><button class="btn block" data-claim="${j.id}">Claim this job</button></div>`;
+    }
   }else if(mode==='mine'){
     if(j.status==='claimed'){
       body += `<div class="row"><button class="btn block" data-advance="${j.id}" data-value="in_progress">Start job</button></div>`;
@@ -591,6 +599,12 @@ function wireTicketControls(main, mode){
     });
   }
   if(mode==='claim'){
+    main.querySelectorAll('.claimLicenseAck').forEach(cb=>{
+      cb.onchange = ()=>{
+        const btn = main.querySelector(`[data-claim="${cb.dataset.ack}"]`);
+        if(btn) btn.disabled = !cb.checked;
+      };
+    });
     main.querySelectorAll('[data-claim]').forEach(btn=>{
       btn.onclick = async ()=>{
         if(!selectedContractor){
@@ -599,6 +613,9 @@ function wireTicketControls(main, mode){
         }
         const job = jobs.find(j=>j.id===btn.dataset.claim);
         if(!job) return;
+        if(jobNeedsLicense(job)){
+          job.licenseConfirmedBy = selectedContractor;
+        }
         job.assignedTo = selectedContractor;
         job.status = 'claimed';
         await saveJobs();
@@ -626,5 +643,4 @@ function wireTicketControls(main, mode){
 </script>
 </body>
 </html>
-
 
