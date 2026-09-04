@@ -119,20 +119,6 @@
     pointer-events:none;
   }
   .hero-inner{position:relative;max-width:640px;}
-  .hero-bg-photo{
-    position:absolute;inset:0;
-    background-image:url('IMG_1528.jpeg');
-    background-size:cover;
-    background-position:center 65%;
-    opacity:0.32;
-    pointer-events:none;
-    transition:opacity .6s ease, transform .6s ease;
-  }
-  .hero-bg-photo.drive-away{
-    opacity:0;
-    transform:translateX(-6%);
-  }
-  @media (prefers-reduced-motion:reduce){ .hero-bg-photo{transition:none;} }
   .eyebrow{
     display:inline-flex;align-items:center;gap:8px;
     font-family:'Inter',sans-serif;
@@ -409,7 +395,6 @@
 <div id="top"></div>
 
 <section class="hero" style="padding-top:56px;">
-  <div class="hero-bg-photo" id="heroVan"></div>
   <div class="wrap">
     <div class="hero-inner">
       <span class="eyebrow">Locally Owned &amp; Operated</span>
@@ -606,22 +591,5 @@
   </div>
 </footer>
 
-<script>
-(function(){
-  var van = document.getElementById('heroVan');
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  document.querySelectorAll('a[href="request.html"]').forEach(function(link){
-    link.addEventListener('click', function(e){
-      var visible = van && van.offsetParent !== null;
-      if(!visible || reduceMotion) return;
-      e.preventDefault();
-      van.classList.add('drive-away');
-      setTimeout(function(){ window.location.href = link.href; }, 600);
-    });
-  });
-})();
-</script>
-
 </body>
 </html>
-
