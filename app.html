@@ -161,6 +161,8 @@
   .ticket-desc{font-size:14px;color:var(--ink-soft);margin-top:3px;}
   .ticket-meta{font-size:13px;color:var(--ink-soft);margin-top:6px;}
   .ticket-meta div{margin-top:2px;}
+  .ticket-photos{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .ticket-photos img{width:60px;height:60px;object-fit:cover;border-radius:6px;border:1.5px solid var(--line);}
   .pay{font-weight:700;color:var(--ink);}
   .stamp{
     font-family:'Oswald',sans-serif;
@@ -567,6 +569,7 @@ function ticketCardHtml(j, mode){
       <div class="perf"></div>
       <div class="ticket-body">
         ${meta.length ? `<div class="ticket-meta">${meta.map(m=>`<div>${m}</div>`).join('')}</div>` : ''}
+        ${j.photos && j.photos.length ? `<div class="ticket-photos">${j.photos.map(url=>`<a href="${esc(url)}" target="_blank" rel="noopener"><img src="${esc(url)}" alt="Job photo"></a>`).join('')}</div>` : ''}
         ${body}
       </div>
     </div>
