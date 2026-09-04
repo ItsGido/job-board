@@ -181,27 +181,13 @@
   .trust-item{display:flex;align-items:center;gap:9px;font-size:13.5px;color:#C9D3E0;font-weight:500;}
   .trust-item svg{width:18px;height:18px;color:var(--gold);flex-shrink:0;}
 
-  /* ---- photo placeholder strip ---- */
-  .photo-band{background:var(--paper-alt);padding:22px 0;border-bottom:1px solid var(--line);}
-  .photo-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:10px;
+  /* ---- coming soon photo treatment ---- */
+  .photo-band{background:var(--paper-alt);padding:18px 0;border-bottom:1px solid var(--line);}
+  .coming-soon-strip{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    color:var(--ink-soft);font-size:13.5px;font-weight:600;padding:8px 0;
   }
-  .photo-slot{
-    aspect-ratio:4/3;
-    border-radius:8px;
-    border:1.5px dashed #C7BFA9;
-    background:repeating-linear-gradient(135deg, #E4DECE, #E4DECE 10px, #EAE4D6 10px, #EAE4D6 20px);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:var(--ink-soft);
-    font-size:11px;
-    font-weight:600;
-    text-align:center;
-    padding:6px;
-  }
+  .coming-soon-strip svg{width:19px;height:19px;color:var(--rust);flex-shrink:0;}
 
   /* ---- section shell ---- */
   section{padding:64px 0;}
@@ -318,11 +304,12 @@
     flex:1;min-width:220px;
     aspect-ratio:4/3;
     border-radius:10px;
-    border:1.5px dashed #C7BFA9;
-    background:repeating-linear-gradient(135deg, #E4DECE, #E4DECE 10px, #EAE4D6 10px, #EAE4D6 20px);
-    display:flex;align-items:center;justify-content:center;
-    font-size:12px;color:var(--ink-soft);font-weight:600;text-align:center;
+    border:1.5px solid var(--line);
+    background:var(--paper-alt);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+    font-size:13px;color:var(--ink-soft);font-weight:600;text-align:center;
   }
+  .about-photo svg{width:26px;height:26px;color:var(--rust);}
   .about-text{flex:1.4;min-width:260px;}
   .about-text p{margin:0 0 14px;font-size:15px;color:var(--ink-soft);}
   .about-text p:last-child{margin-bottom:0;}
@@ -365,7 +352,6 @@
     h2.section-title{font-size:25px;}
     .services-grid{grid-template-columns:1fr;}
     .steps{grid-template-columns:1fr;}
-    .photo-grid{grid-template-columns:repeat(2,1fr);}
     section{padding:48px 0;}
     .final-cta{padding:38px 22px;}
   }
@@ -427,11 +413,9 @@
 
 <div class="photo-band">
   <div class="wrap">
-    <div class="photo-grid" aria-hidden="true">
-      <div class="photo-slot">Photo: finished job</div>
-      <div class="photo-slot">Photo: work in progress</div>
-      <div class="photo-slot">Photo: before / after</div>
-      <div class="photo-slot">Photo: the crew</div>
+    <div class="coming-soon-strip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      <span>Job photos coming soon</span>
     </div>
   </div>
 </div>
@@ -535,7 +519,10 @@
 <section class="alt" id="about">
   <div class="wrap">
     <div class="about-row">
-      <div class="about-photo">Photo: owner / crew</div>
+      <div class="about-photo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <span>Photo coming soon</span>
+      </div>
       <div class="about-text">
         <p class="section-tag">About Us</p>
         <h2 class="section-title" style="margin-bottom:14px;">A local, family-run operation</h2>
