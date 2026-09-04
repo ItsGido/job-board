@@ -19,6 +19,7 @@
     --moss:#3F7A52;
     --line:#DFD9CB;
     --danger:#943E22;
+    --gold:#A9C3DA;
   }
   *{box-sizing:border-box;}
   body{
@@ -32,7 +33,12 @@
   }
   .app{max-width:560px;margin:0 auto;padding:0 0 60px;}
 
-  header{padding:20px 18px 14px;}
+  header{padding:20px 18px 14px;background:var(--denim);border-bottom:3px solid var(--rust);}
+  header .brand{color:#fff;}
+  header .brand-sub{color:var(--gold);}
+  header .who{color:var(--gold);}
+  header .who strong{color:#fff;}
+  header .logout{color:#fff;}
   .brand{font-family:'Oswald',sans-serif;font-weight:600;font-size:24px;letter-spacing:.3px;color:var(--ink);margin:0;}
   .brand-sub{color:var(--ink-soft);font-size:13px;margin-top:2px;}
   .top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
@@ -349,18 +355,18 @@ function renderLogin(errorMsg){
   const app = document.getElementById('app');
   app.innerHTML = `
     <div style="min-height:100vh;display:flex;flex-direction:column;">
-      <div style="flex:1;padding:28px 20px;text-align:center;">
-        <h1 class="brand">Coomer Home Improvements</h1>
-        <div class="brand-sub" style="margin-bottom:10px;">Subcontractor Portal</div>
-        <span class="link-btn" id="adminToggle">${showAdminLogin ? 'Hide admin login' : 'Admin login'}</span>
+      <div style="flex:1;padding:28px 20px;text-align:center;background:var(--denim);color:#fff;">
+        <h1 class="brand" style="color:#fff;">Coomer Home Improvements</h1>
+        <div class="brand-sub" style="margin-bottom:10px;color:var(--gold);">Subcontractor Portal</div>
+        <span class="link-btn" id="adminToggle" style="color:#fff;">${showAdminLogin ? 'Hide admin login' : 'Admin login'}</span>
         ${showAdminLogin ? `
           <form id="adminLoginForm" style="max-width:340px;margin:16px auto 0;text-align:left;">
-            <div class="field"><label for="l_email">Email</label><input id="l_email" type="email" required></div>
-            <div class="field"><label for="l_pw">Password</label><input id="l_pw" type="password" required></div>
+            <div class="field"><label for="l_email" style="color:#fff;">Email</label><input id="l_email" type="email" required></div>
+            <div class="field"><label for="l_pw" style="color:#fff;">Password</label><input id="l_pw" type="password" required></div>
             <button type="submit" class="btn block">Log In</button>
           </form>
         ` : ''}
-        ${errorMsg ? `<div class="msg error" style="max-width:340px;margin:16px auto 0;">${esc(errorMsg)}</div>` : ''}
+        ${errorMsg ? `<div class="msg error" style="max-width:340px;margin:16px auto 0;background:#fff;">${esc(errorMsg)}</div>` : ''}
       </div>
       <div style="background:var(--paper);border-top:2px solid var(--ink);padding:20px;">
         <div style="max-width:340px;margin:0 auto;">
@@ -1032,8 +1038,7 @@ function renderSubDetail(main){
       ${s.status==='ACTIVE' ? `<button class="btn secondary block" id="resetLoginBtn">Reset Login (forgot PIN)</button>` : ''}
       ${s.status==='ACTIVE' ? `<button class="btn secondary block" id="disableBtn">Disable Account</button>` : ''}
       ${s.status==='DISABLED' ? `<button class="btn secondary block" id="enableBtn">Re-enable Account</button>` : ''}
-      ${s.status!=='DELETED' ? `<button class="btn danger block" id="deleteBtn">Permanently Delete Account</button>` : `<div class="msg error">This account has been permanently deleted.</div>`}
-    </div>
+      ${s.status!=='DELETED' ? `<button class="btn danger block" id="deleteBtn">Permanently Delete Account</button>` : `<div class="msg error">This account has been permanently deleted.</div>`}  </div>
     <div id="subActionMsg"></div>
   `;
   document.getElementById('backBtn').onclick = ()=>{ openSubId=null; renderApp(); };
