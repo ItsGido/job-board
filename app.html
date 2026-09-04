@@ -359,14 +359,12 @@ function renderLogin(errorMsg){
       <div style="background:var(--paper);border-top:2px solid var(--ink);padding:20px;">
         <div style="max-width:340px;margin:0 auto;">
           <h2 class="section" style="margin-top:0;">Subcontractor Login</h2>
-          <form id="subLoginForm">
+          <form id="subIdForm">
             <div class="field"><label for="l_id">Subcontractor ID</label><input id="l_id" placeholder="CHI-0001" required autocapitalize="characters"></div>
-            <div class="field"><label for="l_pin">PIN</label><input id="l_pin" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="4-digit PIN" required></div>
-            <button type="submit" class="btn block">Log In</button>
+            <button type="submit" class="btn block">Continue</button>
           </form>
-          <div style="display:flex;justify-content:space-between;margin-top:12px;">
+          <div style="display:flex;justify-content:flex-end;margin-top:12px;">
             <span class="link-btn" id="forgotIdBtn">Forgot ID?</span>
-            <span class="link-btn" id="forgotPinBtn">Forgot PIN?</span>
           </div>
         </div>
       </div>
@@ -381,19 +379,49 @@ function renderLogin(errorMsg){
       await auth.signInWithEmailAndPassword(document.getElementById('l_email').value.trim(), document.getElementById('l_pw').value);
     }catch(err){ renderLogin('Wrong login — check your details and try again.'); }
   };
-  document.getElementById('subLoginForm').onsubmit = async (e)=>{
+  document.getElementById('subIdForm').onsubmit = (e)=>{
     e.preventDefault();
     const id = document.getElementById('l_id').value.trim().toUpperCase();
-    const pin = document.getElementById('l_pin').value.trim();
-    try{
-      await auth.signInWithEmailAndPassword(subIdToEmail(id), pinToPassword(pin));
-    }catch(err){ renderLogin('Wrong ID or PIN — try again.'); }
+    if(id) openPinModal(id);
   };
   document.getElementById('forgotIdBtn').onclick = ()=> openForgotModal('FORGOT_ID');
-  document.getElementById('forgotPinBtn').onclick = ()=> openForgotModal('FORGOT_PIN');
 }
 
-function openForgotModal(type){
+function openPinModal(id){
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="modal"><div class="modal-inner">
+      <span class="close" id="closePinModal">&times;</span>
+      <h3>Enter Your PIN</h3>
+      <p class="hint">Signing in as <strong>${esc(id)}</strong>. First time logging in? Use the temporary PIN your admin gave you — you'll be asked to set a permanent one right after.</p>
+      <form id="pinForm">
+        <div class="field"><label for="pm_pin">PIN</label><input id="pm_pin" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="4-digit PIN" required></div>
+        <button type="submit" class="btn block">Log In</button>
+      </form>
+      <div id="pinMsg"></div>
+      <div style="text-align:right;margin-top:12px;">
+        <span class="link-btn" id="forgotPinBtn">Forgot PIN?</span>
+      </div>
+    </div></div>
+  `;
+  document.body.appendChild(backdrop);
+  document.getElementById('closePinModal').onclick = ()=> backdrop.remove();
+  document.getElementById('pm_pin').focus();
+  document.getElementById('pinForm').onsubmit = async (e)=>{
+    e.preventDefault();
+    const pin = document.getElementById('pm_pin').value.trim();
+    try{
+      await auth.signInWithEmailAndPassword(subIdToEmail(id), pinToPassword(pin));
+      backdrop.remove();
+    }catch(err){
+      document.getElementById('pinMsg').innerHTML = '<div class="msg error">Wrong ID or PIN — try again.</div>';
+    }
+  };
+  document.getElementById('forgotPinBtn').onclick = ()=>{ backdrop.remove(); openForgotModal('FORGOT_PIN', id); };
+}
+
+function openForgotModal(type, prefillId){
   const isId = type==='FORGOT_ID';
   const backdrop = document.createElement('div');
   backdrop.className = 'modal-backdrop';
@@ -403,7 +431,7 @@ function openForgotModal(type){
       <h3>${isId ? "Forgot Your ID" : "Forgot Your PIN"}</h3>
       <p class="hint">This notifies the admin — no passwords are ever emailed. He'll reach out to help you back in.</p>
       <form id="forgotForm">
-        ${!isId ? `<div class="field"><label>Subcontractor ID</label><input id="fg_id" placeholder="CHI-0001" required></div>` : ''}
+        ${(!isId && !prefillId) ? `<div class="field"><label>Subcontractor ID</label><input id="fg_id" placeholder="CHI-0001" required></div>` : ''}
         <div class="field"><label>Your name</label><input id="fg_name" required></div>
         <div class="field"><label>Your phone</label><input id="fg_phone" required></div>
         <button type="submit" class="btn block">Notify Admin</button>
@@ -417,7 +445,7 @@ function openForgotModal(type){
     e.preventDefault();
     const payload = {
       type,
-      subcontractorId: isId ? '' : document.getElementById('fg_id').value.trim().toUpperCase(),
+      subcontractorId: isId ? '' : (prefillId || document.getElementById('fg_id').value.trim().toUpperCase()),
       name: document.getElementById('fg_name').value.trim(),
       phone: document.getElementById('fg_phone').value.trim(),
       status: 'NEW',
@@ -1281,8 +1309,7 @@ function wireSubControls(main){
     btn.onclick = async ()=>{
       const add = btn.dataset.value==='1';
       await db.collection('jobs').doc(btn.dataset.interest).update({
-        interestedUids: add ? firebase.firestore.FieldValue.arrayUnion(me.uid) : firebase.firestore.FieldValue.arrayRemove(me.uid)
-      });
+        interestedUids: add ? firebase.firestore.FieldValue.arrayUnion(me.uid) : firebase.firestore.FieldValue.arrayRemove(me.uid)   });
     };
   });
   main.querySelectorAll('[data-respond]').forEach(btn=>{
