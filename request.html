@@ -251,7 +251,6 @@
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const storage = firebase.storage();
-const jobsDocRef = db.collection('board').doc('jobs');
 emailjs.init({ publicKey: 'Q09gYijicA1O-h85i' });
 
 function notifyNewJob(job){
@@ -342,10 +341,7 @@ document.getElementById('jobForm').onsubmit = async (e)=>{
       photoUrls = await uploadPhotos(jobId);
       btn.textContent = 'Sending…';
     }
-    const doc = await jobsDocRef.get();
-    const jobs = (doc.exists && doc.data().list) || [];
     const job = {
-      id: jobId,
       customerName: document.getElementById('f_name').value.trim(),
       phone: document.getElementById('f_phone').value.trim(),
       email: document.getElementById('f_email').value.trim(),
@@ -356,13 +352,11 @@ document.getElementById('jobForm').onsubmit = async (e)=>{
       jobType: document.getElementById('f_type').value,
       estimatedValue: document.getElementById('f_value').value.trim(),
       preferredDays: document.getElementById('f_days').value.trim(),
-      payRate: '',
-      status: 'open',
-      assignedTo: null,
+      status: 'NEW',
+      adminNotes: '',
       createdAt: Date.now()
     };
-    jobs.push(job);
-    await jobsDocRef.set({ list: jobs });
+    await db.collection('requests').add(job);
     notifyNewJob(job);
     document.getElementById('formView').style.display = 'none';
     document.getElementById('confirmView').classList.add('show');
