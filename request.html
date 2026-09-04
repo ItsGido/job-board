@@ -8,16 +8,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#122540;
-    --navy-deep:#0B1B30;
+    --navy:#3E5E82;
+    --navy-deep:#26394D;
     --paper:#F6F3ED;
     --paper-alt:#EFEAE0;
-    --ink:#171E29;
+    --ink:#1C2733;
     --ink-soft:#5B6470;
     --white:#FFFFFF;
-    --rust:#C4501F;
-    --rust-dark:#A63F17;
-    --gold:#D9A441;
+    --rust:#4E7FA8;
+    --rust-dark:#3A6285;
+    --gold:#A9C3DA;
+    --warn:#B5502F;
+    --warn-dark:#943E22;
     --line:#DFD9CB;
     --success:#3F7A52;
   }
@@ -76,6 +78,20 @@
   .field input:focus, .field textarea:focus, .field select:focus{outline:2px solid var(--navy);outline-offset:1px;}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 
+  .field input[type="file"]{
+    padding:10px;
+    font-size:13.5px;
+    cursor:pointer;
+  }
+  .photo-preview{
+    display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;
+  }
+  .photo-preview img{
+    width:72px;height:72px;object-fit:cover;
+    border-radius:7px;border:1.5px solid var(--line);
+  }
+  .upload-status{font-size:12.5px;color:var(--ink-soft);margin-top:8px;}
+
   .contact-pref{
     display:flex;align-items:center;gap:10px;
     padding:12px 14px;
@@ -92,12 +108,12 @@
   .license-warning{
     margin:-4px 0 18px;
     padding:14px 16px;
-    border:1.5px solid var(--rust);
-    border-left:4px solid var(--rust);
+    border:1.5px solid var(--warn);
+    border-left:4px solid var(--warn);
     border-radius:7px;
     background:#FBF1EC;
   }
-  .license-warning p{margin:0;color:var(--rust-dark);font-weight:600;font-size:13.5px;line-height:1.45;}
+  .license-warning p{margin:0;color:var(--warn-dark);font-weight:600;font-size:13.5px;line-height:1.45;}
 
   .btn{
     display:inline-flex;align-items:center;justify-content:center;gap:8px;
@@ -138,7 +154,7 @@
   <div class="navrow">
     <a class="mark" href="index.html">
       <span class="mark-badge">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.77z"/></svg>
+        <svg viewBox="0 0 48 32" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17L13 5l11 12"/><path d="M15 21L24 3l9 18"/><path d="M26 17L37 5l9 12"/><line x1="4" y1="27" x2="44" y2="27"/></svg>
       </span>
       <span class="mark-text">Coomer Home Improvements</span>
     </a>
@@ -152,7 +168,7 @@
     <div class="intro">
       <p class="eyebrow">Request a Job</p>
       <h1>Tell us what's broken.</h1>
-      <p>Fill this out and we'll text you back with a quote — usually within a day. No call needed.</p>
+      <p>Fill this out and we'll contact you back with a quote — usually within a day.</p>
     </div>
 
     <div class="form-card">
@@ -163,7 +179,7 @@
         </div>
         <div class="row2">
           <div class="field">
-            <label for="f_phone">Phone <span class="hint">(for texting you back)</span></label>
+            <label for="f_phone">Phone</label>
             <input id="f_phone" type="tel" required>
           </div>
           <div class="field">
@@ -186,6 +202,11 @@
           <textarea id="f_desc" required placeholder="e.g. Drywall patch in the hallway, about 2ft wide, from a door handle hole"></textarea>
         </div>
         <div class="field">
+          <label for="f_photos">Photos <span class="hint">(optional — up to 4, helps us quote accurately)</span></label>
+          <input id="f_photos" type="file" accept="image/*" multiple>
+          <div id="photoPreview" class="photo-preview"></div>
+        </div>
+        <div class="field">
           <label for="f_type">What kind of job is this? <span class="hint">(unsure? leave as General)</span></label>
           <select id="f_type">
             <option value="general">General handyman</option>
@@ -204,7 +225,6 @@
           <input id="f_days" placeholder="e.g. weekday mornings">
         </div>
         <button type="submit" class="btn" id="postBtn">Send Request</button>
-        <p class="form-note">We'll text you back — no account or app download needed.</p>
       </form>
     </div>
   </div>
@@ -214,7 +234,7 @@
       <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
     </div>
     <h2>Got it — thanks!</h2>
-    <p>We'll text you back with a quote, usually within a day. No need to call or check back in.</p>
+    <p>We'll contact you back with a quote, usually within a day.</p>
     <a class="back-home" href="index.html">&larr; Back to home</a>
   </div>
 
@@ -224,13 +244,42 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-storage-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script>
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const storage = firebase.storage();
 const jobsDocRef = db.collection('board').doc('jobs');
 
 function uid(){return 'job_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);}
+
+const MAX_PHOTOS = 4;
+let selectedPhotoFiles = [];
+
+document.getElementById('f_photos').onchange = (e)=>{
+  const files = Array.from(e.target.files || []).slice(0, MAX_PHOTOS);
+  selectedPhotoFiles = files;
+  const preview = document.getElementById('photoPreview');
+  preview.innerHTML = '';
+  files.forEach(file=>{
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    preview.appendChild(img);
+  });
+};
+
+async function uploadPhotos(jobId){
+  if(selectedPhotoFiles.length === 0) return [];
+  const urls = [];
+  for(let i=0; i<selectedPhotoFiles.length; i++){
+    const file = selectedPhotoFiles[i];
+    const ref = storage.ref().child(`job-photos/${jobId}/${i}_${file.name}`);
+    await ref.put(file);
+    urls.push(await ref.getDownloadURL());
+  }
+  return urls;
+}
 
 function jobNeedsLicense(j){
   const tradeTypes = ['plumbing','electrical','hvac'];
@@ -270,16 +319,24 @@ document.getElementById('jobForm').onsubmit = async (e)=>{
   btn.disabled = true;
   btn.textContent = 'Sending…';
   try{
+    const jobId = uid();
+    let photoUrls = [];
+    if(selectedPhotoFiles.length > 0){
+      btn.textContent = 'Uploading photos…';
+      photoUrls = await uploadPhotos(jobId);
+      btn.textContent = 'Sending…';
+    }
     const doc = await jobsDocRef.get();
     const jobs = (doc.exists && doc.data().list) || [];
     const job = {
-      id: uid(),
+      id: jobId,
       customerName: document.getElementById('f_name').value.trim(),
       phone: document.getElementById('f_phone').value.trim(),
       email: document.getElementById('f_email').value.trim(),
       textOnly: document.getElementById('f_textonly').checked,
       address: document.getElementById('f_address').value.trim(),
       description: document.getElementById('f_desc').value.trim(),
+      photos: photoUrls,
       jobType: document.getElementById('f_type').value,
       estimatedValue: document.getElementById('f_value').value.trim(),
       preferredDays: document.getElementById('f_days').value.trim(),
