@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coomer Home Improvements — Job Board</title>
+<title>Coomer Home Improvements — Subcontractor Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -18,6 +18,7 @@
     --amber:#A6822C;
     --moss:#5C6B4F;
     --line:#C7B896;
+    --danger:#9C2B1F;
   }
   *{box-sizing:border-box;}
   body{
@@ -29,622 +30,1501 @@
     line-height:1.45;
     -webkit-font-smoothing:antialiased;
   }
-  .app{max-width:520px;margin:0 auto;padding:0 0 48px;}
+  .app{max-width:560px;margin:0 auto;padding:0 0 60px;}
 
   header{padding:20px 18px 14px;}
-  .brand{
-    font-family:'Oswald',sans-serif;
-    font-weight:600;
-    font-size:24px;
-    letter-spacing:.3px;
-    color:var(--ink);
-    margin:0;
-  }
+  .brand{font-family:'Oswald',sans-serif;font-weight:600;font-size:24px;letter-spacing:.3px;color:var(--ink);margin:0;}
   .brand-sub{color:var(--ink-soft);font-size:13px;margin-top:2px;}
+  .top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+  .who{text-align:right;font-size:12.5px;color:var(--ink-soft);}
+  .who strong{display:block;color:var(--ink);font-size:14px;font-family:'Oswald',sans-serif;font-weight:600;}
+  .logout{font-size:12px;color:var(--rust);cursor:pointer;text-decoration:underline;margin-top:3px;display:inline-block;}
 
-  nav.tabs{display:flex;gap:6px;padding:0 14px;margin-top:14px;}
+  nav.tabs{display:flex;gap:5px;padding:0 12px;margin-top:14px;overflow-x:auto;}
   nav.tabs button{
-    flex:1;
-    font-family:'Inter',sans-serif;
-    font-weight:600;
-    font-size:13.5px;
-    padding:11px 6px;
-    border:1.5px solid var(--line);
-    border-bottom:none;
-    background:var(--paper);
-    color:var(--ink-soft);
-    border-radius:8px 8px 0 0;
-    cursor:pointer;
+    flex:1;min-width:76px;
+    font-family:'Inter',sans-serif;font-weight:600;font-size:12.5px;
+    padding:10px 5px;border:1.5px solid var(--line);border-bottom:none;
+    background:var(--paper);color:var(--ink-soft);border-radius:8px 8px 0 0;cursor:pointer;white-space:nowrap;
   }
-  nav.tabs button.active{
-    background:var(--paper-light);
-    color:var(--ink);
-    border-color:var(--ink);
-    position:relative;
-  }
-  main{padding:16px;border-top:1.5px solid var(--ink);background:var(--paper-light);}
+  nav.tabs button.active{background:var(--paper-light);color:var(--ink);border-color:var(--ink);}
+  main{padding:16px;border-top:1.5px solid var(--ink);background:var(--paper-light);min-height:60vh;}
 
-  h2.section{
-    font-family:'Oswald',sans-serif;
-    font-weight:600;
-    font-size:15px;
-    color:var(--ink-soft);
-    margin:22px 0 10px;
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
+  h2.section{font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;color:var(--ink-soft);margin:22px 0 10px;display:flex;align-items:center;gap:8px;}
   h2.section:first-child{margin-top:2px;}
-  .count-badge{
-    font-family:'Inter',sans-serif;
-    font-size:12px;
-    font-weight:600;
-    background:var(--paper-dark);
-    color:var(--ink-soft);
-    padding:1px 8px;
-    border-radius:10px;
-  }
+  .count-badge{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;background:var(--paper-dark);color:var(--ink-soft);padding:1px 8px;border-radius:10px;}
   .hint{font-size:12.5px;color:var(--ink-soft);margin:-4px 0 14px;}
 
   .field{margin-bottom:12px;}
   .field label{display:block;font-size:13px;color:var(--ink-soft);margin-bottom:4px;font-weight:500;}
   .field input, .field textarea, .field select{
-    width:100%;
-    padding:10px 11px;
-    border:1.5px solid var(--line);
-    border-radius:6px;
-    font-family:'Inter',sans-serif;
-    font-size:15px;
-    background:var(--paper-light);
-    color:var(--ink);
+    width:100%;padding:10px 11px;border:1.5px solid var(--line);border-radius:6px;
+    font-family:'Inter',sans-serif;font-size:15px;background:var(--paper-light);color:var(--ink);
   }
   .field textarea{resize:vertical;min-height:64px;}
   .field input:focus, .field textarea:focus, .field select:focus{outline:2px solid var(--denim);outline-offset:1px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
   .btn{
-    display:inline-block;
-    font-family:'Inter',sans-serif;
-    font-weight:600;
-    font-size:14.5px;
-    padding:12px 18px;
-    border-radius:6px;
-    border:1.5px solid var(--ink);
-    background:var(--ink);
-    color:var(--paper-light);
-    cursor:pointer;
-    text-align:center;
+    display:inline-block;font-family:'Inter',sans-serif;font-weight:600;font-size:14.5px;
+    padding:13px 18px;border-radius:6px;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper-light);
+    cursor:pointer;text-align:center;
   }
   .btn.secondary{background:transparent;color:var(--ink);}
+  .btn.danger{background:var(--danger);border-color:var(--danger);color:#fff;}
+  .btn.danger.ghost{background:transparent;color:var(--danger);}
   .btn.block{width:100%;}
   .btn.small{padding:8px 12px;font-size:13px;}
-  .confirm-msg{
-    margin-top:12px;
-    padding:12px 14px;
-    border:1.5px dashed var(--moss);
-    border-radius:6px;
-    color:var(--moss);
-    font-weight:600;
-    font-size:14px;
-  }
-  .license-warning{
-    margin-top:4px;
-    margin-bottom:14px;
-    padding:12px 14px;
-    border:1.5px solid var(--rust);
-    border-radius:6px;
-    background:var(--paper);
-  }
-  .license-warning p{
-    margin:0 0 10px;
-    color:var(--rust);
-    font-weight:600;
-    font-size:13.5px;
-    line-height:1.4;
-  }
-  .license-warning label{
-    display:flex;
-    align-items:flex-start;
-    gap:8px;
-    font-size:13px;
-    color:var(--ink-soft);
-    font-weight:500;
-    cursor:pointer;
-  }
-  .license-warning input[type="checkbox"]{width:auto;margin-top:3px;}
-  .license-flag{
-    color:var(--rust);
-    font-weight:700;
-  }
+  .btn:disabled{opacity:.5;cursor:default;}
 
-  .ticket{background:var(--paper);border:1.5px solid var(--ink);border-radius:8px;margin-bottom:14px;overflow:hidden;}
-  .ticket-top{padding:12px 14px 10px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
-  .ticket-name{font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;}
-  .ticket-desc{font-size:14px;color:var(--ink-soft);margin-top:3px;}
-  .ticket-meta{font-size:13px;color:var(--ink-soft);margin-top:6px;}
-  .ticket-meta div{margin-top:2px;}
-  .ticket-photos{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
-  .ticket-photos img{width:60px;height:60px;object-fit:cover;border-radius:6px;border:1.5px solid var(--line);}
+  .msg{margin-top:12px;padding:12px 14px;border:1.5px dashed var(--moss);border-radius:6px;color:var(--moss);font-weight:600;font-size:14px;}
+  .msg.error{border-color:var(--danger);color:var(--danger);}
+
+  .card{background:var(--paper);border:1.5px solid var(--ink);border-radius:8px;margin-bottom:14px;overflow:hidden;}
+  .card-top{padding:12px 14px 10px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+  .card-title{font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;}
+  .card-sub{font-size:14px;color:var(--ink-soft);margin-top:3px;}
+  .card-meta{font-size:13px;color:var(--ink-soft);margin-top:6px;}
+  .card-meta div{margin-top:2px;}
   .pay{font-weight:700;color:var(--ink);}
+  .card-photos{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .card-photos img{width:60px;height:60px;object-fit:cover;border-radius:6px;border:1.5px solid var(--line);}
   .stamp{
-    font-family:'Oswald',sans-serif;
-    font-weight:700;
-    font-size:11.5px;
-    letter-spacing:.5px;
-    padding:4px 9px;
-    border:2px solid currentColor;
-    border-radius:5px;
-    transform:rotate(-3deg);
-    white-space:nowrap;
-    flex-shrink:0;
+    font-family:'Oswald',sans-serif;font-weight:700;font-size:11px;letter-spacing:.4px;
+    padding:4px 8px;border:2px solid currentColor;border-radius:5px;transform:rotate(-3deg);white-space:nowrap;flex-shrink:0;
   }
-  .stamp.open{color:var(--rust);}
-  .stamp.claimed{color:var(--denim);}
-  .stamp.in_progress{color:var(--amber);}
-  .stamp.done{color:var(--moss);}
+  .stamp.new, .stamp.available{color:var(--rust);}
+  .stamp.contacted, .stamp.offered, .stamp.processing{color:var(--amber);}
+  .stamp.scoping, .stamp.accepted, .stamp.assigned, .stamp.scheduled{color:var(--denim);}
+  .stamp.ready_to_create_job, .stamp.in_progress, .stamp.on_the_way{color:#7A5A9E;}
+  .stamp.completed, .stamp.paid, .stamp.active{color:var(--moss);}
+  .stamp.on_hold, .stamp.pending{color:var(--amber);}
+  .stamp.closed, .stamp.cancelled, .stamp.disabled, .stamp.deleted, .stamp.declined, .stamp.void{color:var(--ink-soft);}
 
   .perf{height:0;border-top:2px dashed var(--line);}
-
-  .ticket-body{padding:12px 14px 14px;}
-  .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
-  .row select{flex:1;min-width:120px;}
+  .card-body{padding:12px 14px 14px;}
   .status-buttons{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
   .status-buttons button{
-    flex:1;
-    min-width:70px;
-    font-family:'Inter',sans-serif;
-    font-size:12.5px;
-    font-weight:600;
-    padding:8px 6px;
-    border-radius:5px;
-    border:1.5px solid var(--line);
-    background:var(--paper-light);
-    color:var(--ink-soft);
-    cursor:pointer;
+    flex:1;min-width:80px;font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;
+    padding:9px 6px;border-radius:5px;border:1.5px solid var(--line);background:var(--paper-light);color:var(--ink-soft);cursor:pointer;
   }
-  .status-buttons button.current{border-color:var(--ink);color:var(--ink);background:var(--paper-dark);}
 
   .empty{text-align:center;padding:32px 20px;color:var(--ink-soft);font-size:14px;border:1.5px dashed var(--line);border-radius:8px;}
 
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
-  .chip{
-    padding:8px 14px;
-    border-radius:20px;
-    border:1.5px solid var(--line);
-    background:var(--paper-light);
-    font-size:13.5px;
-    font-weight:600;
-    color:var(--ink-soft);
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    gap:6px;
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;}
+  .stat-grid.tri{grid-template-columns:1fr 1fr 1fr;}
+  .stat{background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:14px 12px;text-align:center;}
+  .stat .num{font-family:'Oswald',sans-serif;font-weight:700;font-size:22px;}
+  .stat .lbl{font-size:11.5px;color:var(--ink-soft);margin-top:2px;text-transform:uppercase;letter-spacing:.4px;}
+  .stat.owed .num{color:var(--rust);}
+  .stat.paid .num{color:var(--moss);}
+
+  .id-badge{
+    font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.5px;font-size:13px;
+    background:var(--denim);color:#fff;padding:3px 9px;border-radius:5px;display:inline-block;
   }
-  .chip.active{border-color:var(--ink);color:var(--ink);background:var(--paper-dark);}
-  .chip .x{color:var(--rust);font-weight:700;}
+
+  .login-wrap{max-width:400px;margin:60px auto;padding:0 20px;}
+  .login-toggle{display:flex;gap:8px;margin-bottom:22px;}
+  .login-toggle button{
+    flex:1;padding:10px;border-radius:7px;border:1.5px solid var(--line);background:var(--paper);
+    color:var(--ink-soft);font-weight:600;font-size:13.5px;cursor:pointer;
+  }
+  .login-toggle button.active{background:var(--denim);border-color:var(--denim);color:#fff;}
+
+  .filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+  .filter-row button{
+    padding:7px 13px;border-radius:20px;border:1.5px solid var(--line);background:var(--paper-light);
+    color:var(--ink-soft);font-size:12.5px;font-weight:600;cursor:pointer;
+  }
+  .filter-row button.active{background:var(--ink);border-color:var(--ink);color:var(--paper-light);}
+  .search-box{margin-bottom:12px;}
+
+  table.ledger{width:100%;border-collapse:collapse;font-size:13.5px;}
+  table.ledger th{text-align:left;font-size:11.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.3px;padding:6px 4px;border-bottom:1.5px solid var(--ink);}
+  table.ledger td{padding:9px 4px;border-bottom:1px solid var(--line);}
+
+  .modal-backdrop{position:fixed;inset:0;background:rgba(43,38,32,0.55);display:flex;align-items:flex-end;justify-content:center;z-index:50;}
+  .modal{background:var(--paper-light);width:100%;max-width:560px;border-radius:14px 14px 0 0;padding:20px 18px 26px;max-height:88vh;overflow-y:auto;}
+  .modal h3{font-family:'Oswald',sans-serif;font-weight:600;margin:0 0 4px;}
+  .modal .close{position:absolute;top:16px;right:20px;font-size:20px;color:var(--ink-soft);cursor:pointer;}
+  .modal-inner{position:relative;}
+  .checkline{display:flex;align-items:flex-start;gap:8px;font-size:14px;margin:14px 0;}
+  .checkline input{width:auto;margin-top:3px;}
+
+  .history-line{font-size:12.5px;color:var(--ink-soft);padding:6px 0;border-bottom:1px dashed var(--line);}
+  .history-line:last-child{border-bottom:none;}
+
+  .link-btn{color:var(--denim);text-decoration:underline;cursor:pointer;font-size:12.5px;font-weight:600;}
 
   footer{text-align:center;padding:20px 16px 0;font-size:12px;color:var(--ink-soft);}
-  footer a{color:var(--ink-soft);text-decoration:underline;cursor:pointer;}
-  .loading{padding:40px;text-align:center;color:var(--ink-soft);}
+  .loading{padding:60px 20px;text-align:center;color:var(--ink-soft);}
 </style>
 </head>
 <body>
 <div class="app" id="app">
-  <div class="loading">Loading board…</div>
+  <div class="loading">Loading…</div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="firebase-config.js"></script>
 <script>
 firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 const db = firebase.firestore();
-const jobsDocRef = db.collection('board').doc('jobs');
-const contractorsDocRef = db.collection('board').doc('contractors');
+const SUB_EMAIL_DOMAIN = 'subs.coomerhi.internal';
+emailjs.init({ publicKey: 'Q09gYijicA1O-h85i' });
 
-let jobs = [];
-let contractors = [];
-let activeTab = 'intake';
-let selectedContractor = null;
-
-function esc(s){
-  return (s===undefined||s===null?'':s).toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function uid(){return 'job_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);}
-
-function jobNeedsLicense(j){
-  const tradeTypes = ['plumbing','electrical','hvac'];
-  const estNum = parseFloat((j.estimatedValue||'').replace(/[^0-9.]/g,'')) || 0;
-  return tradeTypes.includes(j.jobType) || estNum > 1000;
-}
-function licenseWarningText(j){
-  const tradeTypes = ['plumbing','electrical','hvac'];
-  if(tradeTypes.includes(j.jobType)){
-    return `${j.jobType[0].toUpperCase()+j.jobType.slice(1)} work always requires a Virginia specialty license, regardless of job cost.`;
-  }
-  return `This job's estimated total is over $1,000. Virginia requires a contractor's license (Class C or higher) for any job over $1,000 in labor + materials.`;
+function sendSupportEmail(payload){
+  emailjs.send('service_i3oreff', 'template_4sgo40e', payload)
+    .catch(err => console.error('Support notification email failed to send', err));
 }
 
-function subscribeToData(){
-  jobsDocRef.onSnapshot(doc=>{
-    jobs = (doc.exists && doc.data().list) || [];
-    render();
-  }, err=>{ console.error('Jobs listener error', err); });
-  contractorsDocRef.onSnapshot(doc=>{
-    contractors = (doc.exists && doc.data().list) || [];
-    render();
-  }, err=>{ console.error('Contractors listener error', err); });
-}
-
-async function saveJobs(){
-  try{
-    await jobsDocRef.set({ list: jobs });
-  }catch(e){ console.error('Firestore error saving jobs', e); }
-}
-async function saveContractors(){
-  try{
-    await contractorsDocRef.set({ list: contractors });
-  }catch(e){ console.error('Firestore error saving contractors', e); }
-}
-
+/* ---------------- helpers ---------------- */
+function esc(s){ return (s===undefined||s===null?'':s).toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function centsToStr(c){ c = c||0; const neg = c<0; c = Math.abs(c); const s = (c/100).toFixed(2); return (neg?'-':'')+'$'+s; }
+function dollarsToCents(str){ const n = parseFloat((str||'').toString().replace(/[^0-9.\-]/g,'')); return Number.isFinite(n) ? Math.round(n*100) : 0; }
+function fmtDate(ts){ if(!ts) return ''; const d = ts instanceof Date ? ts : new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+function fmtDateTime(ts){ if(!ts) return ''; const d = ts instanceof Date ? ts : new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ', ' + d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}); }
+function now(){ return Date.now(); }
+function subIdToEmail(id){ return id.trim().toUpperCase().toLowerCase() + '@' + SUB_EMAIL_DOMAIN; }
 function statusLabel(s){
-  return {open:'Open', claimed:'Claimed', in_progress:'In progress', done:'Done'}[s] || s;
+  return (s||'').split('_').map(w=>w[0]+w.slice(1).toLowerCase()).join(' ');
+}
+function stampClass(s){ return (s||'').toLowerCase(); }
+
+function pinToPassword(pin){ return pin + 'chi0'; }
+
+async function restCreateAuthAccount(email, password){
+  const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${firebaseConfig.apiKey}`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ email, password, returnSecureToken:false })
+  });
+  const data = await res.json();
+  if(!res.ok) throw new Error((data.error && data.error.message) || 'Could not create login');
+  return data.localId;
 }
 
-function render(){
+/* ---------------- global state ---------------- */
+let me = null;          // firebase auth user
+let myRole = null;      // {role:'admin'} | {role:'subcontractor', subcontractorId}
+let mySubDoc = null;    // subcontractors/{id} doc data, for subcontractor role
+let activeTab = null;
+let unsubs = [];
+
+let adminData = { requests:[], jobs:[], subs:[], payouts:[], supportRequests:[] };
+let subData = { availableJobs:[], offeredJobs:[], myJobs:[], payouts:[], mileage:[] };
+
+let openRequestId = null, openJobId = null, openSubId = null, openPayoutId = null;
+let mileageFilter = 'month';
+let payoutFilter = 'all';
+
+function clearListeners(){ unsubs.forEach(u=>u()); unsubs = []; }
+
+/* ---------------- auth state ---------------- */
+auth.onAuthStateChanged(async (user)=>{
+  clearListeners();
+  me = user;
+  myRole = null; mySubDoc = null;
+  if(!user){ renderLogin(); return; }
+  try{
+    const roleSnap = await db.collection('roles').doc(user.uid).get();
+    if(!roleSnap.exists){ await auth.signOut(); renderLogin('Account not set up. Ask the admin to add you.'); return; }
+    myRole = roleSnap.data();
+    if(myRole.role === 'admin'){
+      activeTab = activeTab && ['requests','dispatch','jobs','subs','payouts'].includes(activeTab) ? activeTab : 'requests';
+      subscribeAdmin();
+    }else if(myRole.role === 'subcontractor'){
+      const subSnap = await db.collection('subcontractors').doc(myRole.subcontractorId).get();
+      if(!subSnap.exists || subSnap.data().status !== 'ACTIVE'){
+        await auth.signOut();
+        renderLogin('This account is not active. Contact the admin.');
+        return;
+      }
+      mySubDoc = subSnap.data();
+      proceedAfterSubAuth();
+    }else{
+      await auth.signOut(); renderLogin('Unrecognized account type.');
+    }
+  }catch(e){
+    console.error(e);
+    renderLogin('Sign-in error — please try again.');
+  }
+});
+
+/* ---------------- gates a subcontractor must clear before the dashboard ---------------- */
+function proceedAfterSubAuth(){
+  if(mySubDoc.mustChangePin){ renderSetPin(); return; }
+  if(!mySubDoc.onboardingComplete){ renderOnboarding(); return; }
+  activeTab = activeTab && ['home','available','myjobs','payouts','mileage','profile'].includes(activeTab) ? activeTab : 'home';
+  subscribeSub();
+}
+
+/* ---------------- first-login: set a real PIN ---------------- */
+function renderSetPin(){
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="login-wrap">
+      <h1 class="brand" style="text-align:center;">Welcome, ${esc((mySubDoc.name||'').split(' ')[0])}</h1>
+      <div class="brand-sub" style="text-align:center;margin-bottom:24px;">Set your own 4-digit PIN to finish logging in. Your temporary one won't work again.</div>
+      <form id="setPinForm">
+        <div class="field"><label>New 4-digit PIN</label><input id="np_pin" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required></div>
+        <div class="field"><label>Confirm PIN</label><input id="np_pin2" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required></div>
+        <div id="setPinMsg"></div>
+        <button type="submit" class="btn block">Save PIN</button>
+      </form>
+    </div>
+  `;
+  document.getElementById('setPinForm').onsubmit = async (e)=>{
+    e.preventDefault();
+    const p1 = document.getElementById('np_pin').value.trim();
+    const p2 = document.getElementById('np_pin2').value.trim();
+    if(!/^\d{4}$/.test(p1) || p1!==p2){
+      document.getElementById('setPinMsg').innerHTML = '<div class="msg error">PINs must match and be 4 digits.</div>';
+      return;
+    }
+    try{
+      await auth.currentUser.updatePassword(pinToPassword(p1));
+      await db.collection('subcontractors').doc(myRole.subcontractorId).update({ mustChangePin: false });
+      mySubDoc.mustChangePin = false;
+      proceedAfterSubAuth();
+    }catch(err){
+      document.getElementById('setPinMsg').innerHTML = `<div class="msg error">${esc(err.message)}</div>`;
+    }
+  };
+}
+
+/* ---------------- first-login: onboarding (1099 info) ---------------- */
+function renderOnboarding(){
+  const app = document.getElementById('app');
+  const o = mySubDoc.onboarding || {};
+  app.innerHTML = `
+    <div class="login-wrap" style="max-width:480px;">
+      <h1 class="brand" style="text-align:center;">Almost done, ${esc((mySubDoc.name||'').split(' ')[0])}</h1>
+      <div class="brand-sub" style="text-align:center;margin-bottom:24px;">A few details for our records before you start seeing jobs.</div>
+      <form id="onboardForm">
+        <div class="field"><label>Legal name</label><input id="ob_name" value="${esc(o.legalName||mySubDoc.name||'')}" required></div>
+        <div class="field"><label>Address</label><input id="ob_address" value="${esc(o.address||'')}" required></div>
+        <div class="field"><label>License number / type (if applicable)</label><input id="ob_license" value="${esc(o.license||'')}" placeholder="e.g. VA Class C #123456"></div>
+        <label class="checkline"><input type="checkbox" id="ob_1099" required> I understand I am an independent contractor (1099), not an employee of Coomer Home Improvements.</label>
+        <div id="onboardMsg"></div>
+        <button type="submit" class="btn block">Continue</button>
+      </form>
+      <div class="hint" style="text-align:center;margin-top:10px;">Your husband/admin will follow up directly if he needs photos of your license.</div>
+    </div>
+  `;
+  document.getElementById('onboardForm').onsubmit = async (e)=>{
+    e.preventDefault();
+    if(!document.getElementById('ob_1099').checked) return;
+    try{
+      const onboarding = {
+        legalName: document.getElementById('ob_name').value.trim(),
+        address: document.getElementById('ob_address').value.trim(),
+        license: document.getElementById('ob_license').value.trim(),
+        acknowledged1099: true,
+        submittedAt: now()
+      };
+      await db.collection('subcontractors').doc(myRole.subcontractorId).update({ onboarding, onboardingComplete: true });
+      mySubDoc.onboarding = onboarding;
+      mySubDoc.onboardingComplete = true;
+      proceedAfterSubAuth();
+    }catch(err){
+      document.getElementById('onboardMsg').innerHTML = `<div class="msg error">${esc(err.message)}</div>`;
+    }
+  };
+}
+
+/* ---------------- login screen ---------------- */
+let showAdminLogin = false;
+function renderLogin(errorMsg){
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div style="min-height:100vh;display:flex;flex-direction:column;">
+      <div style="flex:1;padding:28px 20px;text-align:center;">
+        <h1 class="brand">Coomer Home Improvements</h1>
+        <div class="brand-sub" style="margin-bottom:10px;">Subcontractor Portal</div>
+        <span class="link-btn" id="adminToggle">${showAdminLogin ? 'Hide admin login' : 'Admin login'}</span>
+        ${showAdminLogin ? `
+          <form id="adminLoginForm" style="max-width:340px;margin:16px auto 0;text-align:left;">
+            <div class="field"><label for="l_email">Email</label><input id="l_email" type="email" required></div>
+            <div class="field"><label for="l_pw">Password</label><input id="l_pw" type="password" required></div>
+            <button type="submit" class="btn block">Log In</button>
+          </form>
+        ` : ''}
+        ${errorMsg ? `<div class="msg error" style="max-width:340px;margin:16px auto 0;">${esc(errorMsg)}</div>` : ''}
+      </div>
+      <div style="background:var(--paper);border-top:2px solid var(--ink);padding:20px;">
+        <div style="max-width:340px;margin:0 auto;">
+          <h2 class="section" style="margin-top:0;">Subcontractor Login</h2>
+          <form id="subLoginForm">
+            <div class="field"><label for="l_id">Subcontractor ID</label><input id="l_id" placeholder="CHI-0001" required autocapitalize="characters"></div>
+            <div class="field"><label for="l_pin">PIN</label><input id="l_pin" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="4-digit PIN" required></div>
+            <button type="submit" class="btn block">Log In</button>
+          </form>
+          <div style="display:flex;justify-content:space-between;margin-top:12px;">
+            <span class="link-btn" id="forgotIdBtn">Forgot ID?</span>
+            <span class="link-btn" id="forgotPinBtn">Forgot PIN?</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  const adminToggle = document.getElementById('adminToggle');
+  if(adminToggle) adminToggle.onclick = ()=>{ showAdminLogin = !showAdminLogin; renderLogin(); };
+  const adminForm = document.getElementById('adminLoginForm');
+  if(adminForm) adminForm.onsubmit = async (e)=>{
+    e.preventDefault();
+    try{
+      await auth.signInWithEmailAndPassword(document.getElementById('l_email').value.trim(), document.getElementById('l_pw').value);
+    }catch(err){ renderLogin('Wrong login — check your details and try again.'); }
+  };
+  document.getElementById('subLoginForm').onsubmit = async (e)=>{
+    e.preventDefault();
+    const id = document.getElementById('l_id').value.trim().toUpperCase();
+    const pin = document.getElementById('l_pin').value.trim();
+    try{
+      await auth.signInWithEmailAndPassword(subIdToEmail(id), pinToPassword(pin));
+    }catch(err){ renderLogin('Wrong ID or PIN — try again.'); }
+  };
+  document.getElementById('forgotIdBtn').onclick = ()=> openForgotModal('FORGOT_ID');
+  document.getElementById('forgotPinBtn').onclick = ()=> openForgotModal('FORGOT_PIN');
+}
+
+function openForgotModal(type){
+  const isId = type==='FORGOT_ID';
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="modal"><div class="modal-inner">
+      <span class="close" id="closeModal">&times;</span>
+      <h3>${isId ? "Forgot Your ID" : "Forgot Your PIN"}</h3>
+      <p class="hint">This notifies the admin — no passwords are ever emailed. He'll reach out to help you back in.</p>
+      <form id="forgotForm">
+        ${!isId ? `<div class="field"><label>Subcontractor ID</label><input id="fg_id" placeholder="CHI-0001" required></div>` : ''}
+        <div class="field"><label>Your name</label><input id="fg_name" required></div>
+        <div class="field"><label>Your phone</label><input id="fg_phone" required></div>
+        <button type="submit" class="btn block">Notify Admin</button>
+      </form>
+      <div id="forgotMsg"></div>
+    </div></div>
+  `;
+  document.body.appendChild(backdrop);
+  document.getElementById('closeModal').onclick = ()=> backdrop.remove();
+  document.getElementById('forgotForm').onsubmit = async (e)=>{
+    e.preventDefault();
+    const payload = {
+      type,
+      subcontractorId: isId ? '' : document.getElementById('fg_id').value.trim().toUpperCase(),
+      name: document.getElementById('fg_name').value.trim(),
+      phone: document.getElementById('fg_phone').value.trim(),
+      status: 'NEW',
+      createdAt: now()
+    };
+    try{
+      await db.collection('supportRequests').add(payload);
+      sendSupportEmail({
+        request_type: isId ? "A subcontractor forgot their ID." : "A subcontractor forgot their PIN — reset their login from the Subcontractors tab.",
+        subcontractor_id: payload.subcontractorId || 'not provided',
+        name: payload.name, phone: payload.phone
+      });
+      document.getElementById('forgotForm').style.display='none';
+      document.getElementById('forgotMsg').innerHTML = '<div class="msg">Sent — the admin has been notified and will reach out.</div>';
+    }catch(err){
+      document.getElementById('forgotMsg').innerHTML = `<div class="msg error">${esc(err.message)}</div>`;
+    }
+  };
+}
+
+/* ================= ADMIN ================= */
+function subscribeAdmin(){
+  unsubs.push(db.collection('requests').onSnapshot(qs=>{
+    adminData.requests = qs.docs.map(d=>({id:d.id, ...d.data()}));
+    renderApp();
+  }, e=>console.error('requests', e)));
+  unsubs.push(db.collection('jobs').onSnapshot(qs=>{
+    adminData.jobs = qs.docs.map(d=>({id:d.id, ...d.data()}));
+    renderApp();
+  }, e=>console.error('jobs', e)));
+  unsubs.push(db.collection('subcontractors').onSnapshot(qs=>{
+    adminData.subs = qs.docs.map(d=>({id:d.id, ...d.data()}));
+    renderApp();
+  }, e=>console.error('subs', e)));
+  unsubs.push(db.collection('payouts').onSnapshot(qs=>{
+    adminData.payouts = qs.docs.map(d=>({id:d.id, ...d.data()}));
+    renderApp();
+  }, e=>console.error('payouts', e)));
+  unsubs.push(db.collection('supportRequests').where('status','==','NEW').onSnapshot(qs=>{
+    adminData.supportRequests = qs.docs.map(d=>({id:d.id, ...d.data()}));
+    renderApp();
+  }, e=>console.error('supportRequests', e)));
+}
+
+async function nextCounter(field, prefix, pad){
+  const ref = db.collection('meta').doc('counters');
+  return db.runTransaction(async (tx)=>{
+    const snap = await tx.get(ref);
+    const cur = (snap.exists && snap.data()[field]) || 0;
+    const next = cur + 1;
+    tx.set(ref, { [field]: next }, { merge:true });
+    return prefix ? prefix + String(next).padStart(pad||4,'0') : next;
+  });
+}
+
+function renderApp(){
+  if(myRole && myRole.role==='admin') return renderAdminApp();
+  if(myRole && myRole.role==='subcontractor') return renderSubApp();
+}
+
+function renderAdminApp(){
+  const app = document.getElementById('app');
+  const newReqCount = adminData.requests.filter(r=>r.status==='NEW').length;
+  app.innerHTML = `
+    <header>
+      <div class="top-row">
+        <div>
+          <h1 class="brand">Dispatch</h1>
+          <div class="brand-sub">Coomer Home Improvements — Admin</div>
+        </div>
+        <div class="who"><strong>Admin</strong>${esc(me.email||'')}<div class="logout" id="logoutBtn">Log out</div></div>
+      </div>
+    </header>
+    <nav class="tabs">
+      <button data-tab="requests" class="${activeTab==='requests'?'active':''}">Requests${newReqCount?` <span class="count-badge">${newReqCount}</span>`:''}</button>
+      <button data-tab="dispatch" class="${activeTab==='dispatch'?'active':''}">Dispatch</button>
+      <button data-tab="jobs" class="${activeTab==='jobs'?'active':''}">Jobs</button>
+      <button data-tab="subs" class="${activeTab==='subs'?'active':''}">Subcontractors${adminData.supportRequests.length?` <span class="count-badge">${adminData.supportRequests.length}</span>`:''}</button>
+      <button data-tab="payouts" class="${activeTab==='payouts'?'active':''}">Payouts</button>
+    </nav>
+    <main id="main"></main>
+    <footer>Coomer Home Improvements — private admin dashboard.</footer>
+  `;
+  document.getElementById('logoutBtn').onclick = ()=> auth.signOut();
+  document.querySelectorAll('nav.tabs button').forEach(b=>{ b.onclick = ()=>{ activeTab=b.dataset.tab; openRequestId=openJobId=openSubId=openPayoutId=null; renderApp(); }; });
+  const main = document.getElementById('main');
+  if(activeTab==='requests') renderRequestsTab(main);
+  if(activeTab==='dispatch') renderDispatchTab(main);
+  if(activeTab==='jobs') renderJobsTab(main);
+  if(activeTab==='subs') renderSubsTab(main);
+  if(activeTab==='payouts') renderPayoutsTab(main);
+}
+
+/* ---- Requests tab ---- */
+function renderRequestsTab(main){
+  if(openRequestId){ return renderRequestDetail(main); }
+  const order = ['NEW','CONTACTED','SCOPING','READY_TO_CREATE_JOB','ON_HOLD'];
+  const open = adminData.requests.filter(r=>order.includes(r.status)).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  const closed = adminData.requests.filter(r=>!order.includes(r.status)).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  let html = `<h2 class="section">Customer requests <span class="count-badge">${open.length}</span></h2>`;
+  html += `<div class="hint">These are private — subcontractors never see this list.</div>`;
+  if(open.length===0){ html += `<div class="empty">No open requests.</div>`; }
+  else open.forEach(r=>{ html += requestCardHtml(r); });
+  if(closed.length){
+    html += `<h2 class="section">Converted / closed <span class="count-badge">${closed.length}</span></h2>`;
+    closed.slice(0,20).forEach(r=>{ html += requestCardHtml(r); });
+  }
+  main.innerHTML = html;
+  main.querySelectorAll('[data-open-request]').forEach(el=>{ el.onclick=()=>{ openRequestId = el.dataset.openRequest; renderApp(); }; });
+}
+function requestCardHtml(r){
+  return `
+    <div class="card" data-open-request="${r.id}" style="cursor:pointer;">
+      <div class="card-top">
+        <div>
+          <div class="card-title">${esc(r.customerName)||'Unnamed'}</div>
+          <div class="card-sub">${esc((r.description||'').slice(0,90))}${(r.description||'').length>90?'…':''}</div>
+        </div>
+        <span class="stamp ${stampClass(r.status)}">${statusLabel(r.status)}</span>
+      </div>
+      <div class="perf"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <div>Received: ${fmtDate(r.createdAt)}</div>
+          ${r.address?`<div>${esc(r.address)}</div>`:''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+function renderRequestDetail(main){
+  const r = adminData.requests.find(x=>x.id===openRequestId);
+  if(!r){ openRequestId=null; return renderRequestsTab(main); }
+  main.innerHTML = `
+    <div class="link-btn" id="backBtn">&larr; Back to requests</div>
+    <h2 class="section" style="margin-top:14px;">${esc(r.customerName)||'Unnamed'} <span class="stamp ${stampClass(r.status)}">${statusLabel(r.status)}</span></h2>
+    <div class="card-meta" style="margin-bottom:14px;">
+      <div>Phone: ${esc(r.phone)||'—'}${r.textOnly?' <strong>(text only)</strong>':''}</div>
+      <div>Email: ${esc(r.email)||'—'}</div>
+      <div>Address: ${esc(r.address)||'—'}</div>
+      <div>Job type: ${esc(r.jobType)||'general'}</div>
+      <div>Estimated value: ${esc(r.estimatedValue)||'—'}</div>
+      <div>Preferred days: ${esc(r.preferredDays)||'—'}</div>
+      <div>Received: ${fmtDate(r.createdAt)}</div>
+    </div>
+    <div class="field"><label>Request</label><div class="card" style="padding:12px 14px;">${esc(r.description)}</div></div>
+    ${r.photos && r.photos.length ? `<div class="card-photos" style="margin-bottom:14px;">${r.photos.map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener"><img src="${esc(u)}"></a>`).join('')}</div>` : ''}
+    <div class="field"><label for="adminNotes">Internal notes (admin only)</label><textarea id="adminNotes">${esc(r.adminNotes||'')}</textarea></div>
+    <div class="status-buttons" style="margin-bottom:16px;">
+      <button data-set-status="CONTACTED">Mark contacted</button>
+      <button data-set-status="SCOPING">Mark scoping</button>
+      <button data-set-status="READY_TO_CREATE_JOB">Ready to create job</button>
+      <button data-set-status="ON_HOLD">Put on hold</button>
+      <button data-set-status="CLOSED">Close request</button>
+    </div>
+    ${r.status!=='CONVERTED' ? `<button class="btn block" id="createJobBtn">Create Job From This Request</button>` : `<div class="msg">Converted to a job already.</div>`}
+    <div id="reqMsg"></div>
+  `;
+  document.getElementById('backBtn').onclick = ()=>{ openRequestId=null; renderApp(); };
+  main.querySelectorAll('[data-set-status]').forEach(btn=>{
+    btn.onclick = async ()=>{
+      await db.collection('requests').doc(r.id).update({ status: btn.dataset.setStatus, adminNotes: document.getElementById('adminNotes').value });
+    };
+  });
+  const createBtn = document.getElementById('createJobBtn');
+  if(createBtn) createBtn.onclick = ()=>{ openJobCreateModal(r); };
+}
+
+/* ---- Job create modal ---- */
+function openJobCreateModal(fromRequest){
+  const r = fromRequest || {};
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="modal">
+      <div class="modal-inner">
+        <span class="close" id="closeModal">&times;</span>
+        <h3>Create Job</h3>
+        <div class="hint">Only visible to subcontractors once you offer or publish it.</div>
+        <form id="jobCreateForm">
+          <div class="field"><label>Customer name</label><input id="j_name" value="${esc(r.customerName||'')}" required></div>
+          <div class="row2">
+            <div class="field"><label>Phone</label><input id="j_phone" value="${esc(r.phone||'')}"></div>
+            <div class="field"><label>Email</label><input id="j_email" value="${esc(r.email||'')}"></div>
+          </div>
+          <div class="field"><label>Address</label><input id="j_address" value="${esc(r.address||'')}" required></div>
+          <div class="field"><label>Job type</label>
+            <select id="j_type">
+              <option value="general" ${r.jobType==='general'?'selected':''}>General handyman</option>
+              <option value="plumbing" ${r.jobType==='plumbing'?'selected':''}>Plumbing</option>
+              <option value="electrical" ${r.jobType==='electrical'?'selected':''}>Electrical</option>
+              <option value="hvac" ${r.jobType==='hvac'?'selected':''}>HVAC</option>
+            </select>
+          </div>
+          <div class="field"><label>Scope of work</label><textarea id="j_scope" required>${esc(r.description||'')}</textarea></div>
+          <div class="row2">
+            <div class="field"><label>Customer price</label><input id="j_price" placeholder="e.g. 850" inputmode="decimal"></div>
+            <div class="field"><label>Subcontractor payout</label><input id="j_payout" placeholder="e.g. 600" inputmode="decimal" required></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>Preferred date</label><input id="j_preferred" placeholder="e.g. next week"></div>
+            <div class="field"><label>Scheduled date</label><input id="j_scheduled" type="date"></div>
+          </div>
+          <div class="field"><label>Estimated duration</label><input id="j_duration" placeholder="e.g. 1 day"></div>
+          <div class="field"><label>Materials</label><textarea id="j_materials"></textarea></div>
+          <div class="field"><label>Special instructions</label><textarea id="j_special"></textarea></div>
+          <div class="field"><label>Internal admin notes</label><textarea id="j_notes"></textarea></div>
+          <button type="submit" class="btn block" id="jobCreateBtn">Create Job</button>
+        </form>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(backdrop);
+  document.getElementById('closeModal').onclick = ()=> backdrop.remove();
+  backdrop.onclick = (e)=>{ if(e.target===backdrop) backdrop.remove(); };
+  document.getElementById('jobCreateForm').onsubmit = async (e)=>{
+    e.preventDefault();
+    const btn = document.getElementById('jobCreateBtn'); btn.disabled = true; btn.textContent = 'Creating…';
+    try{
+      const jobNumber = await nextCounter('nextJobNumber', '', 0) + 1000;
+      const job = {
+        jobNumber,
+        requestId: fromRequest ? fromRequest.id : null,
+        customer: {
+          name: document.getElementById('j_name').value.trim(),
+          phone: document.getElementById('j_phone').value.trim(),
+          email: document.getElementById('j_email').value.trim(),
+          address: document.getElementById('j_address').value.trim()
+        },
+        jobType: document.getElementById('j_type').value,
+        scope: document.getElementById('j_scope').value.trim(),
+        photos: (fromRequest && fromRequest.photos) || [],
+        customerPriceCents: dollarsToCents(document.getElementById('j_price').value),
+        payoutCents: dollarsToCents(document.getElementById('j_payout').value),
+        preferredDate: document.getElementById('j_preferred').value.trim(),
+        scheduledDate: document.getElementById('j_scheduled').value || null,
+        estimatedDuration: document.getElementById('j_duration').value.trim(),
+        materials: document.getElementById('j_materials').value.trim(),
+        specialInstructions: document.getElementById('j_special').value.trim(),
+        adminNotes: document.getElementById('j_notes').value.trim(),
+        status: 'AVAILABLE',
+        offeredToUid: null, offeredToId: null,
+        assignedUid: null, assignedSubcontractorId: null,
+        interestedUids: [],
+        timeline: [{ event:'Created', at: now() }],
+        createdAt: now()
+      };
+      const ref = await db.collection('jobs').add(job);
+      if(fromRequest){
+        await db.collection('requests').doc(fromRequest.id).update({ status:'CONVERTED', jobId: ref.id });
+      }
+      backdrop.remove();
+      openRequestId = null; openJobId = ref.id; activeTab = 'jobs';
+      renderApp();
+    }catch(err){
+      console.error(err);
+      alert('Could not create job: ' + err.message);
+      btn.disabled = false; btn.textContent = 'Create Job';
+    }
+  };
+}
+
+/* ---- Dispatch tab ---- */
+function renderDispatchTab(main){
+  const active = adminData.jobs.filter(j=>!['COMPLETED','PAID','CANCELLED'].includes(j.status)).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  let html = `<h2 class="section">Dispatch <span class="count-badge">${active.length}</span></h2>`;
+  html += `<div class="hint">Offer jobs directly, or make them available and choose from who's interested. You always confirm the final assignment.</div>`;
+  if(active.length===0){ html += `<div class="empty">Nothing to dispatch right now.</div>`; }
+  active.forEach(j=>{ html += dispatchCardHtml(j); });
+  main.innerHTML = html;
+  wireDispatchControls(main);
+}
+function dispatchCardHtml(j){
+  const activeSubs = adminData.subs.filter(s=>s.status==='ACTIVE');
+  let controls = '';
+  if(j.status==='AVAILABLE'){
+    const interested = (j.interestedUids||[]).map(uid=>activeSubs.find(s=>s.authUid===uid)).filter(Boolean);
+    controls = `
+      <div class="hint" style="margin:10px 0 4px;">${interested.length? 'Interested:' : 'No one has flagged interest yet.'}</div>
+      ${interested.map(s=>`<button class="btn small" data-assign="${j.id}" data-sub="${s.id}" style="margin:2px 4px 2px 0;">Assign to ${esc(s.name)} (${s.id})</button>`).join('')}
+      <div class="row2" style="margin-top:8px;">
+        <select data-offer="${j.id}">
+          <option value="">— offer directly to —</option>
+          ${activeSubs.map(s=>`<option value="${s.id}">${esc(s.name)} (${s.id})</option>`).join('')}
+        </select>
+        <button class="btn small" data-offer-btn="${j.id}">Offer</button>
+      </div>
+    `;
+  }else if(j.status==='OFFERED'){
+    const s = adminData.subs.find(x=>x.id===j.offeredToId);
+    controls = `<div class="card-meta">Offered to ${s?esc(s.name):j.offeredToId} — awaiting response.</div>
+      <button class="btn small secondary" data-cancel-offer="${j.id}">Cancel offer</button>`;
+  }else if(j.status==='ACCEPTED'){
+    const s = adminData.subs.find(x=>x.id===j.offeredToId);
+    controls = `<div class="card-meta">${s?esc(s.name):j.offeredToId} accepted.</div>
+      <button class="btn small" data-confirm-assign="${j.id}">Confirm assignment</button>`;
+  }else if(['ASSIGNED','SCHEDULED','ON_THE_WAY','IN_PROGRESS'].includes(j.status)){
+    const s = adminData.subs.find(x=>x.id===j.assignedSubcontractorId);
+    controls = `<div class="card-meta">Assigned to ${s?esc(s.name):j.assignedSubcontractorId}.</div>`;
+  }
+  return `
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-title">Job #${j.jobNumber} — ${esc(j.customer?.name)}</div>
+          <div class="card-sub">${esc((j.scope||'').slice(0,80))}</div>
+        </div>
+        <span class="stamp ${stampClass(j.status)}">${statusLabel(j.status)}</span>
+      </div>
+      <div class="perf"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <div>${esc(j.customer?.address)}</div>
+          <div class="pay">Payout: ${centsToStr(j.payoutCents)}</div>
+        </div>
+        ${controls}
+      </div>
+    </div>
+  `;
+}
+function wireDispatchControls(main){
+  main.querySelectorAll('[data-assign]').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const s = adminData.subs.find(x=>x.id===btn.dataset.sub);
+      await db.collection('jobs').doc(btn.dataset.assign).update({
+        status:'ASSIGNED', assignedUid: s.authUid, assignedSubcontractorId: s.id,
+        offeredToUid:null, offeredToId:null, interestedUids:[],
+        timeline: firebase.firestore.FieldValue.arrayUnion({event:`Assigned to ${s.name}`, at: now()})
+      });
+    };
+  });
+  main.querySelectorAll('[data-offer-btn]').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const sel = main.querySelector(`[data-offer="${btn.dataset.offerBtn}"]`);
+      const subId = sel.value;
+      if(!subId) return;
+      const s = adminData.subs.find(x=>x.id===subId);
+      await db.collection('jobs').doc(btn.dataset.offerBtn).update({
+        status:'OFFERED', offeredToUid: s.authUid, offeredToId: s.id,
+        timeline: firebase.firestore.FieldValue.arrayUnion({event:`Offered to ${s.name}`, at: now()})
+      });
+    };
+  });
+  main.querySelectorAll('[data-cancel-offer]').forEach(btn=>{
+    btn.onclick = async ()=>{
+      await db.collection('jobs').doc(btn.dataset.cancelOffer).update({
+        status:'AVAILABLE', offeredToUid:null, offeredToId:null,
+        timeline: firebase.firestore.FieldValue.arrayUnion({event:'Offer cancelled', at: now()})
+      });
+    };
+  });
+  main.querySelectorAll('[data-confirm-assign]').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const j = adminData.jobs.find(x=>x.id===btn.dataset.confirmAssign);
+      await db.collection('jobs').doc(j.id).update({
+        status:'ASSIGNED', assignedUid: j.offeredToUid, assignedSubcontractorId: j.offeredToId,
+        timeline: firebase.firestore.FieldValue.arrayUnion({event:'Assignment confirmed', at: now()})
+      });
+    };
+  });
+}
+
+/* ---- Jobs tab (full overview) ---- */
+function renderJobsTab(main){
+  if(openJobId) return renderJobDetail(main);
+  const sorted = [...adminData.jobs].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  let html = `<h2 class="section">All jobs <span class="count-badge">${sorted.length}</span></h2>
+    <button class="btn block secondary" id="newJobBtn" style="margin-bottom:16px;">+ New Job</button>`;
+  if(sorted.length===0){ html += `<div class="empty">No jobs yet.</div>`; }
+  sorted.forEach(j=>{
+    html += `
+      <div class="card" data-open-job="${j.id}" style="cursor:pointer;">
+        <div class="card-top">
+          <div><div class="card-title">Job #${j.jobNumber} — ${esc(j.customer?.name)}</div>
+          <div class="card-sub">${esc((j.scope||'').slice(0,70))}</div></div>
+          <span class="stamp ${stampClass(j.status)}">${statusLabel(j.status)}</span>
+        </div>
+      </div>
+    `;
+  });
+  main.innerHTML = html;
+  document.getElementById('newJobBtn').onclick = ()=> openJobCreateModal(null);
+  main.querySelectorAll('[data-open-job]').forEach(el=>{ el.onclick=()=>{ openJobId=el.dataset.openJob; renderApp(); }; });
+}
+function renderJobDetail(main){
+  const j = adminData.jobs.find(x=>x.id===openJobId);
+  if(!j){ openJobId=null; return renderJobsTab(main); }
+  const profit = (j.customerPriceCents||0) - (j.payoutCents||0);
+  const s = adminData.subs.find(x=>x.id===j.assignedSubcontractorId);
+  main.innerHTML = `
+    <div class="link-btn" id="backBtn">&larr; Back to jobs</div>
+    <h2 class="section" style="margin-top:14px;">Job #${j.jobNumber} <span class="stamp ${stampClass(j.status)}">${statusLabel(j.status)}</span></h2>
+    <div class="card-meta">
+      <div><strong>Customer:</strong> ${esc(j.customer?.name)}</div>
+      <div>Phone: ${esc(j.customer?.phone)||'—'}</div>
+      <div>Email: ${esc(j.customer?.email)||'—'}</div>
+      <div>Address: ${esc(j.customer?.address)}</div>
+      <div style="margin-top:8px;"><strong>Customer price:</strong> ${centsToStr(j.customerPriceCents)}</div>
+      <div><strong>Subcontractor payout:</strong> ${centsToStr(j.payoutCents)}</div>
+      <div><strong>Profit:</strong> ${centsToStr(profit)}</div>
+      <div style="margin-top:8px;">Assigned: ${s?esc(s.name)+' ('+s.id+')':'— unassigned —'}</div>
+    </div>
+    <div class="field" style="margin-top:14px;"><label>Scope of work</label><div class="card" style="padding:12px 14px;">${esc(j.scope)}</div></div>
+    ${j.materials?`<div class="field"><label>Materials</label><div class="card" style="padding:12px 14px;">${esc(j.materials)}</div></div>`:''}
+    ${j.specialInstructions?`<div class="field"><label>Special instructions</label><div class="card" style="padding:12px 14px;">${esc(j.specialInstructions)}</div></div>`:''}
+    ${j.adminNotes?`<div class="field"><label>Internal notes</label><div class="card" style="padding:12px 14px;">${esc(j.adminNotes)}</div></div>`:''}
+    <h2 class="section">Timeline</h2>
+    ${(j.timeline||[]).slice().reverse().map(t=>`<div class="history-line">${fmtDateTime(t.at)} — ${esc(t.event)}</div>`).join('') || '<div class="hint">No history yet.</div>'}
+    ${j.status!=='CANCELLED' && j.status!=='COMPLETED' && j.status!=='PAID' ? `<button class="btn danger ghost block" style="margin-top:16px;" id="cancelJobBtn">Cancel job</button>` : ''}
+  `;
+  document.getElementById('backBtn').onclick = ()=>{ openJobId=null; renderApp(); };
+  const cancelBtn = document.getElementById('cancelJobBtn');
+  if(cancelBtn) cancelBtn.onclick = async ()=>{
+    if(confirm('Cancel this job?')){
+      await db.collection('jobs').doc(j.id).update({ status:'CANCELLED', timeline: firebase.firestore.FieldValue.arrayUnion({event:'Cancelled', at: now()}) });
+    }
+  };
+}
+
+/* ---- Subcontractors tab ---- */
+function renderSubsTab(main){
+  if(openSubId) return renderSubDetail(main);
+  let html = '';
+  if(adminData.supportRequests.length){
+    html += `<h2 class="section">Login help needed <span class="count-badge">${adminData.supportRequests.length}</span></h2>`;
+    adminData.supportRequests.forEach(r=>{
+      html += `
+        <div class="card">
+          <div class="card-top">
+            <div><div class="card-title">${r.type==='FORGOT_ID' ? 'Forgot their ID' : 'Forgot their PIN'}</div>
+            <div class="card-sub">${esc(r.name)||''} ${esc(r.phone)?'· '+esc(r.phone):''} ${esc(r.subcontractorId)?'· '+esc(r.subcontractorId):''}</div></div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta"><div>${fmtDateTime(r.createdAt)}</div></div>
+            <button class="btn small secondary" data-resolve-support="${r.id}">Mark handled</button>
+          </div>
+        </div>
+      `;
+    });
+  }
+  html += `<h2 class="section">Subcontractors <span class="count-badge">${adminData.subs.length}</span></h2>
+    <button class="btn block secondary" id="addSubBtn" style="margin-bottom:16px;">+ Add Subcontractor</button>`;
+  if(adminData.subs.length===0){ html += `<div class="empty">No subcontractors yet.</div>`; }
+  adminData.subs.forEach(s=>{
+    const jobsCompleted = adminData.jobs.filter(j=>j.assignedSubcontractorId===s.id && ['COMPLETED','PAID'].includes(j.status)).length;
+    html += `
+      <div class="card" data-open-sub="${s.id}" style="cursor:pointer;">
+        <div class="card-top">
+          <div><div class="card-title">${esc(s.name)}</div><span class="id-badge">${s.id}</span></div>
+          <span class="stamp ${stampClass(s.status)}">${statusLabel(s.status)}</span>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <div>Trade: ${esc((s.trades||[]).join(', '))||'—'}</div>
+            <div>Jobs completed: ${jobsCompleted}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  main.innerHTML = html;
+  document.getElementById('addSubBtn').onclick = openAddSubModal;
+  main.querySelectorAll('[data-open-sub]').forEach(el=>{ el.onclick=()=>{ openSubId=el.dataset.openSub; renderApp(); }; });
+  main.querySelectorAll('[data-resolve-support]').forEach(btn=>{
+    btn.onclick = ()=> db.collection('supportRequests').doc(btn.dataset.resolveSupport).update({ status:'HANDLED' });
+  });
+}
+function openAddSubModal(){
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="modal"><div class="modal-inner">
+      <span class="close" id="closeModal">&times;</span>
+      <h3>Add Subcontractor</h3>
+      <form id="addSubForm">
+        <div class="field"><label>Name</label><input id="s_name" required></div>
+        <div class="row2">
+          <div class="field"><label>Phone</label><input id="s_phone"></div>
+          <div class="field"><label>Email</label><input id="s_email" type="email"></div>
+        </div>
+        <div class="field"><label>Trade(s) — comma separated</label><input id="s_trades" placeholder="Flooring, Drywall"></div>
+        <div class="field"><label>Service area</label><input id="s_area" placeholder="Front Royal, Winchester"></div>
+        <div class="field"><label>Notes</label><textarea id="s_notes"></textarea></div>
+        <div class="hint">A temporary PIN is generated automatically — they'll be required to set their own permanent PIN the first time they log in.</div>
+        <button type="submit" class="btn block" id="addSubBtnSubmit">Create Subcontractor</button>
+      </form>
+      <div id="addSubMsg"></div>
+    </div></div>
+  `;
+  document.body.appendChild(backdrop);
+  document.getElementById('closeModal').onclick = ()=> backdrop.remove();
+  backdrop.onclick = (e)=>{ if(e.target===backdrop) backdrop.remove(); };
+  document.getElementById('addSubForm').onsubmit = async (e)=>{
+    e.preventDefault();
+    const tempPin = String(Math.floor(1000 + Math.random()*9000));
+    const btn = document.getElementById('addSubBtnSubmit'); btn.disabled = true; btn.textContent = 'Creating…';
+    try{
+      const id = await nextCounter('nextSubcontractorSeq', 'CHI-', 4);
+      const email = subIdToEmail(id);
+      const authUid = await restCreateAuthAccount(email, pinToPassword(tempPin));
+      await db.collection('subcontractors').doc(id).set({
+        name: document.getElementById('s_name').value.trim(),
+        phone: document.getElementById('s_phone').value.trim(),
+        email: document.getElementById('s_email').value.trim(),
+        trades: document.getElementById('s_trades').value.split(',').map(t=>t.trim()).filter(Boolean),
+        serviceArea: document.getElementById('s_area').value.trim(),
+        notes: document.getElementById('s_notes').value.trim(),
+        status: 'ACTIVE',
+        authUid,
+        mustChangePin: true,
+        createdAt: now()
+      });
+      await db.collection('roles').doc(authUid).set({ role:'subcontractor', subcontractorId: id });
+      document.getElementById('addSubForm').style.display = 'none';
+      document.getElementById('addSubMsg').innerHTML = `
+        <div class="msg">SUBCONTRACTOR CREATED<br><br>${esc(document.getElementById('s_name').value)}<br><br>
+        Subcontractor ID:<br><span class="id-badge" style="font-size:16px;margin-top:4px;">${id}</span><br><br>
+        Temporary PIN: ${esc(tempPin)}<br><br>Give them the ID and this one-time PIN — they'll be asked to set their own permanent PIN the moment they log in with it.</div>
+        <button class="btn block" id="doneAddSub" style="margin-top:12px;">Done</button>
+      `;
+      document.getElementById('doneAddSub').onclick = ()=> backdrop.remove();
+    }catch(err){
+      console.error(err);
+      document.getElementById('addSubMsg').innerHTML = `<div class="msg error">${esc(err.message)}</div>`;
+      btn.disabled = false; btn.textContent = 'Create Subcontractor';
+    }
+  };
+}
+function renderSubDetail(main){
+  const s = adminData.subs.find(x=>x.id===openSubId);
+  if(!s){ openSubId=null; return renderSubsTab(main); }
+  const subJobs = adminData.jobs.filter(j=>j.assignedSubcontractorId===s.id);
+  const completed = subJobs.filter(j=>['COMPLETED','PAID'].includes(j.status)).length;
+  const current = subJobs.filter(j=>!['COMPLETED','PAID','CANCELLED'].includes(j.status)).length;
+  const subPayouts = adminData.payouts.filter(p=>p.subcontractorId===s.id);
+  const totalPaidCents = subPayouts.filter(p=>p.status==='PAID').reduce((sum,p)=>sum+(p.amountCents||0),0);
+  const outstandingCents = subPayouts.filter(p=>['PENDING','PROCESSING'].includes(p.status)).reduce((sum,p)=>sum+(p.amountCents||0),0);
+  main.innerHTML = `
+    <div class="link-btn" id="backBtn">&larr; Back to subcontractors</div>
+    <h2 class="section" style="margin-top:14px;">${esc(s.name)} <span class="stamp ${stampClass(s.status)}">${statusLabel(s.status)}</span></h2>
+    <span class="id-badge">${s.id}</span>
+    <div class="card-meta" style="margin-top:12px;">
+      <div>Phone: ${esc(s.phone)||'—'}</div>
+      <div>Email: ${esc(s.email)||'—'}</div>
+      <div>Trades: ${esc((s.trades||[]).join(', '))||'—'}</div>
+      <div>Service area: ${esc(s.serviceArea)||'—'}</div>
+      ${s.notes?`<div>Notes: ${esc(s.notes)}</div>`:''}
+    </div>
+    <div class="stat-grid tri" style="margin-top:16px;">
+      <div class="stat"><div class="num">${completed}</div><div class="lbl">Completed</div></div>
+      <div class="stat"><div class="num">${current}</div><div class="lbl">Current</div></div>
+      <div class="stat owed"><div class="num">${centsToStr(outstandingCents)}</div><div class="lbl">Outstanding</div></div>
+    </div>
+    <div class="hint" style="margin-top:8px;">Total paid: ${centsToStr(totalPaidCents)}. Mileage records are private to the subcontractor and are not shown here.</div>
+    <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
+      ${s.status==='ACTIVE' ? `<button class="btn secondary block" id="resetLoginBtn">Reset Login (forgot PIN)</button>` : ''}
+      ${s.status==='ACTIVE' ? `<button class="btn secondary block" id="disableBtn">Disable Account</button>` : ''}
+      ${s.status==='DISABLED' ? `<button class="btn secondary block" id="enableBtn">Re-enable Account</button>` : ''}
+      ${s.status!=='DELETED' ? `<button class="btn danger block" id="deleteBtn">Permanently Delete Account</button>` : `<div class="msg error">This account has been permanently deleted.</div>`}
+    </div>
+    <div id="subActionMsg"></div>
+  `;
+  document.getElementById('backBtn').onclick = ()=>{ openSubId=null; renderApp(); };
+  const resetLoginBtn = document.getElementById('resetLoginBtn');
+  if(resetLoginBtn) resetLoginBtn.onclick = async ()=>{
+    if(!confirm(`Generate a new temporary PIN for ${s.name} (${s.id})? Their current PIN will stop working immediately.`)) return;
+    resetLoginBtn.disabled = true; resetLoginBtn.textContent = 'Resetting…';
+    try{
+      const tempPin = String(Math.floor(1000 + Math.random()*9000));
+      const newAuthUid = await restCreateAuthAccount(subIdToEmail(s.id + '-' + Date.now()), pinToPassword(tempPin));
+      // Firebase requires a unique email per account — reissue using a fresh alias, keep the CHI id as the durable identity
+      await db.collection('roles').doc(newAuthUid).set({ role:'subcontractor', subcontractorId: s.id });
+      if(s.authUid) await db.collection('roles').doc(s.authUid).delete().catch(()=>{});
+      await db.collection('subcontractors').doc(s.id).update({ authUid: newAuthUid, mustChangePin: true });
+      document.getElementById('subActionMsg').innerHTML = `
+        <div class="msg">New temporary PIN for ${esc(s.name)} (${s.id}):<br><span class="id-badge" style="font-size:16px;margin-top:6px;">${tempPin}</span><br><br>
+        Give it to them — they'll be asked to set their own permanent PIN on next login.</div>
+      `;
+    }catch(err){
+      document.getElementById('subActionMsg').innerHTML = `<div class="msg error">${esc(err.message)}</div>`;
+    }
+    resetLoginBtn.disabled = false; resetLoginBtn.textContent = 'Reset Login (forgot PIN)';
+  };
+  const disableBtn = document.getElementById('disableBtn');
+  if(disableBtn) disableBtn.onclick = async ()=>{
+    if(confirm(`Disable ${s.name} (${s.id})? They will not be able to log in, but their history stays intact.`)){
+      await db.collection('subcontractors').doc(s.id).update({ status:'DISABLED' });
+    }
+  };
+  const enableBtn = document.getElementById('enableBtn');
+  if(enableBtn) enableBtn.onclick = async ()=>{
+    await db.collection('subcontractors').doc(s.id).update({ status:'ACTIVE' });
+  };
+  const deleteBtn = document.getElementById('deleteBtn');
+  if(deleteBtn) deleteBtn.onclick = ()=> openDeleteSubModal(s);
+}
+function openDeleteSubModal(s){
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="modal"><div class="modal-inner">
+      <span class="close" id="closeModal">&times;</span>
+      <h3>Permanently delete subcontractor?</h3>
+      <p>You are about to permanently remove:</p>
+      <p><strong>${esc(s.name)}</strong><br>${s.id}</p>
+      <p>This cannot be undone. Their name and contact info will be removed; their ID stays attached to past job and payout records so your history isn't corrupted, and their login is blocked immediately.</p>
+      <div class="field"><label>Type the subcontractor ID to confirm (${s.id})</label><input id="confirmId"></div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn secondary block" id="cancelDelete">Cancel</button>
+        <button class="btn danger block" id="confirmDelete" disabled>Permanently Delete</button>
+      </div>
+    </div></div>
+  `;
+  document.body.appendChild(backdrop);
+  document.getElementById('closeModal').onclick = ()=> backdrop.remove();
+  document.getElementById('cancelDelete').onclick = ()=> backdrop.remove();
+  document.getElementById('confirmId').oninput = (e)=>{
+    document.getElementById('confirmDelete').disabled = e.target.value.trim().toUpperCase() !== s.id;
+  };
+  document.getElementById('confirmDelete').onclick = async ()=>{
+    await db.collection('subcontractors').doc(s.id).update({
+      status:'DELETED', name:'[deleted]', phone:'', email:'', notes:''
+    });
+    backdrop.remove();
+    openSubId = null; renderApp();
+  };
+}
+
+/* ---- Payouts tab ---- */
+function renderPayoutsTab(main){
+  if(openPayoutId) return renderPayoutDetail(main);
+  const outstanding = adminData.payouts.filter(p=>['PENDING','PROCESSING'].includes(p.status));
+  const paid = adminData.payouts.filter(p=>p.status==='PAID');
+  const outstandingCents = outstanding.reduce((s,p)=>s+(p.amountCents||0),0);
+  const startOfMonth = new Date(); startOfMonth.setDate(1); startOfMonth.setHours(0,0,0,0);
+  const paidThisMonthCents = paid.filter(p=>p.paidAt && p.paidAt>=startOfMonth.getTime()).reduce((s,p)=>s+(p.amountCents||0),0);
+
+  let list = adminData.payouts.slice();
+  if(payoutFilter!=='all') list = list.filter(p=>p.status===payoutFilter);
+  list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+
+  let html = `
+    <h2 class="section">Payments</h2>
+    <div class="stat-grid">
+      <div class="stat owed"><div class="num">${centsToStr(outstandingCents)}</div><div class="lbl">🔴 Owed</div></div>
+      <div class="stat paid"><div class="num">${centsToStr(paidThisMonthCents)}</div><div class="lbl">🟢 Paid this month</div></div>
+    </div>
+    <div class="stat-grid" style="margin-bottom:18px;">
+      <div class="stat"><div class="num">${outstanding.length}</div><div class="lbl">Pending</div></div>
+      <div class="stat"><div class="num">${paid.length}</div><div class="lbl">Paid</div></div>
+    </div>
+    <h2 class="section">All payouts</h2>
+    <div class="filter-row">
+      ${['all','PENDING','PROCESSING','PAID','CANCELLED'].map(f=>`<button data-filter="${f}" class="${payoutFilter===f?'active':''}">${f==='all'?'All':statusLabel(f)}</button>`).join('')}
+    </div>
+  `;
+  if(list.length===0){ html += `<div class="empty">No payouts here.</div>`; }
+  list.forEach(p=>{
+    html += `
+      <div class="card" data-open-payout="${p.id}" style="cursor:pointer;">
+        <div class="card-top">
+          <div><div class="card-title">${esc(p.subcontractorName)} <span class="id-badge">${p.subcontractorId}</span></div>
+          <div class="card-sub">Job #${p.jobNumber||''} — completed ${fmtDate(p.completedAt)}</div></div>
+          <span class="stamp ${stampClass(p.status)}">${statusLabel(p.status)}</span>
+        </div>
+        <div class="card-body"><span class="pay">${centsToStr(p.amountCents)}</span></div>
+      </div>
+    `;
+  });
+  main.innerHTML = html;
+  main.querySelectorAll('[data-filter]').forEach(b=>{ b.onclick = ()=>{ payoutFilter=b.dataset.filter; renderApp(); }; });
+  main.querySelectorAll('[data-open-payout]').forEach(el=>{ el.onclick=()=>{ openPayoutId=el.dataset.openPayout; renderApp(); }; });
+}
+function renderPayoutDetail(main){
+  const p = adminData.payouts.find(x=>x.id===openPayoutId);
+  if(!p){ openPayoutId=null; return renderPayoutsTab(main); }
+  main.innerHTML = `
+    <div class="link-btn" id="backBtn">&larr; Back to payouts</div>
+    <h2 class="section" style="margin-top:14px;">${esc(p.subcontractorName)} <span class="id-badge">${p.subcontractorId}</span></h2>
+    <div class="card-meta">
+      <div>Job #${p.jobNumber} — ${esc(p.jobLabel)}</div>
+      <div>Job completed: ${fmtDate(p.completedAt)}</div>
+      <div class="pay" style="margin-top:6px;font-size:18px;">${centsToStr(p.amountCents)}</div>
+      <div>Status: <span class="stamp ${stampClass(p.status)}">${statusLabel(p.status)}</span></div>
+      ${p.paidAt?`<div>Paid: ${fmtDate(p.paidAt)}</div>`:''}
+      ${p.method?`<div>Method: ${esc(p.method)}</div>`:''}
+      ${p.referenceId?`<div>Reference: ${esc(p.referenceId)}</div>`:''}
+    </div>
+    ${p.status!=='PAID' && p.status!=='CANCELLED' ? `
+    <div class="field" style="margin-top:14px;"><label>Payment method</label><input id="p_method" value="${esc(p.method||'')}" placeholder="e.g. Zelle, check, cash"></div>
+    <div class="field"><label>Reference / transaction ID</label><input id="p_ref" value="${esc(p.referenceId||'')}"></div>
+    <div class="field"><label>Note</label><textarea id="p_note"></textarea></div>
+    <div class="status-buttons">
+      <button data-mark="PROCESSING">Mark processing</button>
+      <button data-mark="PAID">Mark paid</button>
+      <button data-mark="CANCELLED">Cancel / void</button>
+    </div>
+    ` : ''}
+    <h2 class="section">History</h2>
+    ${(p.history||[]).slice().reverse().map(h=>`<div class="history-line">${fmtDateTime(h.at)} — ${esc(h.event)}</div>`).join('')}
+  `;
+  document.getElementById('backBtn').onclick = ()=>{ openPayoutId=null; renderApp(); };
+  main.querySelectorAll('[data-mark]').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const status = btn.dataset.mark;
+      const method = document.getElementById('p_method').value.trim();
+      const ref = document.getElementById('p_ref').value.trim();
+      const note = document.getElementById('p_note').value.trim();
+      const events = [{ event:`Marked ${statusLabel(status)}`, at: now() }];
+      if(method) events.push({ event:`Method set to ${method}`, at: now() });
+      if(ref) events.push({ event:`Reference added: ${ref}`, at: now() });
+      if(note) events.push({ event:`Note: ${note}`, at: now() });
+      const update = {
+        status, method: method||p.method||'', referenceId: ref||p.referenceId||'',
+        history: firebase.firestore.FieldValue.arrayUnion(...events)
+      };
+      if(status==='PAID') update.paidAt = now();
+      await db.collection('payouts').doc(p.id).update(update);
+    };
+  });
+}
+
+/* ================= SUBCONTRACTOR ================= */
+function subscribeSub(){
+  const uid = me.uid;
+  unsubs.push(db.collection('subcontractors').doc(myRole.subcontractorId).onSnapshot(d=>{
+    if(d.exists) mySubDoc = d.data();
+    if(!d.exists || mySubDoc.status!=='ACTIVE'){ auth.signOut(); return; }
+    if(mySubDoc.mustChangePin || !mySubDoc.onboardingComplete){ clearListeners(); proceedAfterSubAuth(); return; }
+    renderApp();
+  }));
+  unsubs.push(db.collection('jobs').where('status','==','AVAILABLE').onSnapshot(qs=>{
+    subData.availableJobs = qs.docs.map(d=>({id:d.id, ...d.data()}));
+    renderApp();
+  }, e=>console.error(e)));
+  unsubs.push(db.collection('jobs').where('offeredToUid','==',uid).onSnapshot(qs=>{
+    subData.offeredJobs = qs.docs.map(d=>({id:d.id, ...d.data()})).filter(j=>j.status==='OFFERED');
+    renderApp();
+  }, e=>console.error(e)));
+  unsubs.push(db.collection('jobs').where('assignedUid','==',uid).onSnapshot(qs=>{
+    subData.myJobs = qs.docs.map(d=>({id:d.id, ...d.data()}));
+    renderApp();
+  }, e=>console.error(e)));
+  unsubs.push(db.collection('payouts').where('subcontractorUid','==',uid).onSnapshot(qs=>{
+    subData.payouts = qs.docs.map(d=>({id:d.id, ...d.data()}));
+    renderApp();
+  }, e=>console.error(e)));
+  unsubs.push(db.collection('mileage').where('subcontractorUid','==',uid).onSnapshot(qs=>{
+    subData.mileage = qs.docs.map(d=>({id:d.id, ...d.data()}));
+    renderApp();
+  }, e=>console.error(e)));
+}
+
+function renderSubApp(){
   const app = document.getElementById('app');
   app.innerHTML = `
     <header>
-      <h1 class="brand">Job Board</h1>
-      <div class="brand-sub">Post the job, contractors claim it, everyone updates from their phone</div>
+      <div class="top-row">
+        <div><h1 class="brand">Welcome, ${esc((mySubDoc.name||'').split(' ')[0])}</h1>
+        <div class="brand-sub"><span class="id-badge">${myRole.subcontractorId}</span></div></div>
+        <div class="who"><div class="logout" id="logoutBtn">Log out</div></div>
+      </div>
     </header>
     <nav class="tabs">
-      <button data-tab="intake" class="${activeTab==='intake'?'active':''}">New Job</button>
-      <button data-tab="dispatch" class="${activeTab==='dispatch'?'active':''}">Dispatch</button>
-      <button data-tab="board" class="${activeTab==='board'?'active':''}">Job Board</button>
+      <button data-tab="home" class="${activeTab==='home'?'active':''}">Home</button>
+      <button data-tab="available" class="${activeTab==='available'?'active':''}">Available</button>
+      <button data-tab="myjobs" class="${activeTab==='myjobs'?'active':''}">My Jobs</button>
+      <button data-tab="payouts" class="${activeTab==='payouts'?'active':''}">Payouts</button>
+      <button data-tab="mileage" class="${activeTab==='mileage'?'active':''}">Mileage</button>
+      <button data-tab="profile" class="${activeTab==='profile'?'active':''}">Profile</button>
     </nav>
     <main id="main"></main>
-    <footer>Contractors browse and claim jobs on their own phone — nobody's assigning shifts.
-      <br><a id="resetLink">Reset all data</a>
-    </footer>
+    <footer>Coomer Home Improvements — Front Royal, Virginia.</footer>
   `;
-  document.querySelectorAll('nav.tabs button').forEach(b=>{
-    b.onclick = ()=>{ activeTab = b.dataset.tab; render(); };
-  });
-  document.getElementById('resetLink').onclick = async ()=>{
-    if(confirm('This clears every job and contractor for everyone using this board. Continue?')){
-      jobs = []; contractors = [];
-      await saveJobs(); await saveContractors();
-      render();
-    }
-  };
+  document.getElementById('logoutBtn').onclick = ()=> auth.signOut();
+  document.querySelectorAll('nav.tabs button').forEach(b=>{ b.onclick = ()=>{ activeTab=b.dataset.tab; renderApp(); }; });
   const main = document.getElementById('main');
-  if(activeTab==='intake') renderIntake(main);
-  if(activeTab==='dispatch') renderDispatch(main);
-  if(activeTab==='board') renderBoard(main);
+  if(activeTab==='home') renderSubHome(main);
+  if(activeTab==='available') renderSubAvailable(main);
+  if(activeTab==='myjobs') renderSubMyJobs(main);
+  if(activeTab==='payouts') renderSubPayouts(main);
+  if(activeTab==='mileage') renderSubMileage(main);
+  if(activeTab==='profile') renderSubProfile(main);
 }
 
-/* ---------- New Job tab ---------- */
-function renderIntake(main){
-  main.innerHTML = `
-    <h2 class="section">Post a new job</h2>
-    <form id="jobForm">
-      <div class="field"><label for="f_name">Customer name</label><input id="f_name" required></div>
-      <div class="field"><label for="f_phone">Phone</label><input id="f_phone" type="tel"></div>
-      <div class="field"><label for="f_address">Address</label><input id="f_address"></div>
-      <div class="field"><label for="f_desc">What needs fixing</label><textarea id="f_desc" required></textarea></div>
-      <div class="field"><label for="f_type">Job type</label>
-        <select id="f_type">
-          <option value="general">General handyman</option>
-          <option value="plumbing">Plumbing</option>
-          <option value="electrical">Electrical</option>
-          <option value="hvac">HVAC</option>
-        </select>
-      </div>
-      <div class="field"><label for="f_value">Estimated total (labor + materials)</label><input id="f_value" placeholder="e.g. 450" inputmode="decimal"></div>
-      <div id="licenseWarningBox"></div>
-      <div class="field"><label for="f_days">Preferred days</label><input id="f_days" placeholder="e.g. weekday mornings"></div>
-      <div class="field"><label for="f_pay">Pay for this job</label><input id="f_pay" placeholder="e.g. $120 flat rate"></div>
-      <button type="submit" class="btn block" id="postBtn">Post to job board</button>
-    </form>
-    <div id="confirmMsg"></div>
-  `;
-
-  function updateLicenseWarning(){
-    const box = document.getElementById('licenseWarningBox');
-    const j = {
-      jobType: document.getElementById('f_type').value,
-      estimatedValue: document.getElementById('f_value').value || ''
-    };
-    if(jobNeedsLicense(j)){
-      box.innerHTML = `
-        <div class="license-warning">
-          <p>⚠ ${licenseWarningText(j)} This job will only be claimable by a contractor who confirms they hold that license — nothing to verify yourself before posting.</p>
-        </div>
-      `;
-    }else{
-      box.innerHTML = '';
-    }
-  }
-  document.getElementById('f_type').onchange = updateLicenseWarning;
-  document.getElementById('f_value').oninput = updateLicenseWarning;
-
-  document.getElementById('jobForm').onsubmit = async (e)=>{
-    e.preventDefault();
-    const job = {
-      id: uid(),
-      customerName: document.getElementById('f_name').value.trim(),
-      phone: document.getElementById('f_phone').value.trim(),
-      address: document.getElementById('f_address').value.trim(),
-      description: document.getElementById('f_desc').value.trim(),
-      jobType: document.getElementById('f_type').value,
-      estimatedValue: document.getElementById('f_value').value.trim(),
-      preferredDays: document.getElementById('f_days').value.trim(),
-      payRate: document.getElementById('f_pay').value.trim(),
-      status: 'open',
-      assignedTo: null,
-      createdAt: Date.now()
-    };
-    jobs.push(job);
-    await saveJobs();
-    document.getElementById('jobForm').reset();
-    updateLicenseWarning();
-    document.getElementById('confirmMsg').innerHTML = '<div class="confirm-msg">Posted — it will show up on the Job Board for contractors to claim.</div>';
-    setTimeout(()=>{ const m=document.getElementById('confirmMsg'); if(m) m.innerHTML=''; }, 4000);
-  };
-}
-
-/* ---------- Dispatch tab ---------- */
-function renderDispatch(main){
-  const statuses = ['open','claimed','in_progress','done'];
-  let html = `
-    <h2 class="section">Contractors</h2>
-    <div class="field" style="display:flex;gap:8px;align-items:flex-end;">
-      <div style="flex:1;"><input id="newContractorName" placeholder="Add a contractor's name"></div>
-      <button id="addContractorBtn" class="btn small">Add</button>
-    </div>
-    <div class="chips" id="contractorChips"></div>
-  `;
-  statuses.forEach(s=>{
-    const list = jobs.filter(j=>j.status===s).sort((a,b)=>b.createdAt-a.createdAt);
-    html += `<h2 class="section">${statusLabel(s)} <span class="count-badge">${list.length}</span></h2>`;
-    if(list.length===0){
-      html += `<div class="empty">No jobs here yet.</div>`;
-    }else{
-      list.forEach(j=>{ html += ticketCardHtml(j, 'dispatch'); });
-    }
-  });
-  main.innerHTML = html;
-
-  renderContractorChips();
-
-  document.getElementById('addContractorBtn').onclick = async ()=>{
-    const input = document.getElementById('newContractorName');
-    const name = input.value.trim();
-    if(!name) return;
-    if(!contractors.includes(name)) contractors.push(name);
-    await saveContractors();
-    input.value='';
-    renderDispatch(main);
-  };
-
-  wireTicketControls(main, 'dispatch');
-}
-
-function renderContractorChips(){
-  const el = document.getElementById('contractorChips');
-  if(!el) return;
-  if(contractors.length===0){
-    el.innerHTML = '<div style="font-size:13px;color:var(--ink-soft);">No contractors added yet.</div>';
-    return;
-  }
-  el.innerHTML = contractors.map(name=>`
-    <span class="chip"><span>${esc(name)}</span><span class="x" data-remove="${esc(name)}">×</span></span>
-  `).join('');
-  el.querySelectorAll('[data-remove]').forEach(x=>{
-    x.onclick = async ()=>{
-      const name = x.dataset.remove;
-      if(confirm(`Remove ${name} from the roster? Their claimed jobs will go back to open.`)){
-        contractors = contractors.filter(n=>n!==name);
-        jobs.forEach(j=>{
-          if(j.assignedTo===name){
-            j.assignedTo=null;
-            if(j.status==='claimed') j.status='open';
-          }
-        });
-        await saveContractors();
-        await saveJobs();
-        render();
-      }
-    };
-  });
-}
-
-/* ---------- Job Board tab (contractor view) ---------- */
-function renderBoard(main){
-  let html = `<h2 class="section">Who are you?</h2>`;
-  if(contractors.length===0){
-    html += `<div class="empty">No contractors on the roster yet — add one from the Dispatch tab.</div>`;
-    main.innerHTML = html;
-    return;
-  }
-  html += `<div class="chips">` + contractors.map(name=>
-    `<span class="chip ${selectedContractor===name?'active':''}" data-select="${esc(name)}">${esc(name)}</span>`
-  ).join('') + `</div>`;
-
-  const openJobs = jobs.filter(j=>j.status==='open').sort((a,b)=>a.createdAt-b.createdAt);
-  html += `<h2 class="section">Open jobs <span class="count-badge">${openJobs.length}</span></h2>`;
-  html += `<div class="hint">Browse what's posted and claim what you want — nobody's assigning you anything.</div>`;
-  if(openJobs.length===0){
-    html += `<div class="empty">Nothing posted right now.</div>`;
-  }else{
-    openJobs.forEach(j=>{ html += ticketCardHtml(j, 'claim'); });
-  }
-
-  if(selectedContractor){
-    const mine = jobs.filter(j=>j.assignedTo===selectedContractor);
-    const active = mine.filter(j=>j.status!=='done').sort((a,b)=>a.createdAt-b.createdAt);
-    const done = mine.filter(j=>j.status==='done');
-    html += `<h2 class="section">Your claimed jobs <span class="count-badge">${active.length}</span></h2>`;
-    if(active.length===0){
-      html += `<div class="empty">You haven't claimed anything yet.</div>`;
-    }else{
-      active.forEach(j=>{ html += ticketCardHtml(j, 'mine'); });
-    }
-    if(done.length>0){
-      html += `<h2 class="section">Completed <span class="count-badge">${done.length}</span></h2>`;
-      done.forEach(j=>{ html += ticketCardHtml(j, 'mine'); });
-    }
-  }
-  main.innerHTML = html;
-
-  main.querySelectorAll('[data-select]').forEach(c=>{
-    c.onclick = ()=>{ selectedContractor = c.dataset.select; renderBoard(main); };
-  });
-  wireTicketControls(main, 'claim');
-  wireTicketControls(main, 'mine');
-}
-
-/* ---------- shared ticket rendering ---------- */
-function ticketCardHtml(j, mode){
-  const meta = [];
-  if(j.phone) meta.push(`Phone: ${esc(j.phone)}${j.textOnly ? ' <strong>(text only — don\'t call)</strong>' : ''}`);
-  if(j.email) meta.push(`Email: ${esc(j.email)}`);
-  if(j.address) meta.push(`Address: ${esc(j.address)}`);
-  if(j.preferredDays) meta.push(`Preferred: ${esc(j.preferredDays)}`);
-  if(j.payRate) meta.push(`<span class="pay">Pay: ${esc(j.payRate)}</span>`);
-  if(mode==='dispatch' && j.assignedTo) meta.push(`Claimed by: ${esc(j.assignedTo)}`);
-  if(mode==='dispatch' && j.licenseConfirmedBy) meta.push(`License confirmed by: ${esc(j.licenseConfirmedBy)}`);
-  const tradeTypes = ['plumbing','electrical','hvac'];
-  const estNum = parseFloat((j.estimatedValue||'').replace(/[^0-9.]/g,'')) || 0;
-  if(j.jobType && (tradeTypes.includes(j.jobType) || estNum > 1000)){
-    const label = tradeTypes.includes(j.jobType) ? (j.jobType[0].toUpperCase()+j.jobType.slice(1)+' — needs specialty license') : 'Over $1,000 — needs contractor license';
-    meta.push(`<span class="license-flag">⚠ ${label}</span>`);
-  }
-
-  let body = '';
-  if(mode==='dispatch'){
-    const options = ['<option value="">— open, unclaimed —</option>']
-      .concat(contractors.map(n=>`<option value="${esc(n)}" ${j.assignedTo===n?'selected':''}>${esc(n)}</option>`))
-      .join('');
-    body += `
-      <div class="row">
-        <select data-assign="${j.id}">${options}</select>
-      </div>
-      <div class="status-buttons">
-        ${['open','claimed','in_progress','done'].map(s=>`
-          <button data-status="${j.id}" data-value="${s}" class="${j.status===s?'current':''}">${statusLabel(s)}</button>
-        `).join('')}
-      </div>
-    `;
-  }else if(mode==='claim'){
-    if(jobNeedsLicense(j)){
-      body += `
-        <div class="license-warning">
-          <p>⚠ ${licenseWarningText(j)} Only claim this if you hold that license.</p>
-          <label><input type="checkbox" class="claimLicenseAck" data-ack="${j.id}"> I hold the required license for this job</label>
-        </div>
-        <div class="row"><button class="btn block" data-claim="${j.id}" disabled>Claim this job</button></div>
-      `;
-    }else{
-      body += `<div class="row"><button class="btn block" data-claim="${j.id}">Claim this job</button></div>`;
-    }
+function subJobCardHtml(j, mode){
+  let controls = '';
+  if(mode==='available'){
+    const iAmInterested = (j.interestedUids||[]).includes(me.uid);
+    controls = `<button class="btn block ${iAmInterested?'secondary':''}" data-interest="${j.id}" data-value="${iAmInterested?'0':'1'}">${iAmInterested?"You're marked available — tap to undo":"I'm Available"}</button>`;
+  }else if(mode==='offered'){
+    controls = `<div class="status-buttons"><button data-respond="${j.id}" data-value="ACCEPTED" style="background:var(--moss);color:#fff;border-color:var(--moss);">Accept</button><button data-respond="${j.id}" data-value="DECLINED">Decline</button></div>`;
   }else if(mode==='mine'){
-    if(j.status==='claimed'){
-      body += `<div class="row"><button class="btn block" data-advance="${j.id}" data-value="in_progress">Start job</button></div>`;
-    }else if(j.status==='in_progress'){
-      body += `<div class="row"><button class="btn block" data-advance="${j.id}" data-value="done">Mark done</button></div>`;
-    }else if(j.status==='done'){
-      body += `<div class="row"><span style="color:var(--moss);font-weight:600;font-size:14px;">✓ Completed</span></div>`;
-    }
+    if(j.status==='ASSIGNED' || j.status==='SCHEDULED') controls = `<button class="btn block" data-advance="${j.id}" data-value="ON_THE_WAY">On the way</button>`;
+    else if(j.status==='ON_THE_WAY') controls = `<button class="btn block" data-advance="${j.id}" data-value="IN_PROGRESS">Start job</button>`;
+    else if(j.status==='IN_PROGRESS') controls = `<button class="btn block" data-complete="${j.id}">Mark Job Complete</button>`;
+    else if(j.status==='COMPLETED' || j.status==='PAID') controls = `<span style="color:var(--moss);font-weight:600;">✓ Completed</span>`;
   }
-
+  const showCustomer = mode==='mine';
   return `
-    <div class="ticket">
-      <div class="ticket-top">
-        <div>
-          <div class="ticket-name">${esc(j.customerName)||'Unnamed job'}</div>
-          <div class="ticket-desc">${esc(j.description)}</div>
-        </div>
-        <span class="stamp ${j.status}">${statusLabel(j.status)}</span>
+    <div class="card">
+      <div class="card-top">
+        <div><div class="card-title">Job #${j.jobNumber} — ${esc(j.jobType||'General')}</div>
+        <div class="card-sub">${esc((j.scope||'').slice(0,90))}</div></div>
+        <span class="stamp ${stampClass(j.status)}">${statusLabel(j.status)}</span>
       </div>
       <div class="perf"></div>
-      <div class="ticket-body">
-        ${meta.length ? `<div class="ticket-meta">${meta.map(m=>`<div>${m}</div>`).join('')}</div>` : ''}
-        ${j.photos && j.photos.length ? `<div class="ticket-photos">${j.photos.map(url=>`<a href="${esc(url)}" target="_blank" rel="noopener"><img src="${esc(url)}" alt="Job photo"></a>`).join('')}</div>` : ''}
-        ${body}
+      <div class="card-body">
+        <div class="card-meta">
+          <div>${esc(j.customer?.address)}</div>
+          ${j.scheduledDate?`<div>Scheduled: ${esc(j.scheduledDate)}</div>`:''}
+          ${j.estimatedDuration?`<div>Duration: ${esc(j.estimatedDuration)}</div>`:''}
+          <div class="pay">Pay: ${centsToStr(j.payoutCents)}</div>
+          ${showCustomer?`<div style="margin-top:6px;"><strong>${esc(j.customer?.name)}</strong></div><div>${esc(j.customer?.phone)}</div>`:''}
+        </div>
+        ${controls}
       </div>
     </div>
   `;
 }
 
-function wireTicketControls(main, mode){
-  if(mode==='dispatch'){
-    main.querySelectorAll('[data-assign]').forEach(sel=>{
-      sel.onchange = async ()=>{
-        const job = jobs.find(j=>j.id===sel.dataset.assign);
-        if(!job) return;
-        job.assignedTo = sel.value || null;
-        if(job.assignedTo){
-          if(job.status==='open') job.status='claimed';
-        }else{
-          if(job.status==='claimed') job.status='open';
-        }
-        await saveJobs();
-        render();
-      };
-    });
-    main.querySelectorAll('[data-status]').forEach(btn=>{
-      btn.onclick = async ()=>{
-        const job = jobs.find(j=>j.id===btn.dataset.status);
-        if(!job) return;
-        job.status = btn.dataset.value;
-        await saveJobs();
-        render();
-      };
-    });
+function renderSubHome(main){
+  main.innerHTML = `
+    <div class="stat-grid tri">
+      <div class="stat"><div class="num">${subData.availableJobs.length}</div><div class="lbl">Available</div></div>
+      <div class="stat"><div class="num">${subData.myJobs.filter(j=>!['COMPLETED','PAID'].includes(j.status)).length}</div><div class="lbl">My Jobs</div></div>
+      <div class="stat"><div class="num">${subData.myJobs.filter(j=>['COMPLETED','PAID'].includes(j.status)).length}</div><div class="lbl">Completed</div></div>
+    </div>
+    <h2 class="section">Job offers <span class="count-badge">${subData.offeredJobs.length}</span></h2>
+    ${subData.offeredJobs.length ? subData.offeredJobs.map(j=>subJobCardHtml(j,'offered')).join('') : '<div class="empty">No offers right now.</div>'}
+    <h2 class="section">Available jobs <span class="count-badge">${subData.availableJobs.length}</span></h2>
+    ${subData.availableJobs.slice(0,3).map(j=>subJobCardHtml(j,'available')).join('') || '<div class="empty">Nothing open right now.</div>'}
+    <h2 class="section">My active jobs</h2>
+    ${subData.myJobs.filter(j=>!['COMPLETED','PAID'].includes(j.status)).map(j=>subJobCardHtml(j,'mine')).join('') || '<div class="empty">Nothing assigned yet.</div>'}
+  `;
+  wireSubControls(main);
+}
+function renderSubAvailable(main){
+  let html = `<h2 class="section">Job offers <span class="count-badge">${subData.offeredJobs.length}</span></h2>`;
+  html += subData.offeredJobs.length ? subData.offeredJobs.map(j=>subJobCardHtml(j,'offered')).join('') : `<div class="empty">Nothing offered directly to you.</div>`;
+  html += `<h2 class="section">Available jobs <span class="count-badge">${subData.availableJobs.length}</span></h2>`;
+  html += `<div class="hint">Tap "I'm Available" to flag interest — the admin picks who gets it.</div>`;
+  html += subData.availableJobs.length ? subData.availableJobs.map(j=>subJobCardHtml(j,'available')).join('') : `<div class="empty">Nothing posted right now.</div>`;
+  main.innerHTML = html;
+  wireSubControls(main);
+}
+function renderSubMyJobs(main){
+  const active = subData.myJobs.filter(j=>!['COMPLETED','PAID'].includes(j.status));
+  const done = subData.myJobs.filter(j=>['COMPLETED','PAID'].includes(j.status));
+  let html = `<h2 class="section">My Jobs <span class="count-badge">${active.length}</span></h2>`;
+  html += active.length ? active.map(j=>subJobCardHtml(j,'mine')).join('') : `<div class="empty">Nothing assigned yet.</div>`;
+  if(done.length){
+    html += `<h2 class="section">Completed <span class="count-badge">${done.length}</span></h2>`;
+    html += done.map(j=>subJobCardHtml(j,'mine')).join('');
   }
-  if(mode==='claim'){
-    main.querySelectorAll('.claimLicenseAck').forEach(cb=>{
-      cb.onchange = ()=>{
-        const btn = main.querySelector(`[data-claim="${cb.dataset.ack}"]`);
-        if(btn) btn.disabled = !cb.checked;
-      };
-    });
-    main.querySelectorAll('[data-claim]').forEach(btn=>{
-      btn.onclick = async ()=>{
-        if(!selectedContractor){
-          alert('Tap your name up top first, then claim the job.');
-          return;
-        }
-        const job = jobs.find(j=>j.id===btn.dataset.claim);
-        if(!job) return;
-        if(jobNeedsLicense(job)){
-          job.licenseConfirmedBy = selectedContractor;
-        }
-        job.assignedTo = selectedContractor;
-        job.status = 'claimed';
-        await saveJobs();
-        renderBoard(document.getElementById('main'));
-      };
-    });
-  }
-  if(mode==='mine'){
-    main.querySelectorAll('[data-advance]').forEach(btn=>{
-      btn.onclick = async ()=>{
-        const job = jobs.find(j=>j.id===btn.dataset.advance);
-        if(!job) return;
-        job.status = btn.dataset.value;
-        await saveJobs();
-        renderBoard(document.getElementById('main'));
-      };
-    });
-  }
+  main.innerHTML = html;
+  wireSubControls(main);
+}
+function wireSubControls(main){
+  main.querySelectorAll('[data-interest]').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const add = btn.dataset.value==='1';
+      await db.collection('jobs').doc(btn.dataset.interest).update({
+        interestedUids: add ? firebase.firestore.FieldValue.arrayUnion(me.uid) : firebase.firestore.FieldValue.arrayRemove(me.uid)
+      });
+    };
+  });
+  main.querySelectorAll('[data-respond]').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const status = btn.dataset.value;
+      await db.collection('jobs').doc(btn.dataset.respond).update({
+        status, timeline: firebase.firestore.FieldValue.arrayUnion({event:`${status==='ACCEPTED'?'Accepted':'Declined'} by ${mySubDoc.name}`, at: now()})
+      });
+    };
+  });
+  main.querySelectorAll('[data-advance]').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const status = btn.dataset.value;
+      await db.collection('jobs').doc(btn.dataset.advance).update({
+        status, timeline: firebase.firestore.FieldValue.arrayUnion({event: statusLabel(status), at: now()})
+      });
+    };
+  });
+  main.querySelectorAll('[data-complete]').forEach(btn=>{
+    btn.onclick = ()=> openCompleteJobModal(btn.dataset.complete);
+  });
 }
 
-(function init(){
-  render();
-  subscribeToData();
-})();
+function openCompleteJobModal(jobId){
+  const j = subData.myJobs.find(x=>x.id===jobId);
+  if(!j) return;
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="modal"><div class="modal-inner">
+      <span class="close" id="closeModal">&times;</span>
+      <h3>Complete Job</h3>
+      <p>Job #${j.jobNumber}<br>${esc(j.jobType||'')}</p>
+      <div class="field"><label>Miles driven (optional, private to you — for your own records)</label><input id="c_miles" inputmode="decimal" placeholder="e.g. 38.4"></div>
+      <label class="checkline"><input type="checkbox" id="c_confirm"> I confirm the job has been completed</label>
+      <button class="btn block" id="submitComplete" disabled>Submit Completion</button>
+    </div></div>
+  `;
+  document.body.appendChild(backdrop);
+  document.getElementById('closeModal').onclick = ()=> backdrop.remove();
+  document.getElementById('c_confirm').onchange = (e)=>{ document.getElementById('submitComplete').disabled = !e.target.checked; };
+  document.getElementById('submitComplete').onclick = async ()=>{
+    const btn = document.getElementById('submitComplete'); btn.disabled = true; btn.textContent = 'Submitting…';
+    try{
+      const completedAt = now();
+      await db.collection('jobs').doc(j.id).update({
+        status:'COMPLETED',
+        timeline: firebase.firestore.FieldValue.arrayUnion({event:'Job completed', at: completedAt})
+      });
+      const milesVal = document.getElementById('c_miles').value.trim();
+      if(milesVal){
+        await db.collection('mileage').add({
+          subcontractorUid: me.uid, subcontractorId: myRole.subcontractorId,
+          jobId: j.id, jobLabel: `Job #${j.jobNumber} — ${j.jobType||''}`,
+          miles: parseFloat(milesVal), date: completedAt, correctionOf: null, createdAt: completedAt
+        });
+      }
+      await db.collection('payouts').doc(j.id).set({
+        subcontractorUid: me.uid, subcontractorId: myRole.subcontractorId, subcontractorName: mySubDoc.name,
+        jobId: j.id, jobNumber: j.jobNumber, jobLabel: j.jobType||'',
+        amountCents: j.payoutCents||0, status:'PENDING',
+        completedAt, paidAt:null, method:'', referenceId:'',
+        history:[{event:'Payout created', at: completedAt}],
+        createdAt: completedAt
+      });
+      backdrop.remove();
+    }catch(err){
+      console.error(err);
+      alert('Could not complete job: ' + err.message);
+      btn.disabled = false; btn.textContent = 'Submit Completion';
+    }
+  };
+}
+
+function renderSubPayouts(main){
+  const pending = subData.payouts.filter(p=>['PENDING','PROCESSING'].includes(p.status));
+  const paid = subData.payouts.filter(p=>p.status==='PAID');
+  const pendingCents = pending.reduce((s,p)=>s+(p.amountCents||0),0);
+  const paidCents = paid.reduce((s,p)=>s+(p.amountCents||0),0);
+  let html = `
+    <h2 class="section">My Payouts</h2>
+    <div class="stat-grid" style="margin-bottom:20px;">
+      <div class="stat owed"><div class="num">${centsToStr(pendingCents)}</div><div class="lbl">Pending</div></div>
+      <div class="stat paid"><div class="num">${centsToStr(paidCents)}</div><div class="lbl">Paid</div></div>
+    </div>
+    <div class="hint">Total earned: ${centsToStr(pendingCents+paidCents)}</div>
+  `;
+  const all = subData.payouts.slice().sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  if(all.length===0) html += `<div class="empty">No payouts yet.</div>`;
+  all.forEach(p=>{
+    html += `
+      <div class="card">
+        <div class="card-top">
+          <div><div class="card-title">Job #${p.jobNumber}</div><div class="card-sub">Completed ${fmtDate(p.completedAt)}</div></div>
+          <span class="stamp ${stampClass(p.status)}">${statusLabel(p.status)}</span>
+        </div>
+        <div class="card-body"><span class="pay">${centsToStr(p.amountCents)}</span></div>
+      </div>
+    `;
+  });
+  main.innerHTML = html;
+}
+
+function renderSubMileage(main){
+  const nowD = new Date();
+  const startOfWeek = new Date(nowD); startOfWeek.setDate(nowD.getDate()-nowD.getDay()); startOfWeek.setHours(0,0,0,0);
+  const startOfMonth = new Date(nowD.getFullYear(), nowD.getMonth(), 1);
+  const startOfYear = new Date(nowD.getFullYear(), 0, 1);
+
+  const active = subData.mileage.filter(m => !subData.mileage.some(other=>other.correctionOf===m.id)); // superseded entries hidden
+  const sumSince = (t)=> active.filter(m=>m.date>=t.getTime()).reduce((s,m)=>s+(m.miles||0),0);
+
+  let filtered = active;
+  if(mileageFilter==='week') filtered = active.filter(m=>m.date>=startOfWeek.getTime());
+  else if(mileageFilter==='month') filtered = active.filter(m=>m.date>=startOfMonth.getTime());
+  else if(mileageFilter==='year') filtered = active.filter(m=>m.date>=startOfYear.getTime());
+  filtered = filtered.slice().sort((a,b)=>b.date-a.date);
+
+  main.innerHTML = `
+    <h2 class="section">${nowD.getFullYear()} Mileage</h2>
+    <div class="hint">Private to you — never visible to the admin. For your own tax records.</div>
+    <div class="stat-grid tri" style="margin:12px 0 18px;">
+      <div class="stat"><div class="num">${sumSince(startOfYear).toFixed(1)}</div><div class="lbl">Total</div></div>
+      <div class="stat"><div class="num">${sumSince(startOfMonth).toFixed(1)}</div><div class="lbl">This Month</div></div>
+      <div class="stat"><div class="num">${sumSince(startOfWeek).toFixed(1)}</div><div class="lbl">This Week</div></div>
+    </div>
+    <div class="filter-row">
+      ${['week','month','year','all'].map(f=>`<button data-mfilter="${f}" class="${mileageFilter===f?'active':''}">${f==='all'?'All time':f[0].toUpperCase()+f.slice(1)}</button>`).join('')}
+      <button class="btn small secondary" id="exportCsv">Export CSV</button>
+    </div>
+    <table class="ledger">
+      <tr><th>Date</th><th>Job</th><th>Miles</th><th></th></tr>
+      ${filtered.map(m=>`
+        <tr>
+          <td>${fmtDate(m.date)}</td>
+          <td>${esc(m.jobLabel||'')}</td>
+          <td>${(m.miles||0).toFixed(1)}</td>
+          <td><span class="link-btn" data-correct="${m.id}">Correct</span></td>
+        </tr>
+      `).join('') || `<tr><td colspan="4" style="padding:20px 4px;color:var(--ink-soft);">No entries in this range.</td></tr>`}
+    </table>
+  `;
+  main.querySelectorAll('[data-mfilter]').forEach(b=>{ b.onclick = ()=>{ mileageFilter=b.dataset.mfilter; renderApp(); }; });
+  document.getElementById('exportCsv').onclick = ()=>{
+    const rows = [['Date','Job','Miles']].concat(filtered.map(m=>[new Date(m.date).toISOString().slice(0,10), (m.jobLabel||'').replace(/,/g,' '), (m.miles||0).toFixed(1)]));
+    const csv = rows.map(r=>r.join(',')).join('\n');
+    const blob = new Blob([csv], {type:'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `mileage-${mileageFilter}-${Date.now()}.csv`;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  };
+  main.querySelectorAll('[data-correct]').forEach(el=>{
+    el.onclick = ()=> openMileageCorrectionModal(el.dataset.correct);
+  });
+}
+function openMileageCorrectionModal(originalId){
+  const orig = subData.mileage.find(m=>m.id===originalId);
+  if(!orig) return;
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="modal"><div class="modal-inner">
+      <span class="close" id="closeModal">&times;</span>
+      <h3>Request Mileage Correction</h3>
+      <p>${esc(orig.jobLabel)} — ${fmtDate(orig.date)}<br>Original: ${(orig.miles||0).toFixed(1)} mi</p>
+      <div class="field"><label>Corrected miles</label><input id="corr_miles" inputmode="decimal" value="${(orig.miles||0).toFixed(1)}"></div>
+      <button class="btn block" id="submitCorrection">Save Correction</button>
+      <div class="hint" style="margin-top:8px;">The original stays on record; this correction supersedes it in your totals and exports.</div>
+    </div></div>
+  `;
+  document.body.appendChild(backdrop);
+  document.getElementById('closeModal').onclick = ()=> backdrop.remove();
+  document.getElementById('submitCorrection').onclick = async ()=>{
+    const miles = parseFloat(document.getElementById('corr_miles').value);
+    if(!Number.isFinite(miles)) return;
+    await db.collection('mileage').add({
+      subcontractorUid: me.uid, subcontractorId: myRole.subcontractorId,
+      jobId: orig.jobId, jobLabel: orig.jobLabel, miles, date: orig.date,
+      correctionOf: orig.id, createdAt: now()
+    });
+    backdrop.remove();
+  };
+}
+
+function renderSubProfile(main){
+  const s = mySubDoc;
+  main.innerHTML = `
+    <h2 class="section">${esc(s.name)}</h2>
+    <span class="id-badge">${myRole.subcontractorId}</span>
+    <div class="card-meta" style="margin-top:14px;">
+      <div><strong>Status</strong></div>
+      <div style="margin-bottom:10px;"><span class="stamp ${stampClass(s.status)}">${statusLabel(s.status)}</span></div>
+      <div><strong>Trades</strong></div>
+      <div style="margin-bottom:10px;">${esc((s.trades||[]).join(', '))||'—'}</div>
+      <div><strong>Service area</strong></div>
+      <div style="margin-bottom:10px;">${esc(s.serviceArea)||'—'}</div>
+      <div><strong>Phone</strong></div>
+      <div style="margin-bottom:10px;">${esc(s.phone)||'—'}</div>
+      <div><strong>Email</strong></div>
+      <div style="margin-bottom:10px;">${esc(s.email)||'—'}</div>
+    </div>
+    <div class="hint">To update your contact info or trades, ask the admin — these are admin-managed.</div>
+    <button class="btn secondary block" id="changePinBtn" style="margin-top:18px;">Change My PIN</button>
+    <div id="pinMsg"></div>
+  `;
+  document.getElementById('changePinBtn').onclick = openChangePinModal;
+}
+function openChangePinModal(){
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="modal"><div class="modal-inner">
+      <span class="close" id="closeModal">&times;</span>
+      <h3>Change My PIN</h3>
+      <div class="field"><label>Current PIN</label><input id="cp_old" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required></div>
+      <div class="field"><label>New 4-digit PIN</label><input id="cp_new" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required></div>
+      <div class="field"><label>Confirm new PIN</label><input id="cp_new2" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required></div>
+      <div id="cpMsg"></div>
+      <button class="btn block" id="cpSubmit">Save New PIN</button>
+    </div></div>
+  `;
+  document.body.appendChild(backdrop);
+  document.getElementById('closeModal').onclick = ()=> backdrop.remove();
+  document.getElementById('cpSubmit').onclick = async ()=>{
+    const oldPin = document.getElementById('cp_old').value.trim();
+    const p1 = document.getElementById('cp_new').value.trim();
+    const p2 = document.getElementById('cp_new2').value.trim();
+    if(!/^\d{4}$/.test(p1) || p1!==p2){
+      document.getElementById('cpMsg').innerHTML = '<div class="msg error">New PINs must match and be 4 digits.</div>'; return;
+    }
+    try{
+      const cred = firebase.auth.EmailAuthProvider.credential(me.email, pinToPassword(oldPin));
+      await auth.currentUser.reauthenticateWithCredential(cred);
+      await auth.currentUser.updatePassword(pinToPassword(p1));
+      backdrop.remove();
+    }catch(err){
+      document.getElementById('cpMsg').innerHTML = `<div class="msg error">Current PIN was wrong.</div>`;
+    }
+  };
+}
 </script>
 </body>
 </html>
-
