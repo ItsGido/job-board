@@ -101,6 +101,44 @@
   }
   .nav-cta:hover{background:var(--rust-dark);}
 
+  .nav-right{display:flex;align-items:center;gap:10px;}
+  .menu-wrap{position:relative;}
+  .menu-btn{
+    width:38px;height:38px;
+    border-radius:6px;
+    border:1.5px solid rgba(255,255,255,0.35);
+    background:transparent;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    padding:0;
+  }
+  .menu-btn:hover{background:rgba(255,255,255,0.12);}
+  .menu-dropdown{
+    display:none;
+    position:absolute;
+    top:calc(100% + 8px);
+    right:0;
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:8px;
+    box-shadow:0 10px 28px rgba(28,39,51,0.18);
+    min-width:170px;
+    overflow:hidden;
+    z-index:40;
+  }
+  .menu-dropdown.show{display:block;}
+  .menu-dropdown a{
+    display:block;
+    padding:12px 16px;
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+    font-weight:600;
+    color:var(--ink);
+    text-decoration:none;
+  }
+  .menu-dropdown a:hover{background:var(--paper-alt);}
+  .menu-dropdown a + a{border-top:1px solid var(--line);}
+
   /* ---- hero ---- */
   .hero{
     background:linear-gradient(155deg, var(--navy) 0%, var(--navy-deep) 100%);
@@ -307,17 +345,7 @@
 
   /* ---- about ---- */
   .about-row{display:flex;gap:28px;align-items:center;flex-wrap:wrap;}
-  .about-photo{
-    flex:1;min-width:220px;
-    aspect-ratio:4/3;
-    border-radius:10px;
-    border:1.5px solid var(--line);
-    background:var(--paper-alt);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
-    font-size:13px;color:var(--ink-soft);font-weight:600;text-align:center;
-  }
-  .about-photo svg{width:26px;height:26px;color:var(--rust);}
-  .about-text{flex:1.4;min-width:260px;}
+  .about-text{max-width:640px;}
   .about-text p{margin:0 0 14px;font-size:15px;color:var(--ink-soft);}
   .about-text p:last-child{margin-bottom:0;}
   .about-list{list-style:none;margin:20px 0 0;padding:0;display:flex;flex-direction:column;gap:10px;}
@@ -384,7 +412,19 @@
       </span>
       <span class="mark-text">Coomer Home Improvements<span class="sub">Front Royal, VA</span></span>
     </a>
-    <a class="nav-cta" href="request.html">Request a Job</a>
+    <div class="nav-right">
+      <a class="nav-cta" href="request.html">Request a Job</a>
+      <div class="menu-wrap">
+        <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div class="menu-dropdown" id="menuDropdown">
+          <a href="#contact">Contact Us</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#about">About Us</a>
+        </div>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -401,7 +441,6 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
           Request a Job
         </a>
-        <a class="cta ghost" href="#services">See What We Do</a>
       </div>
       <div class="trust-strip">
         <div class="trust-item">
@@ -520,10 +559,6 @@
 <section class="alt" id="about">
   <div class="wrap">
     <div class="about-row">
-      <div class="about-photo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <span>Photo coming soon</span>
-      </div>
       <div class="about-text">
         <p class="section-tag">About Us</p>
         <h2 class="section-title" style="margin-bottom:14px;">A local, family-run operation</h2>
@@ -604,6 +639,28 @@
     </div>
   </div>
 </footer>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const menuDropdown = document.getElementById('menuDropdown');
+  menuBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    const isOpen = menuDropdown.classList.toggle('show');
+    menuBtn.setAttribute('aria-expanded', isOpen);
+  });
+  document.addEventListener('click', (e)=>{
+    if(!menuDropdown.contains(e.target) && e.target !== menuBtn){
+      menuDropdown.classList.remove('show');
+      menuBtn.setAttribute('aria-expanded','false');
+    }
+  });
+  menuDropdown.querySelectorAll('a').forEach(a=>{
+    a.addEventListener('click', ()=>{
+      menuDropdown.classList.remove('show');
+      menuBtn.setAttribute('aria-expanded','false');
+    });
+  });
+</script>
 
 </body>
 </html>
