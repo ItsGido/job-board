@@ -245,12 +245,28 @@
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-storage-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="firebase-config.js"></script>
 <script>
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const storage = firebase.storage();
 const jobsDocRef = db.collection('board').doc('jobs');
+emailjs.init({ publicKey: 'Q09gYijicA1O-h85i' });
+
+function notifyNewJob(job){
+  emailjs.send('service_i3oreff', 'template_8f5hfw9', {
+    customer_name: job.customerName,
+    phone: job.phone,
+    text_only_note: job.textOnly ? ' (text only — don\'t call)' : '',
+    email: job.email || 'not provided',
+    address: job.address || 'not provided',
+    job_type: job.jobType,
+    estimated_value: job.estimatedValue || 'not provided',
+    preferred_days: job.preferredDays || 'not provided',
+    description: job.description
+  }).catch(err => console.error('Job notification email failed to send', err));
+}
 
 function uid(){return 'job_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);}
 
@@ -347,6 +363,7 @@ document.getElementById('jobForm').onsubmit = async (e)=>{
     };
     jobs.push(job);
     await jobsDocRef.set({ list: jobs });
+    notifyNewJob(job);
     document.getElementById('formView').style.display = 'none';
     document.getElementById('confirmView').classList.add('show');
   }catch(err){
@@ -360,4 +377,3 @@ document.getElementById('jobForm').onsubmit = async (e)=>{
 
 </body>
 </html>
-
