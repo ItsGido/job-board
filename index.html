@@ -119,18 +119,20 @@
     pointer-events:none;
   }
   .hero-inner{position:relative;max-width:640px;}
-  .hero-van{
-    position:absolute;right:-10px;bottom:-6px;
-    width:380px;height:auto;color:rgba(255,255,255,0.28);
+  .hero-bg-photo{
+    position:absolute;inset:0;
+    background-image:url('IMG_1528.jpeg');
+    background-size:cover;
+    background-position:center 65%;
+    opacity:0.32;
     pointer-events:none;
-    transition:transform .7s cubic-bezier(.4,0,.2,1), opacity .7s ease;
+    transition:opacity .6s ease, transform .6s ease;
   }
-  .hero-van.drive-away{
-    transform:translateX(-1200px);
+  .hero-bg-photo.drive-away{
     opacity:0;
+    transform:translateX(-6%);
   }
-  @media (max-width:980px){ .hero-van{display:none;} }
-  @media (prefers-reduced-motion:reduce){ .hero-van{transition:none;} }
+  @media (prefers-reduced-motion:reduce){ .hero-bg-photo{transition:none;} }
   .eyebrow{
     display:inline-flex;align-items:center;gap:8px;
     font-family:'Inter',sans-serif;
@@ -396,7 +398,7 @@
   <div class="navrow">
     <a class="mark" href="#top">
       <span class="mark-badge">
-        <svg viewBox="0 0 48 32" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17L13 5l11 12"/><path d="M15 21L24 3l9 18"/><path d="M26 17L37 5l9 12"/><line x1="4" y1="27" x2="44" y2="27"/></svg>
+        <svg viewBox="0 0 48 32" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15L11 5L19 15"/><path d="M5 15V27"/><path d="M17 15V27"/><path d="M13 12L24 1L35 12"/><path d="M15 12V27"/><path d="M33 12V27"/><path d="M29 15L37 5L45 15"/><path d="M31 15V27"/><path d="M43 15V27"/><path d="M3 27H45"/></svg>
       </span>
       <span class="mark-text">Coomer Home Improvements<span class="sub">Front Royal, VA</span></span>
     </a>
@@ -407,6 +409,7 @@
 <div id="top"></div>
 
 <section class="hero" style="padding-top:56px;">
+  <div class="hero-bg-photo" id="heroVan"></div>
   <div class="wrap">
     <div class="hero-inner">
       <span class="eyebrow">Locally Owned &amp; Operated</span>
@@ -435,37 +438,6 @@
       </div>
     </div>
   </div>
-  <svg class="hero-van" id="heroVan" viewBox="0 0 360 170" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <!-- van body: rounded nose, flat roof, rounded back-top, single sweeping outline -->
-    <path d="M30,130 C17,130 14,121 17,111 C19,94 27,79 45,64 C56,50 71,42 92,40 L300,40 C321,40 337,46 338,59 L338,130 Z"
-          stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
-    <!-- flat bottom / running board -->
-    <path d="M17,130 L338,130" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-    <!-- windshield -->
-    <path d="M50,96 L44,61 L102,58 L102,96 Z" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
-    <!-- headlight -->
-    <circle cx="23" cy="119" r="4" stroke="currentColor" stroke-width="2.2"/>
-    <!-- beltline accent -->
-    <path d="M140,106 L332,106" stroke="currentColor" stroke-width="1.6"/>
-    <!-- house mark + name on cargo box side panel -->
-    <g transform="translate(148,52) scale(0.55)">
-      <path d="M2 17L13 5l11 12" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M15 21L24 3l9 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M26 17L37 5l9 12" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-      <line x1="4" y1="27" x2="44" y2="27" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
-    </g>
-    <text x="255" y="70" font-family="Archivo, sans-serif" font-weight="800" font-size="14" fill="currentColor" text-anchor="middle">COOMER HOME</text>
-    <text x="255" y="86" font-family="Inter, sans-serif" font-weight="600" font-size="9" fill="currentColor" text-anchor="middle" letter-spacing="1">IMPROVEMENTS</text>
-    <!-- wheels -->
-    <circle cx="78" cy="134" r="27" stroke="currentColor" stroke-width="3"/>
-    <circle cx="78" cy="134" r="9" stroke="currentColor" stroke-width="2.2"/>
-    <circle cx="272" cy="134" r="27" stroke="currentColor" stroke-width="3"/>
-    <circle cx="272" cy="134" r="9" stroke="currentColor" stroke-width="2.2"/>
-    <!-- motion lines -->
-    <path d="M2,113 L14,113" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-    <path d="M6,122 L16,122" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-    <path d="M2,131 L12,131" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-  </svg>
 </section>
 
 <div class="photo-band">
@@ -614,7 +586,7 @@
       <div>
         <div class="mark" style="margin-bottom:10px;">
           <span class="mark-badge">
-            <svg viewBox="0 0 48 32" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17L13 5l11 12"/><path d="M15 21L24 3l9 18"/><path d="M26 17L37 5l9 12"/><line x1="4" y1="27" x2="44" y2="27"/></svg>
+            <svg viewBox="0 0 48 32" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15L11 5L19 15"/><path d="M5 15V27"/><path d="M17 15V27"/><path d="M13 12L24 1L35 12"/><path d="M15 12V27"/><path d="M33 12V27"/><path d="M29 15L37 5L45 15"/><path d="M31 15V27"/><path d="M43 15V27"/><path d="M3 27H45"/></svg>
           </span>
           <span class="mark-text">Coomer Home Improvements</span>
         </div>
