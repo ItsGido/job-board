@@ -3,14 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coomer Home Improvements — Front Royal, VA Handyman</title>
-<meta name="description" content="Coomer Home Improvements — local handyman services in Front Royal, Virginia. Drywall, painting, carpentry, mounting, and small repairs.">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Coomer Home Improvements — Handyman Services</title>
+<meta name="description" content="Coomer Home Improvements — professional handyman services. Drywall, painting, carpentry, mounting, and small repairs.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <style>
   :root{
     --navy:#3E5E82;
-    --navy-deep:#26394D;
+    --navy-deep:#1B2A3A;
+    --navy-deeper:#131E29;
     --paper:#F6F3ED;
     --paper-alt:#EFEAE0;
     --ink:#1C2733;
@@ -18,11 +24,15 @@
     --white:#FFFFFF;
     --rust:#4E7FA8;
     --rust-dark:#3A6285;
-    --gold:#A9C3DA;
+    --gold:#C9DAEA;
+    --gold-deep:#A9C3DA;
     --warn:#B5502F;
     --warn-dark:#943E22;
     --line:#DFD9CB;
     --success:#3F7A52;
+    --glass:rgba(255,255,255,0.06);
+    --glass-line:rgba(255,255,255,0.14);
+    --ease:cubic-bezier(.16,.84,.44,1);
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -35,39 +45,68 @@
     font-size:16px;
     line-height:1.55;
     -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
   }
   a{color:inherit;}
   img{max-width:100%;display:block;}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px;position:relative;}
   h1,h2,h3{
     font-family:'Archivo',sans-serif;
     text-wrap:balance;
     margin:0;
   }
+  ::selection{background:var(--rust);color:#fff;}
+
+  /* ---- scroll progress ---- */
+  .scroll-progress{
+    position:fixed;top:0;left:0;height:3px;
+    background:linear-gradient(90deg, var(--rust), var(--gold));
+    width:0%;
+    z-index:60;
+    transition:width .05s linear;
+  }
+
+  /* ---- grain / texture ---- */
+  .grain{
+    pointer-events:none;position:fixed;inset:0;z-index:1;opacity:.035;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
 
   /* ---- top bar ---- */
-  .topbar{background:var(--navy-deep);color:#C9D3E0;font-size:12.5px;}
+  .topbar{background:var(--navy-deeper);color:#B9C6D6;font-size:12.5px;position:relative;z-index:31;}
   .topbar .wrap{display:flex;justify-content:space-between;align-items:center;padding:7px 24px;gap:12px;flex-wrap:wrap;}
   .topbar strong{color:var(--white);font-weight:600;}
 
   /* ---- header ---- */
   header.site{
     position:sticky;top:0;z-index:30;
-    background:var(--navy);
-    border-bottom:3px solid var(--rust);
+    background:rgba(62,94,130,0.92);
+    backdrop-filter:blur(10px) saturate(140%);
+    -webkit-backdrop-filter:blur(10px) saturate(140%);
+    border-bottom:1px solid rgba(255,255,255,0.1);
+    transition:box-shadow .3s var(--ease), background .3s var(--ease), padding .25s var(--ease);
+  }
+  header.site.scrolled{
+    box-shadow:0 8px 30px rgba(11,17,24,0.28);
+    background:rgba(38,57,77,0.96);
   }
   .navrow{
     display:flex;align-items:center;justify-content:space-between;
-    max-width:1080px;margin:0 auto;padding:14px 24px;
+    max-width:1120px;margin:0 auto;padding:14px 24px;
     gap:16px;
+    transition:padding .25s var(--ease);
   }
+  header.site.scrolled .navrow{padding:10px 24px;}
   .mark{display:flex;align-items:center;gap:10px;text-decoration:none;}
   .mark-badge{
-    width:38px;height:38px;border-radius:8px;
-    background:var(--rust);
+    width:38px;height:38px;border-radius:9px;
+    background:linear-gradient(155deg, var(--rust) 0%, var(--rust-dark) 100%);
     display:flex;align-items:center;justify-content:center;
     flex-shrink:0;
+    box-shadow:0 4px 14px rgba(78,127,168,0.45);
+    transition:transform .35s var(--ease);
   }
+  .mark:hover .mark-badge{transform:rotate(-6deg) scale(1.05);}
   .mark-badge svg{width:22px;height:22px;}
   .mark-text{
     font-family:'Archivo',sans-serif;
@@ -81,12 +120,14 @@
     font-family:'Inter',sans-serif;
     font-weight:600;
     font-size:10.5px;
-    letter-spacing:1.2px;
+    letter-spacing:1.4px;
     text-transform:uppercase;
-    color:var(--gold);
+    color:var(--gold-deep);
     margin-top:2px;
   }
   .nav-cta{
+    position:relative;
+    display:inline-flex;align-items:center;gap:8px;
     font-family:'Inter',sans-serif;
     font-weight:700;
     font-size:14px;
@@ -94,130 +135,217 @@
     background:var(--rust);
     color:var(--white);
     padding:11px 18px;
-    border-radius:6px;
+    border-radius:7px;
     white-space:nowrap;
     border:1.5px solid var(--rust);
-    transition:background .15s;
+    transition:background .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
+    box-shadow:0 2px 0 rgba(0,0,0,0.05);
   }
-  .nav-cta:hover{background:var(--rust-dark);}
+  .nav-cta:hover{background:var(--rust-dark);transform:translateY(-2px);box-shadow:0 8px 18px rgba(58,98,133,0.45);}
+  .nav-cta:active{transform:translateY(0);}
+  .nav-cta svg{transition:transform .25s var(--ease);}
+  .nav-cta:hover svg{transform:translateX(3px);}
 
   .nav-right{display:flex;align-items:center;gap:10px;}
   .menu-wrap{position:relative;}
   .menu-btn{
     width:38px;height:38px;
-    border-radius:6px;
-    border:1.5px solid rgba(255,255,255,0.35);
+    border-radius:7px;
+    border:1.5px solid rgba(255,255,255,0.3);
     background:transparent;
     display:flex;align-items:center;justify-content:center;
     cursor:pointer;
     padding:0;
+    gap:4px;
+    flex-direction:column;
+    transition:background .2s;
   }
   .menu-btn:hover{background:rgba(255,255,255,0.12);}
+  .menu-btn span{
+    display:block;width:16px;height:2px;border-radius:2px;background:#fff;
+    transition:transform .3s var(--ease), opacity .2s var(--ease);
+  }
+  .menu-btn[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+  .menu-btn[aria-expanded="true"] span:nth-child(2){opacity:0;}
+  .menu-btn[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
   .menu-dropdown{
-    display:none;
     position:absolute;
-    top:calc(100% + 8px);
+    top:calc(100% + 10px);
     right:0;
     background:var(--white);
     border:1px solid var(--line);
-    border-radius:8px;
-    box-shadow:0 10px 28px rgba(28,39,51,0.18);
-    min-width:170px;
+    border-radius:12px;
+    box-shadow:0 20px 46px rgba(19,30,41,0.22);
+    min-width:180px;
     overflow:hidden;
     z-index:40;
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(-8px) scale(.97);
+    transform-origin:top right;
+    transition:opacity .22s var(--ease), transform .22s var(--ease), visibility .22s;
   }
-  .menu-dropdown.show{display:block;}
+  .menu-dropdown.show{opacity:1;visibility:visible;transform:translateY(0) scale(1);}
   .menu-dropdown a{
-    display:block;
-    padding:12px 16px;
+    display:flex;align-items:center;
+    padding:13px 18px;
     font-family:'Inter',sans-serif;
     font-size:14px;
     font-weight:600;
     color:var(--ink);
     text-decoration:none;
+    position:relative;
+    transition:color .18s, padding-left .18s;
   }
-  .menu-dropdown a:hover{background:var(--paper-alt);}
+  .menu-dropdown a:hover{color:var(--rust-dark);padding-left:22px;background:var(--paper-alt);}
   .menu-dropdown a + a{border-top:1px solid var(--line);}
 
   /* ---- hero ---- */
   .hero{
-    background:linear-gradient(155deg, var(--navy) 0%, var(--navy-deep) 100%);
+    background:
+      radial-gradient(1100px 480px at 85% -10%, rgba(78,127,168,0.35), transparent 60%),
+      linear-gradient(155deg, var(--navy) 0%, var(--navy-deep) 62%, var(--navy-deeper) 100%);
     color:var(--white);
-    padding:56px 0 64px;
+    padding:88px 0 90px;
     position:relative;
     overflow:hidden;
   }
-  .hero::after{
-    content:"";
-    position:absolute;
-    right:-120px;top:-80px;
-    width:420px;height:420px;
-    border-radius:50%;
-    background:radial-gradient(circle, rgba(78,127,168,0.28) 0%, rgba(78,127,168,0) 70%);
+  .hero-grid{
+    position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size:26px 26px;
+    mask-image:radial-gradient(ellipse 70% 60% at 30% 20%, black 10%, transparent 75%);
+    -webkit-mask-image:radial-gradient(ellipse 70% 60% at 30% 20%, black 10%, transparent 75%);
     pointer-events:none;
-  }
-  .hero-inner{position:relative;max-width:640px;}
+  }  .orb{position:absolute;border-radius:50%;filter:blur(4px);pointer-events:none;opacity:.55;}
+  .orb-1{width:340px;height:340px;right:-90px;top:-110px;background:radial-gradient(circle, rgba(78,127,168,0.55) 0%, rgba(78,127,168,0) 72%);animation:drift1 22s ease-in-out infinite;}
+  .orb-2{width:220px;height:220px;left:-60px;bottom:-60px;background:radial-gradient(circle, rgba(169,195,218,0.35) 0%, rgba(169,195,218,0) 72%);animation:drift2 26s ease-in-out infinite;}
+  .orb-3{width:160px;height:160px;right:18%;bottom:8%;background:radial-gradient(circle, rgba(78,127,168,0.4) 0%, rgba(78,127,168,0) 72%);animation:drift3 19s ease-in-out infinite;}
+  @keyframes drift1{0%,100%{transform:translate(0,0);}50%{transform:translate(-26px,30px);}}
+  @keyframes drift2{0%,100%{transform:translate(0,0);}50%{transform:translate(24px,-22px);}}
+  @keyframes drift3{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-18px,-14px) scale(1.08);}}
+  @media (prefers-reduced-motion:reduce){ .orb{animation:none;} }
+
+  .hero-layout{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;}
+  .hero-inner{position:relative;max-width:600px;}
   .eyebrow{
     display:inline-flex;align-items:center;gap:8px;
     font-family:'Inter',sans-serif;
     font-weight:700;
     font-size:12.5px;
-    letter-spacing:1.2px;
+    letter-spacing:1.3px;
     text-transform:uppercase;
     color:var(--gold);
-    background:rgba(169,195,218,0.14);
-    border:1px solid rgba(169,195,218,0.4);
-    padding:6px 12px;
-    border-radius:20px;
-    margin:0 0 20px;
+    background:var(--glass);
+    border:1px solid var(--glass-line);
+    backdrop-filter:blur(6px);
+    padding:7px 14px;
+    border-radius:22px;
+    margin:0 0 22px;
   }
+  .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(201,218,234,0.22);animation:pulseDot 2.2s ease-in-out infinite;}
+  @keyframes pulseDot{0%,100%{opacity:1;}50%{opacity:.4;}}
   h1.hero-h{
     font-weight:900;
-    font-size:44px;
-    line-height:1.08;
-    margin:0 0 18px;
-    letter-spacing:-.5px;
+    font-size:clamp(34px, 5vw, 58px);
+    line-height:1.06;
+    margin:0 0 20px;
+    letter-spacing:-1px;
   }
-  h1.hero-h span{color:var(--gold);}
+  h1.hero-h .grad{
+    background:linear-gradient(100deg, var(--gold) 0%, #fff 45%, var(--gold-deep) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
   .hero p.lede{
-    font-size:17.5px;
+    font-size:18px;
     color:#C9D3E0;
     max-width:46ch;
-    margin:0 0 30px;
+    margin:0 0 32px;
   }
-  .hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:34px;}
+  .hero-ctas{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:38px;}
   .cta{
     display:inline-flex;
     align-items:center;
-    gap:8px;
+    gap:9px;
     text-align:center;
     text-decoration:none;
     font-family:'Inter',sans-serif;
     font-weight:700;
     font-size:15.5px;
-    padding:15px 24px;
-    border-radius:7px;
+    padding:16px 26px;
+    border-radius:8px;
     border:1.5px solid transparent;
+    transition:transform .22s var(--ease), box-shadow .22s var(--ease), background .22s var(--ease);
   }
+  .cta svg{transition:transform .25s var(--ease);}
+  .cta:hover svg{transform:translateX(4px);}
   .cta.primary{
     background:var(--rust);
     border-color:var(--rust);
     color:var(--white);
+    box-shadow:0 10px 26px rgba(78,127,168,0.35);
   }
-  .cta.primary:hover{background:var(--rust-dark);}
+  .cta.primary:hover{background:var(--rust-dark);transform:translateY(-3px);box-shadow:0 16px 34px rgba(78,127,168,0.5);}
   .cta.ghost{
-    background:transparent;
-    border-color:rgba(255,255,255,0.35);
+    background:var(--glass);
+    border-color:var(--glass-line);
     color:var(--white);
+    backdrop-filter:blur(6px);
   }
+  .cta.ghost:hover{background:rgba(255,255,255,0.12);transform:translateY(-3px);}
 
   .trust-strip{
     display:flex;flex-wrap:wrap;gap:22px 32px;
-    padding-top:26px;
+    padding-top:28px;
     border-top:1px solid rgba(255,255,255,0.14);
   }
   .trust-item{display:flex;align-items:center;gap:9px;font-size:13.5px;color:#C9D3E0;font-weight:500;}
   .trust-item svg{width:18px;height:18px;color:var(--gold);flex-shrink:0;}
+
+  /* ---- hero mockup card ---- */
+  .hero-visual{position:relative;height:100%;min-height:340px;display:flex;align-items:center;justify-content:center;}
+  .mock-stack{position:relative;width:100%;max-width:340px;}
+  .mock-card{
+    background:rgba(255,255,255,0.97);
+    border-radius:16px;
+    padding:22px 22px 24px;
+    box-shadow:0 30px 70px rgba(8,14,20,0.4);
+    color:var(--ink);
+  }
+  .mock-card.back{
+    position:absolute;
+    inset:0;
+    transform:rotate(6deg) translate(18px,22px);
+    background:rgba(255,255,255,0.5);
+    z-index:1;
+  }
+  .mock-card.front{position:relative;z-index:2;}
+  .mock-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .mock-avatar{width:34px;height:34px;border-radius:9px;background:linear-gradient(155deg,var(--rust),var(--rust-dark));flex-shrink:0;}
+  .mock-head-text b{display:block;font-size:14px;font-family:'Archivo',sans-serif;}
+  .mock-head-text span{font-size:12px;color:var(--ink-soft);}
+  .mock-list{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:10px;}
+  .mock-list li{
+    display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:600;
+    opacity:0;transform:translateX(-8px);
+  }
+  .mock-check{
+    width:18px;height:18px;border-radius:50%;background:var(--success);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .mock-check svg{width:11px;height:11px;color:#fff;}
+  .mock-foot{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px dashed var(--line);}
+  .mock-status{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:12px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;
+    color:var(--success);
+  }
+  .mock-status .dot{width:7px;height:7px;border-radius:50%;background:var(--success);animation:pulseDot 1.8s ease-in-out infinite;}
+  .mock-eta{font-size:12.5px;color:var(--ink-soft);font-weight:600;}
+  @media (max-width:980px){
+    .hero-layout{grid-template-columns:1fr;}
+    .hero-visual{display:none;}
+  }
 
   /* ---- our work gallery ---- */
   .work-grid{columns:2;column-gap:16px;}
@@ -226,30 +354,36 @@
     margin-bottom:16px;
     background:var(--white);
     border:1px solid var(--line);
-    border-radius:10px;
+    border-radius:12px;
     overflow:hidden;
+    position:relative;
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease);
   }
-  .work-item img{width:100%;display:block;}
+  .work-item:hover{transform:translateY(-6px);box-shadow:0 22px 40px rgba(28,39,51,0.16);}
+  .work-item img{width:100%;display:block;transition:transform .5s var(--ease);}
+  .work-item:hover img{transform:scale(1.06);}
   @media (min-width:900px){
     .work-grid{columns:3;}
   }
 
   /* ---- section shell ---- */
-  section{padding:64px 0;}
+  section{padding:96px 0;position:relative;}
   section.alt{background:var(--paper-alt);}
-  .section-head{max-width:600px;margin:0 0 40px;}
+  .section-head{max-width:600px;margin:0 0 44px;}
   .section-tag{
+    display:inline-flex;align-items:center;gap:8px;
     font-family:'Inter',sans-serif;
     font-weight:700;
     font-size:12.5px;
-    letter-spacing:1.2px;
+    letter-spacing:1.3px;
     text-transform:uppercase;
     color:var(--rust);
-    margin:0 0 10px;
+    margin:0 0 12px;
   }
+  .section-tag::before{content:"";width:18px;height:2px;background:var(--rust);border-radius:2px;}
   h2.section-title{
     font-weight:900;
-    font-size:30px;
+    font-size:clamp(26px,3.4vw,34px);
     line-height:1.15;
   }
   .section-head p{
@@ -258,137 +392,188 @@
     margin:14px 0 0;
   }
 
+  /* ---- reveal utility ---- */
+  .reveal{opacity:0;transform:translateY(26px);}
+  @media (prefers-reduced-motion:reduce){ .reveal{opacity:1;transform:none;} }
+
   /* ---- services ---- */
   .services-grid{
     display:grid;
     grid-template-columns:repeat(2,1fr);
-    gap:16px;
+    gap:18px;
   }
   .svc{
     background:var(--white);
     border:1px solid var(--line);
-    border-radius:10px;
-    padding:22px 20px;
+    border-radius:14px;
+    padding:26px 22px;
     display:flex;
     flex-direction:column;
     gap:14px;
+    position:relative;
+    overflow:hidden;
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease);
   }
+  .svc::before{
+    content:"";position:absolute;inset:0;border-radius:14px;padding:1.5px;
+    background:linear-gradient(135deg, var(--rust), transparent 40%);
+    -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    opacity:0;transition:opacity .3s var(--ease);
+    pointer-events:none;
+              }  .svc:hover{transform:translateY(-6px);box-shadow:0 26px 46px rgba(28,39,51,0.14);border-color:transparent;}
+  .svc:hover::before{opacity:1;}
   .svc-icon{
-    width:48px;height:48px;border-radius:9px;
-    background:var(--navy);
+    width:50px;height:50px;border-radius:11px;
+    background:linear-gradient(155deg, var(--navy), var(--navy-deep));
     display:flex;align-items:center;justify-content:center;
     color:var(--gold);
+    transition:transform .35s var(--ease);
   }
+  .svc:hover .svc-icon{transform:rotate(-8deg) scale(1.08);}
   .svc h3{font-size:16.5px;font-weight:700;font-family:'Inter',sans-serif;}
   .svc p{margin:0;font-size:13.5px;color:var(--ink-soft);}
-
-  .scope-note{
-    margin-top:24px;
-    padding:16px 18px;
-    background:var(--white);
-    border:1px solid var(--line);
-    border-left:4px solid var(--rust);
-    border-radius:6px;
-    font-size:13.5px;
-    color:var(--ink-soft);
-  }
-  .scope-note strong{color:var(--ink);}
 
   /* ---- how it works ---- */
   .steps{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:20px;
+    gap:24px;
+    position:relative;
   }
+  .steps::before{
+    content:"";position:absolute;top:29px;left:calc(16.6% + 6px);right:calc(16.6% + 6px);height:2px;
+    background:linear-gradient(90deg, var(--rust), var(--line) 60%, var(--rust));
+    background-size:200% 100%;
+    z-index:0;
+  }
+  @media (max-width:760px){ .steps::before{display:none;} }
   .step{
     background:var(--white);
     border:1px solid var(--line);
-    border-radius:10px;
-    padding:26px 22px;
+    border-radius:14px;
+    padding:28px 22px;
     position:relative;
+    z-index:1;
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease);
   }
+  .step:hover{transform:translateY(-5px);box-shadow:0 20px 38px rgba(28,39,51,0.12);}
   .step-num{
     font-family:'Archivo',sans-serif;
     font-weight:900;
-    font-size:13px;
+    font-size:14px;
     color:var(--white);
-    background:var(--rust);
-    width:30px;height:30px;
+    background:linear-gradient(155deg,var(--rust),var(--rust-dark));
+    width:32px;height:32px;
     border-radius:50%;
     display:flex;align-items:center;justify-content:center;
-    margin-bottom:16px;
+    margin-bottom:18px;
+    box-shadow:0 6px 16px rgba(78,127,168,0.4);
   }
   .step h3{font-size:16px;font-weight:700;font-family:'Inter',sans-serif;margin:0 0 6px;}
   .step p{margin:0;font-size:13.5px;color:var(--ink-soft);}
 
   /* ---- service area ---- */
-  .area-row{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start;}
+  .area-row{display:flex;flex-wrap:wrap;gap:32px;align-items:stretch;}
   .area-map{
     flex:1;min-width:240px;
-    background:var(--navy);
-    border-radius:10px;
-    padding:30px 26px;
+    background:linear-gradient(155deg, var(--navy) 0%, var(--navy-deep) 100%);
+    border-radius:16px;
+    padding:36px 32px;
     color:var(--white);
+    position:relative;
+    overflow:hidden;
   }
-  .area-map svg{width:34px;height:34px;color:var(--gold);margin-bottom:14px;}
-  .area-map h3{font-size:18px;font-weight:700;font-family:'Inter',sans-serif;margin:0 0 8px;}
-  .area-map p{margin:0;color:#C9D3E0;font-size:14px;}
-  .area-chips{flex:1;min-width:240px;display:flex;flex-wrap:wrap;gap:9px;align-content:flex-start;}
-  .area-chip{
-    font-size:13.5px;
-    font-weight:600;
-    padding:9px 15px;
-    border-radius:20px;
-    border:1.5px solid var(--line);
-    background:var(--white);
+  .area-map::after{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size:22px 22px;
+    mask-image:radial-gradient(ellipse 70% 100% at 100% 0%, black, transparent 70%);
+    -webkit-mask-image:radial-gradient(ellipse 70% 100% at 100% 0%, black, transparent 70%);
   }
+  .area-map svg{width:36px;height:36px;color:var(--gold);margin-bottom:16px;position:relative;}
+  .area-map h3{font-size:19px;font-weight:700;font-family:'Inter',sans-serif;margin:0 0 8px;position:relative;}
+  .area-map p{margin:0;color:#C9D3E0;font-size:14.5px;position:relative;max-width:44ch;}
 
   /* ---- about ---- */
-  .about-row{display:flex;gap:28px;align-items:center;flex-wrap:wrap;}
-  .about-text{max-width:640px;}
+  .about-row{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center;}
+  @media (max-width:820px){ .about-row{grid-template-columns:1fr;} }
   .about-text p{margin:0 0 14px;font-size:15px;color:var(--ink-soft);}
   .about-text p:last-child{margin-bottom:0;}
-  .about-list{list-style:none;margin:20px 0 0;padding:0;display:flex;flex-direction:column;gap:10px;}
-  .about-list li{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--ink);}
+  .about-list{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;}
+  .about-list li{display:flex;align-items:center;gap:11px;font-size:14px;font-weight:600;color:var(--ink);}
   .about-list svg{width:18px;height:18px;color:var(--success);flex-shrink:0;}
+  .about-panel{
+    background:linear-gradient(155deg, var(--navy) 0%, var(--navy-deep) 100%);
+    border-radius:18px;
+    padding:32px 28px;
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+  }
+  .about-panel::before{
+    content:"”";
+    position:absolute;top:-18px;left:18px;font-family:'Archivo',sans-serif;font-size:120px;font-weight:900;
+    color:rgba(255,255,255,0.08);line-height:1;
+  }
+  .about-panel p{position:relative;font-size:15.5px;color:#DCE4EE;margin:0 0 18px;}
+  .about-panel .who{position:relative;display:flex;align-items:center;gap:10px;}
+  .about-panel .who .dot2{width:36px;height:36px;border-radius:50%;background:linear-gradient(155deg,var(--rust),var(--rust-dark));flex-shrink:0;}
+  .about-panel .who b{display:block;font-size:13.5px;}
+  .about-panel .who span{font-size:12px;color:#9FADC0;}
 
   /* ---- final cta ---- */
   .final-cta{
-    background:linear-gradient(155deg, var(--navy) 0%, var(--navy-deep) 100%);
+    background:
+      radial-gradient(800px 300px at 50% 0%, rgba(78,127,168,0.4), transparent 65%),
+      linear-gradient(155deg, var(--navy) 0%, var(--navy-deep) 100%);
     color:var(--white);
-    border-radius:14px;
-    padding:48px 36px;
+    border-radius:20px;
+    padding:64px 36px;
     text-align:center;
+    position:relative;
+    overflow:hidden;
   }
-  .final-cta h2{color:var(--white);font-weight:900;font-size:28px;}
-  .final-cta p{color:#C9D3E0;margin:14px 0 28px;max-width:44ch;margin-left:auto;margin-right:auto;font-size:15.5px;}
-  .final-cta .cta{font-size:16px;padding:16px 30px;}
-  .final-cta .note{font-size:13px;color:#9FADC0;margin-top:16px;}
+  .final-cta::after{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+    background-size:26px 26px;
+    mask-image:radial-gradient(ellipse 70% 70% at 50% 30%, black, transparent 75%);
+    -webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 30%, black, transparent 75%);
+  }
+  .final-cta h2{color:var(--white);font-weight:900;font-size:clamp(24px,3.6vw,32px);position:relative;}
+  .final-cta p{color:#C9D3E0;margin:14px 0 30px;max-width:44ch;margin-left:auto;margin-right:auto;font-size:15.5px;position:relative;}
+  .final-cta .cta{font-size:16px;padding:17px 32px;position:relative;}
+  .final-cta .note{font-size:13px;color:#9FADC0;margin-top:18px;position:relative;}
 
   footer.site{
-    background:var(--navy-deep);
-    color:#9FADC0;
-    padding:40px 0 32px;
+    background:var(--navy-deeper);
+    color:#8FA0B4;
+    padding:44px 0 32px;
+    position:relative;
   }
   footer.site .foot-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;margin-bottom:28px;}
   footer.site .mark-text{color:var(--white);}
-  footer.site .foot-links{display:flex;flex-direction:column;gap:8px;font-size:14px;}
-  footer.site .foot-links a{color:#C9D3E0;text-decoration:none;}
-  footer.site .foot-links a:hover{text-decoration:underline;}
+  footer.site .foot-links{display:flex;flex-direction:column;gap:9px;font-size:14px;}
+  footer.site .foot-links a{color:#C9D3E0;text-decoration:none;position:relative;width:fit-content;}
+  footer.site .foot-links a::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--gold);transition:width .25s var(--ease);}
+  footer.site .foot-links a:hover::after{width:100%;}
   footer.site .foot-bottom{
-    border-top:1px solid rgba(255,255,255,0.12);
+    border-top:1px solid rgba(255,255,255,0.1);
     padding-top:20px;
     font-size:12.5px;
-    color:#7C8AA0;
+    color:#68788D;
   }
 
+  @media (max-width:480px){
+    .nav-cta{display:none;}
+  }
   @media (max-width:760px){
-    h1.hero-h{font-size:34px;}
-    h2.section-title{font-size:25px;}
+    section{padding:64px 0;}
     .services-grid{grid-template-columns:1fr;}
     .steps{grid-template-columns:1fr;}
-    section{padding:48px 0;}
-    .final-cta{padding:38px 22px;}
+    .final-cta{padding:44px 24px;}
+    .hero{padding:64px 0 70px;}
   }
   @media (max-width:520px){
     .work-grid{columns:1;}
@@ -397,32 +582,37 @@
 </head>
 <body>
 
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="grain"></div>
+
 <div class="topbar">
   <div class="wrap">
-    <span>Serving Front Royal &amp; Warren County, VA</span>
+    <span>Local, Reliable Handyman Services</span>
     <span>Usually quoted within a day</span>
   </div>
 </div>
 
-<header class="site">
+<header class="site" id="siteHeader">
   <div class="navrow">
     <a class="mark" href="#top">
       <span class="mark-badge">
         <svg viewBox="0 0 48 32" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15L11 5L19 15"/><path d="M5 15V27"/><path d="M17 15V27"/><path d="M13 12L24 1L35 12"/><path d="M15 12V27"/><path d="M33 12V27"/><path d="M29 15L37 5L45 15"/><path d="M31 15V27"/><path d="M43 15V27"/><path d="M3 27H45"/></svg>
       </span>
-      <span class="mark-text">Coomer Home Improvements<span class="sub">Front Royal, VA</span></span>
+      <span class="mark-text">Coomer Home Improvements<span class="sub">Handyman Services</span></span>
     </a>
     <div class="nav-right">
-      <a class="nav-cta" href="request.html">Request a Job</a>
+      <a class="nav-cta" href="request.html">
+        Request a Job
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
       <div class="menu-wrap">
         <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          <span></span><span></span><span></span>
         </button>
-        <div class="menu-dropdown" id="menuDropdown">
-          <a href="#contact">Contact Us</a>
+        <div class="menu-dropdown" id="menuDropdown">          <a href="#contact">Contact Us</a>
           <a href="#gallery">Gallery</a>
           <a href="#about">About Us</a>
-          <a href="app.html">Worker Login</a>
+          <a href="app.html">Portal</a>
         </div>
       </div>
     </div>
@@ -432,29 +622,61 @@
 <div id="top"></div>
 
 <section class="hero" style="padding-top:56px;">
+  <div class="hero-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
   <div class="wrap">
-    <div class="hero-inner">
-      <span class="eyebrow">Locally Owned &amp; Operated</span>
-      <h1 class="hero-h">Reliable handyman work, <span>done right the first time.</span></h1>
-      <p class="lede">Drywall, painting, carpentry, and small repairs for homeowners in Front Royal and the surrounding area. Tell us what's broken and we'll get back to you with a quote.</p>
-      <div class="hero-ctas">
-        <a class="cta primary" href="request.html">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-          Request a Job
-        </a>
+    <div class="hero-layout">
+      <div class="hero-inner" data-hero-item>
+        <span class="eyebrow">Locally Owned &amp; Operated</span>
+        <h1 class="hero-h">Reliable handyman work, <span class="grad">done right the first time.</span></h1>
+        <p class="lede">Drywall, painting, carpentry, and small repairs for your home. Tell us what's broken and we'll get back to you with a quote.</p>
+        <div class="hero-ctas">
+          <a class="cta primary" href="request.html">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            Request a Job
+          </a>
+          <a class="cta ghost" href="#services">
+            See what we handle
+          </a>
+        </div>
+        <div class="trust-strip">
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            Call or text — whatever's easiest
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            Upfront, itemized quotes
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            Usually quoted within a day
+          </div>
+        </div>
       </div>
-      <div class="trust-strip">
-        <div class="trust-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-          Call or text — whatever's easiest
-        </div>
-        <div class="trust-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-          Upfront, itemized quotes
-        </div>
-        <div class="trust-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          Usually quoted within a day
+      <div class="hero-visual" data-hero-item>
+        <div class="mock-stack">
+          <div class="mock-card back"></div>
+          <div class="mock-card front">
+            <div class="mock-head">
+              <div class="mock-avatar"></div>
+              <div class="mock-head-text">
+                <b>Your Request</b>
+                <span>Reviewed by our team</span>
+              </div>
+            </div>
+            <ul class="mock-list" id="mockList">
+              <li><span class="mock-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span>Details received</li>
+              <li><span class="mock-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span>Photos reviewed</li>
+              <li><span class="mock-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span>Quote prepared</li>
+            </ul>
+            <div class="mock-foot">
+              <span class="mock-status"><span class="dot"></span>Quote Ready</span>
+              <span class="mock-eta">~1 day turnaround</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -463,35 +685,35 @@
 
 <section id="services">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <p class="section-tag">Services</p>
       <h2 class="section-title">What we handle</h2>
       <p>General handyman work around the house — small jobs, done right, priced fairly.</p>
     </div>
 
-    <div class="services-grid">
-      <div class="svc">
+    <div class="services-grid" id="servicesGrid">
+      <div class="svc reveal">
         <div class="svc-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
         </div>
         <h3>Drywall &amp; General Repairs</h3>
         <p>Patching holes, wall repair, and everyday fix-it jobs around the house.</p>
       </div>
-      <div class="svc">
+      <div class="svc reveal">
         <div class="svc-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.37 2.63L14 7l-1.5-1.5L8.5 9.5 4 14l6 6 4.5-4.5 4-4L20.5 10 22 8.5z"/><path d="M9 15l-4.5 4.5"/></svg>
         </div>
         <h3>Painting</h3>
         <p>Interior and exterior painting, touch-ups, and refresh jobs.</p>
       </div>
-      <div class="svc">
+      <div class="svc reveal">
         <div class="svc-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.77z"/></svg>
         </div>
         <h3>Carpentry &amp; Mounting</h3>
         <p>Shelving, furniture assembly, TV and mirror mounting, minor carpentry.</p>
       </div>
-      <div class="svc">
+      <div class="svc reveal">
         <div class="svc-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         </div>
@@ -499,32 +721,28 @@
         <p>Hardware, fixtures, weatherstripping, caulking, and other small installs.</p>
       </div>
     </div>
-
-    <div class="scope-note">
-      <strong>What we don't do:</strong> licensed plumbing, electrical, or HVAC work, or larger renovation projects. We'll be upfront if a job needs a licensed specialist and can point you in the right direction.
-    </div>
   </div>
 </section>
 
 <section class="alt" id="how">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <p class="section-tag">How It Works</p>
       <h2 class="section-title">Simple, start to finish</h2>
       <p>Every job runs through three simple steps.</p>
     </div>
-    <div class="steps">
-      <div class="step">
+    <div class="steps" id="stepsGrid">
+      <div class="step reveal">
         <div class="step-num">1</div>
         <h3>Tell us what's going on</h3>
         <p>Fill out the request form — what needs fixing, your address, and photos if you've got them.</p>
       </div>
-      <div class="step">
+      <div class="step reveal">
         <div class="step-num">2</div>
         <h3>We get back to you</h3>
         <p>You'll hear back with a quote and timing — usually within a day.</p>
       </div>
-      <div class="step">
+      <div class="step reveal">
         <div class="step-num">3</div>
         <h3>We get it done</h3>
         <p>A local contractor handles the job and you're updated as it moves along.</p>
@@ -535,23 +753,15 @@
 
 <section id="area">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <p class="section-tag">Service Area</p>
-      <h2 class="section-title">Front Royal &amp; nearby</h2>
+      <h2 class="section-title">Where we work</h2>
     </div>
     <div class="area-row">
-      <div class="area-map">
+      <div class="area-map reveal">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        <h3>Based in Front Royal, VA</h3>
-        <p>Serving Warren County and the surrounding area. Not sure if you're in range? Just send us your address.</p>
-      </div>
-      <div class="area-chips">
-        <span class="area-chip">Front Royal</span>
-        <span class="area-chip">Warren County</span>
-        <span class="area-chip">Bentonville</span>
-        <span class="area-chip">Linden</span>
-        <span class="area-chip">Rileyville</span>
-        <span class="area-chip">Middletown</span>
+        <h3>Locally Based</h3>
+        <p>Serving homeowners in the surrounding area. Not sure if you're in range? Just send us your address.</p>
       </div>
     </div>
   </div>
@@ -560,10 +770,9 @@
 <section class="alt" id="about">
   <div class="wrap">
     <div class="about-row">
-      <div class="about-text">
+      <div class="about-text reveal">
         <p class="section-tag">About Us</p>
-        <h2 class="section-title" style="margin-bottom:14px;">A local, family-run operation</h2>
-        <p>Coomer Home Improvements is a small, local handyman business based in Front Royal — honest pricing, straightforward communication, and jobs done right the first time.</p>
+        <h2 class="section-title" style="margin-bottom:14px;">A local, family-run operation</h2>        <p>Coomer Home Improvements is a small, family-run handyman business — honest pricing, straightforward communication, and jobs done right the first time.</p>
         <p>Every job is scoped and quoted up front, so there's no surprise cost when the work's done.</p>
         <ul class="about-list">
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Locally owned &amp; operated</li>
@@ -571,39 +780,49 @@
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Fast, friendly response</li>
         </ul>
       </div>
+      <div class="about-panel reveal">
+        <p>"We treat every home like it's our own — no shortcuts, no surprise costs, just honest work."</p>
+        <div class="who">
+          <div class="dot2"></div>
+          <div>
+            <b>Coomer Home Improvements</b>
+            <span>Owner-operated</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <section id="gallery">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <p class="section-tag">Gallery</p>
       <h2 class="section-title">Recent jobs, before &amp; after</h2>
-      <p>A few examples of what we've handled for customers around Front Royal.</p>
+      <p>A few examples of what we've handled for our customers.</p>
     </div>
-    <div class="work-grid">
-      <div class="work-item"><img src="IMG_20260215_151234.jpeg" alt="Shower wall retiled from green pebble tile to white penny tile, before and after"></div>
-      <div class="work-item"><img src="collage_export_295A9C25-2103-4311-A299-1B0D358217B2.jpeg" alt="Exterior door and frame installation, before and after"></div>
-      <div class="work-item"><img src="IMG_20260215_151223.jpeg" alt="Bedroom accent wall painted, before and after"></div>
-      <div class="work-item"><img src="IMG_20260215_151229.jpeg" alt="Loft bed with built-in desk and shelving assembled, before and after"></div>
-      <div class="work-item"><img src="collage_export_0CB3608E-BC57-4C3E-8B2A-631A5DCCFEA9.jpeg" alt="Wave-pattern wall art panels installed in a hallway, before and after"></div>
-      <div class="work-item"><img src="collage_export_D2E66FEC-DAF2-498E-B807-6FB3D801A2BF.jpeg" alt="Decorative lion door knocker installed, before and after"></div>
-      <div class="work-item"><img src="collage_export_09087FDB-D899-4F70-AAD7-031903C89B32.jpeg" alt="Wave-pattern wall art panels installed in an office, before and after"></div>
-      <div class="work-item"><img src="file_00000000a1f071f5ad6ee45b68b439d3.png" alt="Overhead garage storage rack installed, before and after"></div>
-      <div class="work-item"><img src="file_00000000d41c71f5869edca6a2208b42.png" alt="Window hinge and closer arm repaired, before and after"></div>
-      <div class="work-item"><img src="file_00000000861c722f9f3894fc4c532edb.png" alt="Bathroom sink faucet and drain replaced, before and after"></div>
-      <div class="work-item"><img src="file_000000004180722f9eaa9dacd2a5be94.png" alt="Shower wall retiled with new rain shower head, before and after"></div>
-      <div class="work-item"><img src="file_000000008a6c720c9ee076b09c3c342b.png" alt="Shower wall retiled with new grab bar, before and after"></div>
-      <div class="work-item"><img src="collage_export_96B27E4B-1F5F-4FEF-A402-449972F94970.jpeg" alt="Closet door installation, before and after"></div>
-      <div class="work-item"><img src="file_00000000ce3c71f59ce49e20f561151c.png" alt="Interior door installation, before and after"></div>
+    <div class="work-grid" id="workGrid">
+      <div class="work-item reveal"><img src="IMG_20260215_151234.jpeg" alt="Shower wall retiled from green pebble tile to white penny tile, before and after" loading="lazy"></div>
+      <div class="work-item reveal"><img src="collage_export_295A9C25-2103-4311-A299-1B0D358217B2.jpeg" alt="Exterior door and frame installation, before and after" loading="lazy"></div>
+      <div class="work-item reveal"><img src="IMG_20260215_151223.jpeg" alt="Bedroom accent wall painted, before and after" loading="lazy"></div>
+      <div class="work-item reveal"><img src="IMG_20260215_151229.jpeg" alt="Loft bed with built-in desk and shelving assembled, before and after" loading="lazy"></div>
+      <div class="work-item reveal"><img src="collage_export_0CB3608E-BC57-4C3E-8B2A-631A5DCCFEA9.jpeg" alt="Wave-pattern wall art panels installed in a hallway, before and after" loading="lazy"></div>
+      <div class="work-item reveal"><img src="collage_export_D2E66FEC-DAF2-498E-B807-6FB3D801A2BF.jpeg" alt="Decorative lion door knocker installed, before and after" loading="lazy"></div>
+      <div class="work-item reveal"><img src="collage_export_09087FDB-D899-4F70-AAD7-031903C89B32.jpeg" alt="Wave-pattern wall art panels installed in an office, before and after" loading="lazy"></div>
+      <div class="work-item reveal"><img src="file_00000000a1f071f5ad6ee45b68b439d3.png" alt="Overhead garage storage rack installed, before and after" loading="lazy"></div>
+      <div class="work-item reveal"><img src="file_00000000d41c71f5869edca6a2208b42.png" alt="Window hinge and closer arm repaired, before and after" loading="lazy"></div>
+      <div class="work-item reveal"><img src="file_00000000861c722f9f3894fc4c532edb.png" alt="Bathroom sink faucet and drain replaced, before and after" loading="lazy"></div>
+      <div class="work-item reveal"><img src="file_000000004180722f9eaa9dacd2a5be94.png" alt="Shower wall retiled with new rain shower head, before and after" loading="lazy"></div>
+      <div class="work-item reveal"><img src="file_000000008a6c720c9ee076b09c3c342b.png" alt="Shower wall retiled with new grab bar, before and after" loading="lazy"></div>
+      <div class="work-item reveal"><img src="collage_export_96B27E4B-1F5F-4FEF-A402-449972F94970.jpeg" alt="Closet door installation, before and after" loading="lazy"></div>
+      <div class="work-item reveal"><img src="file_00000000ce3c71f59ce49e20f561151c.png" alt="Interior door installation, before and after" loading="lazy"></div>
     </div>
   </div>
 </section>
 
 <section id="contact">
   <div class="wrap">
-    <div class="final-cta">
+    <div class="final-cta reveal">
       <h2>Got something that needs fixing?</h2>
       <p>Send us the details and we'll get back to you with a quote.</p>
       <a class="cta primary" href="request.html">
@@ -625,18 +844,18 @@
           </span>
           <span class="mark-text">Coomer Home Improvements</span>
         </div>
-        <p style="max-width:32ch;font-size:13.5px;">General handyman work only, under $1,000 per job — no plumbing, electrical, or HVAC.</p>
+        <p style="max-width:32ch;font-size:13.5px;">Honest pricing, reliable work, and jobs done right the first time.</p>
       </div>
       <div class="foot-links">
         <a href="request.html">Request Service</a>
         <a href="mailto:coomerhomeimprovements@gmail.com">coomerhomeimprovements@gmail.com</a>
         <a href="#services">Services</a>
         <a href="#area">Service Area</a>
-        <a href="app.html">Worker Login</a>
+        <a href="app.html">Portal</a>
       </div>
     </div>
     <div class="foot-bottom">
-      Coomer Home Improvements — Front Royal, Virginia.
+      Coomer Home Improvements — Handyman Services.
     </div>
   </div>
 </footer>
@@ -661,6 +880,90 @@
       menuBtn.setAttribute('aria-expanded','false');
     });
   });
+
+  /* scroll progress + sticky header state */
+  const header = document.getElementById('siteHeader');
+  const progressBar = document.getElementById('scrollProgress');
+  function onScroll(){
+    header.classList.toggle('scrolled', window.scrollY > 8);
+    const h = document.documentElement;
+    const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progressBar.style.width = (isFinite(pct) ? pct : 0) + '%';
+  }
+  document.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if(window.gsap && !reduceMotion){
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* hero entrance timeline */
+    const heroTl = gsap.timeline({ defaults:{ ease:'power3.out' } });
+    heroTl
+      .from('.eyebrow', { opacity:0, y:16, duration:.6 })
+      .from('h1.hero-h', { opacity:0, y:24, duration:.7 }, '-=.35')
+      .from('.hero p.lede', { opacity:0, y:18, duration:.6 }, '-=.4')
+      .from('.hero-ctas .cta', { opacity:0, y:16, duration:.5, stagger:.12 }, '-=.35')
+      .from('.trust-strip .trust-item', { opacity:0, y:12, duration:.5, stagger:.1 }, '-=.25')
+      .from('.hero-visual', { opacity:0, y:30, scale:.96, duration:.8 }, '-=.6')
+      .from('#mockList li', { opacity:0, x:-14, duration:.4, stagger:.12 }, '-=.3');
+
+    /* generic scroll reveal */
+    gsap.utils.toArray('.reveal').forEach((el)=>{
+      gsap.to(el, {        opacity:1, y:0, duration:.8, ease:'power3.out',
+        scrollTrigger:{ trigger:el, start:'top 88%' }
+      });
+    });
+
+    /* staggered groups */
+    function staggerGroup(selector, parent){
+      const items = gsap.utils.toArray(selector);
+      if(!items.length) return;
+      gsap.set(items, { opacity:0, y:24 });
+      ScrollTrigger.create({
+        trigger: parent || items[0].parentElement,
+        start:'top 82%',
+        onEnter:()=> gsap.to(items, { opacity:1, y:0, duration:.7, stagger:.12, ease:'power3.out' })
+      });
+    }
+    staggerGroup('#servicesGrid .svc', '#servicesGrid');
+    staggerGroup('#stepsGrid .step', '#stepsGrid');
+    staggerGroup('#workGrid .work-item', '#workGrid');
+
+    /* safety net: content must never stay permanently hidden if a trigger is
+       missed (fast/odd scroll, slow script load, etc.) — reveal anything
+       still hidden once it's actually been scrolled past. */
+    function revealIfPassed(){
+      document.querySelectorAll('.reveal, #servicesGrid .svc, #stepsGrid .step, #workGrid .work-item').forEach(el=>{
+        const r = el.getBoundingClientRect();
+        if(r.top < window.innerHeight * 1.15 && getComputedStyle(el).opacity === '0'){
+          gsap.to(el, { opacity:1, y:0, duration:.5, ease:'power2.out' });
+        }
+      });
+    }
+    document.addEventListener('scroll', revealIfPassed, { passive:true });
+    window.addEventListener('load', ()=> setTimeout(revealIfPassed, 300));
+
+    /* subtle tilt on service + gallery cards */
+    document.querySelectorAll('.svc, .work-item').forEach(card=>{
+      card.addEventListener('mousemove', (e)=>{
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        gsap.to(card, { rotateX: py * -4, rotateY: px * 4, transformPerspective:600, duration:.4, ease:'power2.out' });
+      });
+      card.addEventListener('mouseleave', ()=>{
+        gsap.to(card, { rotateX:0, rotateY:0, duration:.5, ease:'power2.out' });
+      });
+    });
+  } else {
+    /* no GSAP / reduced motion: just show everything */
+    document.querySelectorAll('.reveal, #mockList li').forEach(el=>{
+      el.style.opacity = 1;
+      el.style.transform = 'none';
+    });
+  }
 </script>
 
 </body>
