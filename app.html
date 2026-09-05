@@ -183,11 +183,12 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 const SUB_EMAIL_DOMAIN = 'subs.coomerhi.internal';
+const ADMIN_EMAIL = 'coomerhomeimprovements@gmail.com';
 emailjs.init({ publicKey: 'Q09gYijicA1O-h85i' });
 
-function sendSupportEmail(payload){
-  emailjs.send('service_i3oreff', 'template_4sgo40e', payload)
-    .catch(err => console.error('Support notification email failed to send', err));
+function sendNotificationEmail({ to_email, subject, heading, body_html, footer_note }){
+  emailjs.send('service_i3oreff', 'template_4sgo40e', { to_email, subject, heading, body_html, footer_note: footer_note||'' })
+    .catch(err => console.error('Notification email failed to send', err));
 }
 
 /* ---------------- helpers ---------------- */
@@ -199,6 +200,63 @@ function estimateTaxCents(amountCents){
   const federal = Math.round(amountCents * 0.10);
   const vaState = Math.round(amountCents * 0.0575);
   return { seTax, federal, vaState, total: seTax + federal + vaState };
+}
+
+// Four non-overlapping windows covering the year, each keyed to the IRS quarterly
+// estimated-tax deadline that falls inside it (Jan 15 / Apr 15 / Jun 15 / Sep 15).
+// Whenever admin logs in during a window not yet sent-for, a reminder goes out —
+// this is a nudge, not precision, so a slightly late send beats none at all.
+function currentTaxReminderWindow(d){
+  d = d || new Date();
+  const y = d.getFullYear(), m = d.getMonth(), day = d.getDate();
+  if(m<=2) return { key: `${y}-W1`, label: 'Q4 estimated taxes (due Jan 15)' };
+  if(m===3 || m===4 || (m===5 && day<=14)) return { key: `${y}-W2`, label: 'Q1 estimated taxes (due Apr 15)' };
+  if((m===5 && day>=15) || m===6 || m===7 || (m===8 && day<=14)) return { key: `${y}-W3`, label: 'Q2 estimated taxes (due Jun 15)' };
+  return { key: `${y}-W4`, label: 'Q3 estimated taxes (due Sep 15)' };
+}
+function sendTaxReminderEmail(sub, windowLabel, yearTotalCents, tax){
+  sendNotificationEmail({
+    to_email: sub.email,
+    subject: `Quarterly Estimated Tax Reminder — ${windowLabel}`,
+    heading: 'Quarterly Estimated Tax Reminder',
+    body_html: `<p style="margin:0 0 16px;">Hi ${esc((sub.name||'').split(' ')[0])}, this is a reminder that ${esc(windowLabel)} may be coming up.</p>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="padding:6px 0;font-weight:bold;width:220px;">Paid to you so far this year:</td><td>${centsToStr(yearTotalCents)}</td></tr>
+        <tr><td style="padding:6px 0;font-weight:bold;">Est. total to set aside:</td><td>${centsToStr(tax.total)}</td></tr>
+        <tr><td style="padding:6px 0;">Self-employment tax (15.3%):</td><td>${centsToStr(tax.seTax)}</td></tr>
+        <tr><td style="padding:6px 0;">Federal income tax (est. 10%):</td><td>${centsToStr(tax.federal)}</td></tr>
+        <tr><td style="padding:6px 0;">Virginia state tax (5.75%):</td><td>${centsToStr(tax.vaState)}</td></tr>
+      </table>
+      <p style="margin:16px 0 0;font-size:13px;color:#5B6470;">This is a rough planning estimate based on payments marked paid — not tax advice. Check with an accountant for your real numbers.</p>`,
+    footer_note: "Log in to your subcontractor portal any time to see your full payout and tax history. Don't want these emails? Turn them off in the Profile tab."
+  });
+}
+async function runTaxReminderCheck(force){
+  try{
+    const metaSnap = await db.collection('meta').doc('taxReminders').get();
+    const lastSentKey = metaSnap.exists ? metaSnap.data().lastSentKey : null;
+    const window = currentTaxReminderWindow();
+    if(!force && lastSentKey === window.key) return { sent:false, count:0, label: window.label };
+    const [subsSnap, payoutsSnap] = await Promise.all([
+      db.collection('subcontractors').get(),
+      db.collection('payouts').where('status','==','PAID').get()
+    ]);
+    const subs = subsSnap.docs.map(d=>({id:d.id, ...d.data()})).filter(s=>s.status==='ACTIVE' && s.emailOptIn!==false && s.email);
+    const payouts = payoutsSnap.docs.map(d=>d.data());
+    const yearStart = new Date(new Date().getFullYear(),0,1).getTime();
+    let count = 0;
+    subs.forEach(s=>{
+      const yearTotal = payouts.filter(p=>p.subcontractorId===s.id && p.paidAt && p.paidAt>=yearStart).reduce((sum,p)=>sum+(p.amountCents||0),0);
+      if(yearTotal<=0) return;
+      sendTaxReminderEmail(s, window.label, yearTotal, estimateTaxCents(yearTotal));
+      count++;
+    });
+    await db.collection('meta').doc('taxReminders').set({ lastSentKey: window.key, lastSentAt: now() }, { merge:true });
+    return { sent:true, count, label: window.label };
+  }catch(err){
+    console.error('tax reminder check failed', err);
+    return { sent:false, count:0, error: err.message };
+  }
 }
 function fmtDate(ts){ if(!ts) return ''; const d = ts instanceof Date ? ts : new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
 function fmtDateTime(ts){ if(!ts) return ''; const d = ts instanceof Date ? ts : new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ', ' + d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}); }
@@ -228,7 +286,7 @@ let mySubDoc = null;    // subcontractors/{id} doc data, for subcontractor role
 let activeTab = null;
 let unsubs = [];
 
-let adminData = { requests:[], jobs:[], subs:[], payouts:[], supportRequests:[], adminMileage:[] };
+let adminData = { requests:[], jobs:[], subs:[], payouts:[], supportRequests:[], adminMileage:[], taxRemindersMeta:null };
 let subData = { availableJobs:[], offeredJobs:[], myJobs:[], payouts:[], mileage:[] };
 
 let openRequestId = null, openJobId = null, openSubId = null, openPayoutId = null, openSubPayoutId = null;
@@ -426,7 +484,9 @@ function openPinModal(id){
     e.preventDefault();
     const pin = document.getElementById('pm_pin').value.trim();
     try{
-      await auth.signInWithEmailAndPassword(subIdToEmail(id), pinToPassword(pin));
+      const loginSnap = await db.collection('subLogins').doc(id).get();
+      const loginEmail = loginSnap.exists ? loginSnap.data().email : subIdToEmail(id);
+      await auth.signInWithEmailAndPassword(loginEmail, pinToPassword(pin));
       backdrop.remove();
     }catch(err){
       document.getElementById('pinMsg').innerHTML = '<div class="msg error">Wrong ID or PIN — try again.</div>';
@@ -467,10 +527,17 @@ function openForgotModal(type, prefillId){
     };
     try{
       await db.collection('supportRequests').add(payload);
-      sendSupportEmail({
-        request_type: isId ? "A subcontractor forgot their ID." : "A subcontractor forgot their PIN — reset their login from the Subcontractors tab.",
-        subcontractor_id: payload.subcontractorId || 'not provided',
-        name: payload.name, phone: payload.phone
+      sendNotificationEmail({
+        to_email: ADMIN_EMAIL,
+        subject: `Subcontractor Login Help — ${isId ? 'Forgot ID' : 'Forgot PIN'}`,
+        heading: 'Subcontractor Login Help',
+        body_html: `<p style="margin:0 0 16px;">${esc(isId ? "A subcontractor forgot their ID." : "A subcontractor forgot their PIN — reset their login from the Subcontractors tab.")}</p>
+          <table style="width:100%;border-collapse:collapse;">
+            <tr><td style="padding:6px 0;font-weight:bold;width:140px;">Subcontractor ID:</td><td>${esc(payload.subcontractorId || 'not provided')}</td></tr>
+            <tr><td style="padding:6px 0;font-weight:bold;">Name given:</td><td>${esc(payload.name)}</td></tr>
+            <tr><td style="padding:6px 0;font-weight:bold;">Phone given:</td><td>${esc(payload.phone)}</td></tr>
+          </table>`,
+        footer_note: 'This request is also waiting for you in the Inbox tab of the portal.'
       });
       document.getElementById('forgotForm').style.display='none';
       document.getElementById('forgotMsg').innerHTML = '<div class="msg">Sent — the admin has been notified and will reach out.</div>';
@@ -506,6 +573,11 @@ function subscribeAdmin(){
     adminData.adminMileage = qs.docs.map(d=>({id:d.id, ...d.data()}));
     renderApp();
   }, e=>console.error('adminMileage', e)));
+  unsubs.push(db.collection('meta').doc('taxReminders').onSnapshot(d=>{
+    adminData.taxRemindersMeta = d.exists ? d.data() : null;
+    renderApp();
+  }, e=>console.error('taxRemindersMeta', e)));
+  runTaxReminderCheck(false);
 }
 
 async function nextCounter(field, prefix, pad){
@@ -661,8 +733,7 @@ function openJobCreateModal(fromRequest){
               <option value="electrical" ${r.jobType==='electrical'?'selected':''}>Electrical</option>
               <option value="hvac" ${r.jobType==='hvac'?'selected':''}>HVAC</option>
             </select>
-          </div>
-          <div class="field"><label>Scope of work</label><textarea id="j_scope" required>${esc(r.description||'')}</textarea></div>
+          </div>          <div class="field"><label>Scope of work</label><textarea id="j_scope" required>${esc(r.description||'')}</textarea></div>
           <div class="row2">
             <div class="field"><label>Customer price</label><input id="j_price" placeholder="e.g. 850" inputmode="decimal"></div>
             <div class="field"><label>Subcontractor payout</label><input id="j_payout" placeholder="e.g. 600" inputmode="decimal" required></div>
@@ -813,8 +884,7 @@ function wireDispatchControls(main){
     };
   });
   main.querySelectorAll('[data-cancel-offer]').forEach(btn=>{
-    btn.onclick = async ()=>{
-      await db.collection('jobs').doc(btn.dataset.cancelOffer).update({
+    btn.onclick = async ()=>{      await db.collection('jobs').doc(btn.dataset.cancelOffer).update({
         status:'AVAILABLE', offeredToUid:null, offeredToId:null,
         timeline: firebase.firestore.FieldValue.arrayUnion({event:'Offer cancelled', at: now()})
       });
@@ -962,8 +1032,7 @@ function openAddSubModal(){
     <div class="modal"><div class="modal-inner">
       <span class="close" id="closeModal">&times;</span>
       <h3>Add Subcontractor</h3>
-      <form id="addSubForm">
-        <div class="field"><label>Name</label><input id="s_name" required></div>
+      <form id="addSubForm">        <div class="field"><label>Name</label><input id="s_name" required></div>
         <div class="row2">
           <div class="field"><label>Phone</label><input id="s_phone"></div>
           <div class="field"><label>Email</label><input id="s_email" type="email"></div>
@@ -988,6 +1057,7 @@ function openAddSubModal(){
       const id = await nextCounter('nextSubcontractorSeq', 'CHI-', 4);
       const email = subIdToEmail(id);
       const authUid = await restCreateAuthAccount(email, pinToPassword(tempPin));
+      await db.collection('subLogins').doc(id).set({ email });
       await db.collection('subcontractors').doc(id).set({
         name: document.getElementById('s_name').value.trim(),
         phone: document.getElementById('s_phone').value.trim(),
@@ -1056,9 +1126,12 @@ function renderSubDetail(main){
     resetLoginBtn.disabled = true; resetLoginBtn.textContent = 'Resetting…';
     try{
       const tempPin = String(Math.floor(1000 + Math.random()*9000));
-      const newAuthUid = await restCreateAuthAccount(subIdToEmail(s.id + '-' + Date.now()), pinToPassword(tempPin));
-      // Firebase requires a unique email per account — reissue using a fresh alias, keep the CHI id as the durable identity
+      const newEmail = subIdToEmail(s.id + '-' + Date.now());
+      const newAuthUid = await restCreateAuthAccount(newEmail, pinToPassword(tempPin));
+      // Firebase requires a unique email per account — reissue using a fresh alias, keep the CHI id as the durable identity.
+      // subLogins/{id} is the public pointer the login screen reads to find which alias is currently valid.
       await db.collection('roles').doc(newAuthUid).set({ role:'subcontractor', subcontractorId: s.id });
+      await db.collection('subLogins').doc(s.id).set({ email: newEmail });
       if(s.authUid) await db.collection('roles').doc(s.authUid).delete().catch(()=>{});
       await db.collection('subcontractors').doc(s.id).update({ authUid: newAuthUid, mustChangePin: true });
       document.getElementById('subActionMsg').innerHTML = `
@@ -1075,8 +1148,7 @@ function renderSubDetail(main){
     if(confirm(`Disable ${s.name} (${s.id})? They will not be able to log in, but their history stays intact.`)){
       await db.collection('subcontractors').doc(s.id).update({ status:'DISABLED' });
     }
-  };
-  const enableBtn = document.getElementById('enableBtn');
+  };  const enableBtn = document.getElementById('enableBtn');
   if(enableBtn) enableBtn.onclick = async ()=>{
     await db.collection('subcontractors').doc(s.id).update({ status:'ACTIVE' });
   };
@@ -1158,6 +1230,15 @@ function renderPayoutsTab(main){
       </div>
     </div>
 
+    <div class="card" style="margin-top:14px;">
+      <div class="card-body">
+        <div style="font-weight:600;color:var(--ink);">Quarterly Tax Reminders (email)</div>
+        <div class="hint" style="margin:4px 0 10px;">${adminData.taxRemindersMeta ? 'Last sent: '+fmtDateTime(adminData.taxRemindersMeta.lastSentAt)+' ('+adminData.taxRemindersMeta.lastSentKey+')' : 'Never sent yet.'}</div>
+        <button class="btn small secondary" id="sendTaxRemindersBtn">Send Reminders Now</button>
+        <div class="hint" style="margin-top:8px;">Goes to each active subcontractor who has emails turned on (Profile tab) and has been paid something this year.</div>
+      </div>
+    </div>
+
     <h2 class="section">1099 Summary</h2>
     <div class="hint">Subcontractors paid \$600 or more in a calendar year need a 1099-NEC from you. Totals below only count payments marked Paid.</div>
     <div class="field" style="max-width:160px;">
@@ -1202,8 +1283,7 @@ function renderPayoutsTab(main){
   html += `<h2 class="section">Subcontractors</h2>`;
   if(subs.length===0){ html += `<div class="empty">No subcontractors yet.</div>`; }
   subs.forEach(s=>{
-    const subPayouts = adminData.payouts.filter(p=>p.subcontractorId===s.id).slice().sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-    const owedCents = subPayouts.filter(p=>['PENDING','PROCESSING'].includes(p.status)).reduce((sum,p)=>sum+(p.amountCents||0),0);
+    const subPayouts = adminData.payouts.filter(p=>p.subcontractorId===s.id).slice().sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));    const owedCents = subPayouts.filter(p=>['PENDING','PROCESSING'].includes(p.status)).reduce((sum,p)=>sum+(p.amountCents||0),0);
     const paidCents = subPayouts.filter(p=>p.status==='PAID').reduce((sum,p)=>sum+(p.amountCents||0),0);
     html += `
       <div class="card">
@@ -1230,6 +1310,13 @@ function renderPayoutsTab(main){
   main.innerHTML = html;
   const syEl = document.getElementById('summaryYearSelect');
   if(syEl) syEl.onchange = (e)=>{ summaryYear = parseInt(e.target.value); renderApp(); };
+  document.getElementById('sendTaxRemindersBtn').onclick = async ()=>{
+    const btn = document.getElementById('sendTaxRemindersBtn'); btn.disabled = true; btn.textContent = 'Sending…';
+    const result = await runTaxReminderCheck(true);
+    if(result.sent) alert(`Sent ${result.count} reminder email${result.count===1?'':'s'} for ${result.label}.`);
+    else alert(result.error ? `Failed: ${result.error}` : 'Nothing to send.');
+    btn.disabled = false; btn.textContent = 'Send Reminders Now';
+  };
   main.querySelectorAll('[data-mark-client-paid]').forEach(btn=>{
     btn.onclick = async ()=>{
       const jobId = btn.dataset.markClientPaid;
@@ -1327,8 +1414,7 @@ function openRecordPaymentModal(s){
       if(note) events.push({ event:`Note: ${note}`, at: now() });
       await db.collection('payouts').add({
         subcontractorId: s.id, subcontractorName: s.name,
-        jobId: null, jobNumber: null, jobLabel: note || 'Manual payment',
-        amountCents, status:'PAID',
+        jobId: null, jobNumber: null, jobLabel: note || 'Manual payment',        amountCents, status:'PAID',
         completedAt: null, paidAt, method, referenceId:'',
         history: events, createdAt: now()
       });
@@ -1468,8 +1554,7 @@ function openAddAdminMileageModal(){
         <div class="field"><label>Miles</label><input id="aam_miles" inputmode="decimal" placeholder="e.g. 12.4" required></div>
         <div class="field"><label>Note (optional)</label><input id="aam_note" placeholder="e.g. supply run"></div>
         <button type="submit" class="btn block">Save</button>
-      </form>
-    </div></div>
+      </form>    </div></div>
   `;
   document.body.appendChild(backdrop);
   document.getElementById('closeModal').onclick = ()=> backdrop.remove();
@@ -1616,8 +1701,7 @@ function renderSubHome(main){
   main.innerHTML = `
     <div class="stat-grid tri">
       <div class="stat"><div class="num">${subData.availableJobs.length}</div><div class="lbl">Available</div></div>
-      <div class="stat"><div class="num">${subData.myJobs.filter(j=>!['COMPLETED','PAID'].includes(j.status)).length}</div><div class="lbl">My Jobs</div></div>
-      <div class="stat"><div class="num">${subData.myJobs.filter(j=>['COMPLETED','PAID'].includes(j.status)).length}</div><div class="lbl">Completed</div></div>
+      <div class="stat"><div class="num">${subData.myJobs.filter(j=>!['COMPLETED','PAID'].includes(j.status)).length}</div><div class="lbl">My Jobs</div></div>      <div class="stat"><div class="num">${subData.myJobs.filter(j=>['COMPLETED','PAID'].includes(j.status)).length}</div><div class="lbl">Completed</div></div>
     </div>
     <h2 class="section">Job offers <span class="count-badge">${subData.offeredJobs.length}</span></h2>
     ${subData.offeredJobs.length ? subData.offeredJobs.map(j=>subJobCardHtml(j,'offered')).join('') : '<div class="empty">No offers right now.</div>'}
@@ -1727,7 +1811,9 @@ function openCompleteJobModal(jobId){
       btn.disabled = false; btn.textContent = 'Submit Completion';
     }
   };
-      }function renderSubPayouts(main){
+}
+
+function renderSubPayouts(main){
   const pending = subData.payouts.filter(p=>['PENDING','PROCESSING'].includes(p.status));
   const paid = subData.payouts.filter(p=>p.status==='PAID');
   const pendingCents = pending.reduce((s,p)=>s+(p.amountCents||0),0);
@@ -1754,8 +1840,7 @@ function openCompleteJobModal(jobId){
         <div class="card-body">
           <span class="pay">${centsToStr(p.amountCents)}</span>
           <div class="card-meta" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);">
-            <div style="font-weight:600;color:var(--ink);">Set aside for taxes (est.): ${centsToStr(tax.total)}</div>
-            <div>Self-employment tax (15.3%): ${centsToStr(tax.seTax)}</div>
+            <div style="font-weight:600;color:var(--ink);">Set aside for taxes (est.): ${centsToStr(tax.total)}</div>            <div>Self-employment tax (15.3%): ${centsToStr(tax.seTax)}</div>
             <div>Federal income tax (est. 10%): ${centsToStr(tax.federal)}</div>
             <div>Virginia state tax (5.75%): ${centsToStr(tax.vaState)}</div>
           </div>
@@ -1802,10 +1887,17 @@ function openPayoutDisputeModal(p){
         payoutId: p.id, jobNumber: p.jobNumber || null, amountCents: p.amountCents || 0,
         note, status: 'NEW', createdAt: now()
       });
-      sendSupportEmail({
-        request_type: `${mySubDoc.name} (${myRole.subcontractorId}) says a payment looks incorrect: "${note}"`,
-        subcontractor_id: myRole.subcontractorId,
-        name: mySubDoc.name, phone: mySubDoc.phone || ''
+      sendNotificationEmail({
+        to_email: ADMIN_EMAIL,
+        subject: `Payment Dispute — ${mySubDoc.name} (${myRole.subcontractorId})`,
+        heading: 'Payment Looks Incorrect',
+        body_html: `<p style="margin:0 0 16px;">${esc(mySubDoc.name)} (${esc(myRole.subcontractorId)}) says a payment looks incorrect: "${esc(note)}"</p>
+          <table style="width:100%;border-collapse:collapse;">
+            <tr><td style="padding:6px 0;font-weight:bold;width:140px;">Subcontractor ID:</td><td>${esc(myRole.subcontractorId)}</td></tr>
+            <tr><td style="padding:6px 0;font-weight:bold;">Name:</td><td>${esc(mySubDoc.name)}</td></tr>
+            <tr><td style="padding:6px 0;font-weight:bold;">Phone:</td><td>${esc(mySubDoc.phone||'')}</td></tr>
+          </table>`,
+        footer_note: 'This is also waiting for you in the Inbox tab of the portal.'
       });
       document.getElementById('disputeForm').style.display='none';
       document.getElementById('disputeMsg').innerHTML = '<div class="msg">Sent — the admin has been notified.</div>';
@@ -1871,7 +1963,8 @@ function renderSubMileage(main){
     el.onclick = ()=> openMileageCorrectionModal(el.dataset.correct);
   });
 }
-function openAddMileageModal(){  const today = new Date().toISOString().slice(0,10);
+function openAddMileageModal(){
+  const today = new Date().toISOString().slice(0,10);
   const backdrop = document.createElement('div');
   backdrop.className = 'modal-backdrop';
   backdrop.innerHTML = `
@@ -1894,8 +1987,7 @@ function openAddMileageModal(){  const today = new Date().toISOString().slice(0,
     e.preventDefault();
     const miles = parseFloat(document.getElementById('am_miles').value);
     if(!Number.isFinite(miles)) return;
-    const dateVal = document.getElementById('am_date').value;
-    const date = new Date(dateVal + 'T12:00:00').getTime();
+    const dateVal = document.getElementById('am_date').value;    const date = new Date(dateVal + 'T12:00:00').getTime();
     const note = document.getElementById('am_note').value.trim();
     try{
       await db.collection('mileage').add({
@@ -1955,10 +2047,25 @@ function renderSubProfile(main){
       <div style="margin-bottom:10px;">${esc(s.email)||'—'}</div>
     </div>
     <div class="hint">To update your contact info or trades, ask the admin — these are admin-managed.</div>
+    <div class="card" style="margin-top:18px;padding:14px;">
+      <label class="checkline" style="margin:0;"><input type="checkbox" id="emailOptInToggle" ${s.emailOptIn===false ? '' : 'checked'}> Email me quarterly tax reminders</label>
+      <div class="hint" style="margin-top:8px;margin-bottom:0;">${s.email ? "If you turn this off, you'll need to check the Payouts tab yourself for tax estimates." : "No email on file — ask the admin to add one so these can reach you."}</div>
+      <div id="emailOptInMsg"></div>
+    </div>
     <button class="btn secondary block" id="changePinBtn" style="margin-top:18px;">Change My PIN</button>
     <div id="pinMsg"></div>
   `;
   document.getElementById('changePinBtn').onclick = openChangePinModal;
+  document.getElementById('emailOptInToggle').onchange = async (e)=>{
+    const checked = e.target.checked;
+    try{
+      await db.collection('subcontractors').doc(myRole.subcontractorId).update({ emailOptIn: checked });
+      document.getElementById('emailOptInMsg').innerHTML = '<div class="msg" style="margin-top:8px;">Saved.</div>';
+    }catch(err){
+      e.target.checked = !checked;
+      document.getElementById('emailOptInMsg').innerHTML = `<div class="msg error" style="margin-top:8px;">${esc(err.message)}</div>`;
+    }
+  };
 }
 function openChangePinModal(){
   const backdrop = document.createElement('div');
